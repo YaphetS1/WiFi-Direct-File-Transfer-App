@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#038581</color>
+    <color name="colorPrimaryDark">#02716d</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="textBackColor">#D3D3D3</color>
+    <color name="textColor">#000000</color>
+
+    <color name="cWhite">#ffffff</color>
+
+    <color name="cTextPrimary">#038581</color>
+
+    <color name="cDeviceListItemTitle">#636363</color>
+    <color name="cDivider">#f2f2f2</color>
+
+</resources>

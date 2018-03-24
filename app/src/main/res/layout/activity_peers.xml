@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/send_activity_first_heading"
+        android:gravity="center_horizontal"
+        android:textSize="15dp"
+        android:background="@color/textBackColor"
+        android:textColor="@color/textColor"
+        />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="15dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/peers_name"
+        android:textSize="20dp"
+        android:textColor="@color/textColor"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="15dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/send_activity_second_heading"
+        android:gravity="center_horizontal"
+        android:textSize="15dp"
+        android:background="@color/textBackColor"
+        android:textColor="@color/textColor"
+        />
+
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/peersRecycler"/>
+</LinearLayout>
