@@ -1,9 +1,12 @@
 package com.app.wi_fi_direct.pages;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.app.wi_fi_direct.R;
 import com.app.wi_fi_direct.adapters.DeviceListAdapter;
@@ -23,6 +26,36 @@ public class ReceiveFileActivity extends AppCompatActivity {
   private RecyclerView rvFilesList;
   private List<FileModel> filesList;
   private FileListAdapter fileListAdapter;
+
+  @Override
+  public void onStart() {
+    super.onStart();
+
+    ImageView ivBottomNavSend = findViewById(R.id.ivSend);
+    ImageView ivBottomNavReceive = findViewById(R.id.ivReceive);
+    ImageView ivBottomNavSetting = findViewById(R.id.ivSettings);
+    TextView tvBottomNavSend = findViewById(R.id.tvSend);
+    TextView tvBottomNavReceive = findViewById(R.id.tvReceive);
+    TextView tvBottomNavSetting = findViewById(R.id.tvSettings);
+
+    ivBottomNavSend.setOnClickListener(v -> {
+      ReceiveFileActivity.this.finish();
+      Intent intent = new Intent(ReceiveFileActivity.this, SendFileActivity.class);
+      startActivity(intent);
+    });
+
+    ivBottomNavSetting.setOnClickListener(v -> {
+    });
+
+    ivBottomNavSend.setImageResource(R.drawable.d_bottom_nav_send);
+    ivBottomNavReceive.setImageResource(R.drawable.d_bottom_nav_download_active);
+    ivBottomNavSetting.setImageResource(R.drawable.d_bottom_nav_settings);
+
+    tvBottomNavSend.setTextColor(getResources().getColor(R.color.cTextGrey));
+    tvBottomNavReceive.setTextColor(getResources().getColor(R.color.cTextPrimary));
+    tvBottomNavSetting.setTextColor(getResources().getColor(R.color.cTextGrey));
+
+  }
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
