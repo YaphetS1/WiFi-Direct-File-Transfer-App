@@ -97,7 +97,7 @@ public class RecieveActivity extends AppCompatActivity {
       }
     };
 
-    myBroadcastReciever = new MyBroadcastReciever(p2pManager, channel, this, null, deviceName);
+    myBroadcastReciever = new MyBroadcastReciever(p2pManager, channel, this, null);
 
     intentFilter = new IntentFilter();
     intentFilter.addAction(WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION);
