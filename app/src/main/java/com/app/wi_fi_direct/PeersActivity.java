@@ -15,11 +15,15 @@ import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.app.wi_fi_direct.helpers.ChooseFile;
+import com.app.wi_fi_direct.helpers.FilesUtil;
+import com.app.wi_fi_direct.helpers.PathUtil;
+import com.app.wi_fi_direct.helpers.TransferData;
+
 import java.io.File;
 import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 
 public class PeersActivity extends AppCompatActivity {
 

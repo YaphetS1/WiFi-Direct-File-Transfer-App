@@ -16,16 +16,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.app.wi_fi_direct.ChooseFile;
-import com.app.wi_fi_direct.FilesUtil;
 import com.app.wi_fi_direct.MyBroadcastReciever;
-import com.app.wi_fi_direct.PathUtil;
 import com.app.wi_fi_direct.PeersAdapter;
 import com.app.wi_fi_direct.R;
-import com.app.wi_fi_direct.TransferData;
-import com.app.wi_fi_direct.adapters.DeviceListAdapter;
-import com.app.wi_fi_direct.adapters.FileListAdapter;
-import com.app.wi_fi_direct.models.DeviceModel;
+import com.app.wi_fi_direct.helpers.ChooseFile;
+import com.app.wi_fi_direct.helpers.FilesUtil;
+import com.app.wi_fi_direct.helpers.PathUtil;
+import com.app.wi_fi_direct.helpers.TransferData;
 import com.app.wi_fi_direct.models.FileModel;
 
 import java.io.File;
@@ -38,8 +35,8 @@ public class SendFileActivity extends AppCompatActivity {
   private RecyclerView rvDevicesList;
 
   private RecyclerView rvFilesList;
-  private List<FileModel> filesList;
-  private FileListAdapter fileListAdapter;
+//  private List<FileModel> filesList;
+//  private FileListAdapter fileListAdapter;
 
 
   public WifiP2pManager p2pManager;
@@ -88,40 +85,24 @@ public class SendFileActivity extends AppCompatActivity {
     setContentView(R.layout.activity_send_file);
 
 
-
-//    LinearLayoutManager devicesListLayoutManager = new LinearLayoutManager(
+//    rvFilesList = findViewById(R.id.rvFilesList);
+//    LinearLayoutManager filesListLayoutManager = new LinearLayoutManager(
 //        this, LinearLayoutManager.VERTICAL, false);
-//    rvDevicesList.setLayoutManager(devicesListLayoutManager);
+//    rvFilesList.setLayoutManager(filesListLayoutManager);
 
-//    devicesList = new ArrayList<>();
-//    devicesList.add(new DeviceModel("Устройство 1"));
-//    devicesList.add(new DeviceModel("Устройство 2"));
-//    devicesList.add(new DeviceModel("Устройство 3"));
-//    devicesList.add(new DeviceModel("Устройство 4"));
-//    devicesList.add(new DeviceModel("Устройство 5"));
-//    devicesList.add(new DeviceModel("Устройство 6"));
-//    deviceListAdapter = new DeviceListAdapter(devicesList);
-//    rvDevicesList.setAdapter(deviceListAdapter);
-
-
-    rvFilesList = findViewById(R.id.rvFilesList);
-    LinearLayoutManager filesListLayoutManager = new LinearLayoutManager(
-        this, LinearLayoutManager.VERTICAL, false);
-    rvFilesList.setLayoutManager(filesListLayoutManager);
-
-    filesList = new ArrayList<>();
-    filesList.add(new FileModel("Файл 1", FileModel.TYPE_COMMON));
-    filesList.add(new FileModel("Файл 2", FileModel.TYPE_COMMON));
-    filesList.add(new FileModel("Приложение 1", FileModel.TYPE_APPLICATION));
-    filesList.add(new FileModel("Фото 1", FileModel.TYPE_PHOTO));
-    filesList.add(new FileModel("Фото 2", FileModel.TYPE_PHOTO));
-    filesList.add(new FileModel("Фото 3", FileModel.TYPE_PHOTO));
-    filesList.add(new FileModel("Файл 3", FileModel.TYPE_COMMON));
-    filesList.add(new FileModel("Приложение 2", FileModel.TYPE_APPLICATION));
-    filesList.add(new FileModel("Файл 4", FileModel.TYPE_COMMON));
-    filesList.add(new FileModel("Приложение 3", FileModel.TYPE_APPLICATION));
-    fileListAdapter = new FileListAdapter(filesList);
-    rvFilesList.setAdapter(fileListAdapter);
+//    filesList = new ArrayList<>();
+//    filesList.add(new FileModel("Файл 1", FileModel.TYPE_COMMON));
+//    filesList.add(new FileModel("Файл 2", FileModel.TYPE_COMMON));
+//    filesList.add(new FileModel("Приложение 1", FileModel.TYPE_APPLICATION));
+//    filesList.add(new FileModel("Фото 1", FileModel.TYPE_PHOTO));
+//    filesList.add(new FileModel("Фото 2", FileModel.TYPE_PHOTO));
+//    filesList.add(new FileModel("Фото 3", FileModel.TYPE_PHOTO));
+//    filesList.add(new FileModel("Файл 3", FileModel.TYPE_COMMON));
+//    filesList.add(new FileModel("Приложение 2", FileModel.TYPE_APPLICATION));
+//    filesList.add(new FileModel("Файл 4", FileModel.TYPE_COMMON));
+//    filesList.add(new FileModel("Приложение 3", FileModel.TYPE_APPLICATION));
+//    fileListAdapter = new FileListAdapter(filesList);
+//    rvFilesList.setAdapter(fileListAdapter);
 
 
 

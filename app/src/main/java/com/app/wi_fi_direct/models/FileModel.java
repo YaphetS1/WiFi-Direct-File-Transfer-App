@@ -1,19 +1,21 @@
 package com.app.wi_fi_direct.models;
 
+import java.io.File;
+
 public class FileModel {
   public static final int TYPE_PHOTO = 0;
   public static final int TYPE_APPLICATION = 1;
   public static final int TYPE_COMMON = 2;
 
-  private String title;
+  private File file;
   private int type;
 
-  public FileModel(String title) {
-    this.title = title;
+  public FileModel(File file) {
+    this.file = file;
   }
 
-  public FileModel(String title, int type) {
-    this.title = title;
+  public FileModel(File file, int type) {
+    this.file = file;
     this.type = type;
   }
 
@@ -25,12 +27,12 @@ public class FileModel {
     this.type = type;
   }
 
-  public String getTitle() {
-    return title;
+  public File getFile() {
+    return file;
   }
 
-  public void setTitle(String title) {
-    this.title = title;
+  public void setFile(File file) {
+    this.file = file;
   }
 
 }

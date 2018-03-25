@@ -11,6 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.app.wi_fi_direct.helpers.ConnectPeer;
+
 import java.util.List;
 
 public class PeersAdapter extends RecyclerView.Adapter<PeersViewHolder> {

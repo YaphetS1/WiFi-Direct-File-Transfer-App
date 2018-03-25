@@ -20,6 +20,10 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.app.wi_fi_direct.adapters.FilesAdapter;
+import com.app.wi_fi_direct.helpers.CustomObject;
+import com.app.wi_fi_direct.helpers.FilesUtil;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
