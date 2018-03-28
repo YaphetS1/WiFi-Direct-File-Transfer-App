@@ -23,7 +23,6 @@ import com.app.wi_fi_direct.helpers.ChooseFile;
 import com.app.wi_fi_direct.helpers.FilesUtil;
 import com.app.wi_fi_direct.helpers.PathUtil;
 import com.app.wi_fi_direct.helpers.TransferData;
-import com.app.wi_fi_direct.models.FileModel;
 
 import java.io.File;
 import java.net.InetAddress;
@@ -34,17 +33,12 @@ public class SendFileActivity extends AppCompatActivity {
 
   private RecyclerView rvDevicesList;
 
-  private RecyclerView rvFilesList;
-//  private List<FileModel> filesList;
-//  private FileListAdapter fileListAdapter;
-
-
   public WifiP2pManager p2pManager;
   public WifiP2pManager.Channel channel;
   public IntentFilter intentFilter;
   public MyBroadcastReciever myBroadcastReciever;
   public WifiP2pManager.PeerListListener peerListListener;
-  public List<WifiP2pDevice> peerList;
+  public ArrayList peerList = new ArrayList();
   public PeersAdapter peersAdapter;
   public InetAddress serverAddress;
   public WifiP2pManager.ConnectionInfoListener infoListener;
@@ -115,10 +109,8 @@ public class SendFileActivity extends AppCompatActivity {
 
     Log.d("Send Activity", "onCreate");
 
-    peerList = new ArrayList();
-
     peerListListener = peers -> {
-      peerList = new ArrayList();
+//      peerList = new ArrayList();
       peerList.clear();
       peerList.addAll(peers.getDeviceList());
       peersAdapter.updateList(peerList);

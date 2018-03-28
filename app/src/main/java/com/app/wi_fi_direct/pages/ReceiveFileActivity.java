@@ -2,6 +2,7 @@ package com.app.wi_fi_direct.pages;
 
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.net.wifi.p2p.WifiP2pDevice;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -15,12 +16,11 @@ import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.app.wi_fi_direct.adapters.FilesAdapter;
 import com.app.wi_fi_direct.MyBroadcastReciever;
+import com.app.wi_fi_direct.PeersAdapter;
 import com.app.wi_fi_direct.R;
-import com.app.wi_fi_direct.adapters.DeviceListAdapter;
+import com.app.wi_fi_direct.adapters.FilesAdapter;
 import com.app.wi_fi_direct.helpers.FileServerAsyncTask;
-import com.app.wi_fi_direct.models.DeviceModel;
 
 import java.io.File;
 import java.lang.reflect.Method;
@@ -31,10 +31,11 @@ import java.util.List;
 public class ReceiveFileActivity extends AppCompatActivity {
 
   private RecyclerView rvDevicesList;
-  private List<DeviceModel> devicesList;
-  private DeviceListAdapter deviceListAdapter;
-
   private RecyclerView rvFilesList;
+
+  public WifiP2pManager.PeerListListener peerListListener;
+  public List<WifiP2pDevice> peerList;
+  public PeersAdapter peersAdapter;
 
   public WifiP2pManager p2pManager;
   public WifiP2pManager.Channel channel;
@@ -86,15 +87,17 @@ public class ReceiveFileActivity extends AppCompatActivity {
         this, LinearLayoutManager.VERTICAL, false);
     rvDevicesList.setLayoutManager(devicesListLayoutManager);
 
-    devicesList = new ArrayList<>();
-    devicesList.add(new DeviceModel("Устройство 1"));
-    devicesList.add(new DeviceModel("Устройство 2"));
-    devicesList.add(new DeviceModel("Устройство 3"));
-    devicesList.add(new DeviceModel("Устройство 4"));
-    devicesList.add(new DeviceModel("Устройство 5"));
-    devicesList.add(new DeviceModel("Устройство 6"));
-    deviceListAdapter = new DeviceListAdapter(devicesList);
-    rvDevicesList.setAdapter(deviceListAdapter);
+    peerList = new ArrayList();
+
+    peerListListener = peers -> {
+      peerList = new ArrayList();
+      peerList.clear();
+      peerList.addAll(peers.getDeviceList());
+      peersAdapter.updateList(peerList);
+      peersAdapter.notifyDataSetChanged();
+      //Toast.makeText(getApplicationContext(),String.valueOf(peers.getDeviceList().size()),Toast.LENGTH_LONG).show();
+    };
+
 
 
     rvFilesList = findViewById(R.id.rvFilesList);
@@ -105,6 +108,10 @@ public class ReceiveFileActivity extends AppCompatActivity {
 
     File dir = new File(Environment.getExternalStorageDirectory() + "/");
     File[] receivedFiles = dir.listFiles();
+
+    if (receivedFiles == null) {
+      receivedFiles = new File[] {};
+    }
 
     FilesAdapter filesAdapter = new FilesAdapter(ReceiveFileActivity.this, receivedFiles);
     rvFilesList.setAdapter(filesAdapter);
