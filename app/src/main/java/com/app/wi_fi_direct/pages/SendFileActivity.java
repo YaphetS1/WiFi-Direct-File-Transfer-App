@@ -3,7 +3,6 @@ package com.app.wi_fi_direct.pages;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.Uri;
-import android.net.wifi.p2p.WifiP2pDevice;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -16,8 +15,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.app.wi_fi_direct.MyBroadcastReciever;
-import com.app.wi_fi_direct.PeersAdapter;
+import com.app.wi_fi_direct.helpers.MyBroadcastReciever;
+import com.app.wi_fi_direct.adapters.PeersAdapter;
 import com.app.wi_fi_direct.R;
 import com.app.wi_fi_direct.helpers.ChooseFile;
 import com.app.wi_fi_direct.helpers.FilesUtil;
@@ -27,7 +26,6 @@ import com.app.wi_fi_direct.helpers.TransferData;
 import java.io.File;
 import java.net.InetAddress;
 import java.util.ArrayList;
-import java.util.List;
 
 public class SendFileActivity extends AppCompatActivity {
 

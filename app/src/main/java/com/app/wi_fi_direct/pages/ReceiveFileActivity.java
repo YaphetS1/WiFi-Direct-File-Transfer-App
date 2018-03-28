@@ -16,8 +16,8 @@ import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.app.wi_fi_direct.MyBroadcastReciever;
-import com.app.wi_fi_direct.PeersAdapter;
+import com.app.wi_fi_direct.helpers.MyBroadcastReciever;
+import com.app.wi_fi_direct.adapters.PeersAdapter;
 import com.app.wi_fi_direct.R;
 import com.app.wi_fi_direct.adapters.FilesAdapter;
 import com.app.wi_fi_direct.helpers.FileServerAsyncTask;

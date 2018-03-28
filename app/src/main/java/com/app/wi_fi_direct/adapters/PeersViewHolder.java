@@ -1,4 +1,4 @@
-package com.app.wi_fi_direct;
+package com.app.wi_fi_direct.adapters;
 
 import android.net.wifi.p2p.WifiP2pDevice;
 import android.support.v7.widget.RecyclerView;
@@ -6,6 +6,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.app.wi_fi_direct.R;
 
 public class PeersViewHolder extends RecyclerView.ViewHolder {
 

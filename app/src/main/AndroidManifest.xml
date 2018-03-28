@@ -40,8 +40,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".PeersActivity" />
-        <activity android:name=".RecieveActivity" />
         <activity android:name=".pages.SendFileActivity" />
         <activity android:name=".pages.ReceiveFileActivity"></activity>
     </application>
