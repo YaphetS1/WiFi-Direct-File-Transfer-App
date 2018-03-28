@@ -60,7 +60,7 @@
         app:layout_constraintStart_toEndOf="@+id/linearLayout3">
 
         <ImageView
-            android:id="@+id/imageView5"
+            android:id="@+id/ivSettings"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -69,7 +69,7 @@
             tools:layout_editor_absoluteY="16dp" />
 
         <TextView
-            android:id="@+id/textView5"
+            android:id="@+id/tvSettings"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -93,7 +93,7 @@
         app:layout_constraintStart_toEndOf="@+id/linearLayout2">
 
         <ImageView
-            android:id="@+id/imageView6"
+            android:id="@+id/ivSend"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -102,7 +102,7 @@
             tools:layout_editor_absoluteY="16dp" />
 
         <TextView
-            android:id="@+id/textView6"
+            android:id="@+id/tvSend"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -126,7 +126,7 @@
         app:layout_constraintStart_toEndOf="@+id/linearLayout">
 
         <ImageView
-            android:id="@+id/imageView7"
+            android:id="@+id/ivReceive"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -135,7 +135,7 @@
             tools:layout_editor_absoluteY="16dp" />
 
         <TextView
-            android:id="@+id/textView7"
+            android:id="@+id/tvReceive"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"

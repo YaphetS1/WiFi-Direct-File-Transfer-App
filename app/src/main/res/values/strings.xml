@@ -10,11 +10,11 @@
     <string name="receive_activity_second_heading">Current File Transfer</string>
     <string name="receive_activity_third_heading">Received Files</string>
 
-    <string name="available_devices">Доступные устройства</string>
-    <string name="sending">Отправляется</string>
-    <string name="receiving">Принимается</string>
-    <string name="recomendations">Рекомендации</string>
-    <string name="send">Отправить</string>
-    <string name="receive">Принять</string>
-    <string name="settings">Настройки</string>
+    <string name="available_devices">Available Devices</string>
+    <string name="sending">Sending</string>
+    <string name="receiving">Receiving</string>
+    <string name="recomendations">Recommendations</string>
+    <string name="send">Send</string>
+    <string name="receive">Receive</string>
+    <string name="settings">Settings</string>
 </resources>

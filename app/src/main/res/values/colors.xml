@@ -9,6 +9,7 @@
     <color name="cWhite">#ffffff</color>
 
     <color name="cTextPrimary">#038581</color>
+    <color name="cTextGrey">#858585</color>
 
     <color name="cDeviceListItemTitle">#636363</color>
     <color name="cDivider">#f2f2f2</color>

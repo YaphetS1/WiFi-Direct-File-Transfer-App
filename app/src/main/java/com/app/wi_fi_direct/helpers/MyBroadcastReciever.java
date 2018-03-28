@@ -1,4 +1,4 @@
-package com.app.wi_fi_direct;
+package com.app.wi_fi_direct.helpers;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -19,13 +19,12 @@ public class MyBroadcastReciever extends BroadcastReceiver {
   WifiP2pManager.ConnectionInfoListener infoListener;
   TextView textView;
 
-  public MyBroadcastReciever(WifiP2pManager p2pManager, WifiP2pManager.Channel channel, Context context, WifiP2pManager.ConnectionInfoListener infoListener, TextView textView) {
+  public MyBroadcastReciever(WifiP2pManager p2pManager, WifiP2pManager.Channel channel, Context context, WifiP2pManager.ConnectionInfoListener infoListener) {
     super();
     this.channel = channel;
     this.context = context;
     this.p2pManager = p2pManager;
     this.infoListener = infoListener;
-    this.textView = textView;
   }
 
   @Override
@@ -53,7 +52,7 @@ public class MyBroadcastReciever extends BroadcastReceiver {
       if (textView == null) return;
       WifiP2pDevice device = intent.getParcelableExtra(WifiP2pManager.EXTRA_WIFI_P2P_DEVICE);
       String thisDeviceName = device.deviceName;
-      textView.setText(thisDeviceName);
+//      textView.setText(thisDeviceName);
       //Toast.makeText(context,WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION,Toast.LENGTH_SHORT).show();
     }
 

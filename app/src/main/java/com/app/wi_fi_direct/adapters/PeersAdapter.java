@@ -1,4 +1,4 @@
-package com.app.wi_fi_direct;
+package com.app.wi_fi_direct.adapters;
 
 import android.app.Activity;
 import android.content.Context;
@@ -10,6 +10,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+
+import com.app.wi_fi_direct.R;
+import com.app.wi_fi_direct.helpers.ConnectPeer;
 
 import java.util.List;
 
@@ -23,7 +26,12 @@ public class PeersAdapter extends RecyclerView.Adapter<PeersViewHolder> {
   Activity activity;
   WifiP2pManager.ConnectionInfoListener infoListener;
 
-  public PeersAdapter(List<WifiP2pDevice> peersList, final Context context, final WifiP2pManager manager, final WifiP2pManager.Channel channel, final Activity activity, final WifiP2pManager.ConnectionInfoListener infoListener) {
+  public PeersAdapter(List<WifiP2pDevice> peersList,
+                      final Context context,
+                      final WifiP2pManager manager,
+                      final WifiP2pManager.Channel channel,
+                      final Activity activity,
+                      final WifiP2pManager.ConnectionInfoListener infoListener) {
     this.peersList = peersList;
     this.context = context;
     this.manager = manager;
@@ -36,8 +44,8 @@ public class PeersAdapter extends RecyclerView.Adapter<PeersViewHolder> {
         Toast.makeText(context, "Connected!", Toast.LENGTH_LONG).show();
         //manager.requestConnectionInfo(channel,infoListener);
         //TODO: When connected start fileChooser
-        ChooseFile.fileChooser(activity);
-        //Log.d("ConnectPeer ","Success");
+//        ChooseFile.fileChooser(activity);
+        Log.d("ConnectPeer ","Success");
       }
 
       @Override
@@ -50,11 +58,9 @@ public class PeersAdapter extends RecyclerView.Adapter<PeersViewHolder> {
 
   @Override
   public PeersViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-    View view = LayoutInflater.from(context).inflate(R.layout.peers_list_item, parent, false);
+    View view = LayoutInflater.from(context).inflate(R.layout.device_list_item, parent, false);
 
-    PeersViewHolder viewHolder = new PeersViewHolder(view);
-
-    return viewHolder;
+    return new PeersViewHolder(view);
   }
 
   @Override
@@ -64,7 +70,10 @@ public class PeersAdapter extends RecyclerView.Adapter<PeersViewHolder> {
     try {
       final String deviceAddress = holder.device.deviceAddress;
 
-      holder.peerButton.setOnClickListener(v -> ConnectPeer.connect(deviceAddress, manager, channel, context, listener));
+      holder.peerView.setOnClickListener(v -> {
+        Log.d("peerButton", "ON CLICK");
+        ConnectPeer.connect(deviceAddress, manager, channel, context, listener);
+      });
     } catch (Exception e) {
       e.printStackTrace();
     }
@@ -77,7 +86,7 @@ public class PeersAdapter extends RecyclerView.Adapter<PeersViewHolder> {
 
   public void updateList(List<WifiP2pDevice> devices) {
     peersList = devices;
-    Log.d("Adapter ", "wololoooo");
+    Log.d("Adapter ", "YOLO");
     Log.d("Adapter ", String.valueOf(peersList.size()));
   }
 }

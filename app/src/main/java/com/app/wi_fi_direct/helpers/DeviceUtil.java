@@ -1,4 +1,4 @@
-package com.app.wi_fi_direct;
+package com.app.wi_fi_direct.helpers;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -8,6 +8,8 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+
+import com.app.wi_fi_direct.R;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -20,17 +22,14 @@ public class DeviceUtil {
     builder.setView(view);
     builder.setNegativeButton("Cancel", null);
     final EditText editText = view.findViewById(R.id.change_name_edittext);
-    builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-      @Override
-      public void onClick(DialogInterface dialog, int which) {
-        String newName = editText.getText().toString();
-        if (newName.isEmpty()) return;
-        Log.d("DeviceUtil", (newName.isEmpty()) + "");
-        try {
-          callHiddenMethod(manager, channel, newName);
-        } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
-          e.printStackTrace();
-        }
+    builder.setPositiveButton("OK", (dialog, which) -> {
+      String newName = editText.getText().toString();
+      if (newName.isEmpty()) return;
+      Log.d("DeviceUtil", (newName.isEmpty()) + "");
+      try {
+        callHiddenMethod(manager, channel, newName);
+      } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
+        e.printStackTrace();
       }
     });
     builder.create().show();
