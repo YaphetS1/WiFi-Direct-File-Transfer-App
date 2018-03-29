@@ -42,7 +42,7 @@ public class PeersAdapter extends RecyclerView.Adapter<PeersViewHolder> {
       @Override
       public void onSuccess() {
         Toast.makeText(context, "Connected!", Toast.LENGTH_LONG).show();
-        //manager.requestConnectionInfo(channel,infoListener);
+        manager.requestConnectionInfo(channel,infoListener);
         //TODO: When connected start fileChooser
 //        ChooseFile.fileChooser(activity);
         Log.d("ConnectPeer ","Success");

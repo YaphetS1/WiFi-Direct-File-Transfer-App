@@ -17,7 +17,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 /**
- * Created by dmitrijmarinin on 26.03.2018.
+ * Created by dmitryMarinin on 23.03.2018.
  */
 
 public class FileServerAsyncTask extends AsyncTask<Void, CustomObject, Void> {

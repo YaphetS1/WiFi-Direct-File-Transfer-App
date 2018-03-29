@@ -97,14 +97,6 @@ public class SendFileActivity extends AppCompatActivity {
 //    rvFilesList.setAdapter(fileListAdapter);
 
 
-
-
-        /*if (android.os.Build.VERSION.SDK_INT > 9) {
-            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
-                    .permitAll().build();
-            StrictMode.setThreadPolicy(policy);
-        }*/
-
     Log.d("Send Activity", "onCreate");
 
     peerListListener = peers -> {
@@ -179,7 +171,7 @@ public class SendFileActivity extends AppCompatActivity {
   @Override
   protected void onResume() {
     super.onResume();
-    //registerReceiver(myBroadcastReciever,intentFilter);
+//    registerReceiver(myBroadcastReciever, intentFilter);
     Log.d("Send Activity", "onResume");
   }
 

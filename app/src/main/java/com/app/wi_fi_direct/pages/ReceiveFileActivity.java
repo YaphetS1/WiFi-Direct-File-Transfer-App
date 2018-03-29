@@ -34,7 +34,7 @@ public class ReceiveFileActivity extends AppCompatActivity {
   private RecyclerView rvFilesList;
 
   public WifiP2pManager.PeerListListener peerListListener;
-  public List<WifiP2pDevice> peerList;
+  public ArrayList peerList;
   public PeersAdapter peersAdapter;
 
   public WifiP2pManager p2pManager;
@@ -87,10 +87,8 @@ public class ReceiveFileActivity extends AppCompatActivity {
         this, LinearLayoutManager.VERTICAL, false);
     rvDevicesList.setLayoutManager(devicesListLayoutManager);
 
-    peerList = new ArrayList();
-
     peerListListener = peers -> {
-      peerList = new ArrayList();
+//      peerList = new ArrayList();
       peerList.clear();
       peerList.addAll(peers.getDeviceList());
       peersAdapter.updateList(peerList);
