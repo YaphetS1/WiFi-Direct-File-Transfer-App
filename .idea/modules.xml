@@ -2,8 +2,10 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/WiFi-Direct-File-Transfer-App.iml" filepath="$PROJECT_DIR$/WiFi-Direct-File-Transfer-App.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/wifi-direct-app.iml" filepath="$PROJECT_DIR$/wifi-direct-app.iml" />
+      <module fileurl="file://C:\Users\43691\Documents\WiFi-Direct-File-Transfer-App\app\app.iml" filepath="C:\Users\43691\Documents\WiFi-Direct-File-Transfer-App\app\app.iml" />
+      <module fileurl="file://C:\Users\43691\Documents\WiFi-Direct-File-Transfer-App\wifi-direct-app.iml" filepath="C:\Users\43691\Documents\WiFi-Direct-File-Transfer-App\wifi-direct-app.iml" />
     </modules>
   </component>
 </project>

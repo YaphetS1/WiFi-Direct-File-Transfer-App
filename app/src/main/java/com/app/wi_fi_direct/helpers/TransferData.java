@@ -31,7 +31,7 @@ public class TransferData extends AsyncTask<Void, Void, Void> {
     this.serverAddress = serverAddress;
 
     Log.d("DEBUG::::   ", serverAddress.getHostAddress());
-    Log.d("DEBUG::::   ", serverAddress.getHostName());
+//    Log.d("DEBUG::::   ", serverAddress.getHostName());
 
     Toast.makeText(context, "Transfer Started", Toast.LENGTH_SHORT).show();
     // Toast.makeText(context,(new InetSocketAddress(port)).toString(),Toast.LENGTH_LONG).show();

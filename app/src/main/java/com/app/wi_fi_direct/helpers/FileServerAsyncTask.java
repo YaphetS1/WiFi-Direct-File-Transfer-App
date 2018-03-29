@@ -77,7 +77,6 @@ public class FileServerAsyncTask extends AsyncTask<Void, CustomObject, Void> {
       progress.dataIncrement = 0;
       progress.totalProgress = 0;
 
-      fileList.notifyAdapter();
       try {
         while (((len = inputStream.read(buf)) != -1)) {
 
@@ -133,6 +132,7 @@ public class FileServerAsyncTask extends AsyncTask<Void, CustomObject, Void> {
   protected void onPostExecute(Void aVoid) {
     super.onPostExecute(aVoid);
 //    progressBar.setProgress(100);
+    fileList.notifyAdapter();
     Toast.makeText(context, "File Transferred!", Toast.LENGTH_LONG).show();
     Log.d("Reciever", "onPostExecute");
     Log.d("Reciever", file.length() + " file size");

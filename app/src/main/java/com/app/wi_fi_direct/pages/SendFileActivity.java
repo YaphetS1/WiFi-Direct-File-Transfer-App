@@ -6,6 +6,8 @@ import android.net.Uri;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
+import android.os.Handler;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,6 +17,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.app.wi_fi_direct.adapters.FilesAdapter;
+import com.app.wi_fi_direct.helpers.FileServerAsyncTask;
 import com.app.wi_fi_direct.helpers.MyBroadcastReciever;
 import com.app.wi_fi_direct.adapters.PeersAdapter;
 import com.app.wi_fi_direct.R;
@@ -24,12 +28,17 @@ import com.app.wi_fi_direct.helpers.PathUtil;
 import com.app.wi_fi_direct.helpers.TransferData;
 
 import java.io.File;
+import java.lang.reflect.Method;
 import java.net.InetAddress;
+import java.net.ServerSocket;
 import java.util.ArrayList;
 
 public class SendFileActivity extends AppCompatActivity {
 
   private RecyclerView rvDevicesList;
+  private RecyclerView rvFilesList;
+
+  public FileServerAsyncTask fileServerAsyncTask;
 
   public WifiP2pManager p2pManager;
   public WifiP2pManager.Channel channel;
@@ -40,6 +49,7 @@ public class SendFileActivity extends AppCompatActivity {
   public PeersAdapter peersAdapter;
   public InetAddress serverAddress;
   public WifiP2pManager.ConnectionInfoListener infoListener;
+  public ServerSocket serverSocket;
 
   @Override
   public void onStart() {
@@ -51,6 +61,9 @@ public class SendFileActivity extends AppCompatActivity {
     TextView tvBottomNavSend = findViewById(R.id.tvSend);
     TextView tvBottomNavReceive = findViewById(R.id.tvReceive);
     TextView tvBottomNavSetting = findViewById(R.id.tvSettings);
+
+    rvFilesList = findViewById(R.id.rvFilesList);
+    rvDevicesList = findViewById(R.id.rvDevicesList);
 
     ivBottomNavReceive.setOnClickListener(v -> {
       SendFileActivity.this.finish();
@@ -76,26 +89,34 @@ public class SendFileActivity extends AppCompatActivity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_send_file);
 
+    LinearLayoutManager filesListLayoutManager = new LinearLayoutManager(
+            this, LinearLayoutManager.VERTICAL, false);
+    rvFilesList.setLayoutManager(filesListLayoutManager);
 
-//    rvFilesList = findViewById(R.id.rvFilesList);
-//    LinearLayoutManager filesListLayoutManager = new LinearLayoutManager(
-//        this, LinearLayoutManager.VERTICAL, false);
-//    rvFilesList.setLayoutManager(filesListLayoutManager);
+    try {
+      serverSocket = new ServerSocket(8888);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
 
-//    filesList = new ArrayList<>();
-//    filesList.add(new FileModel("Файл 1", FileModel.TYPE_COMMON));
-//    filesList.add(new FileModel("Файл 2", FileModel.TYPE_COMMON));
-//    filesList.add(new FileModel("Приложение 1", FileModel.TYPE_APPLICATION));
-//    filesList.add(new FileModel("Фото 1", FileModel.TYPE_PHOTO));
-//    filesList.add(new FileModel("Фото 2", FileModel.TYPE_PHOTO));
-//    filesList.add(new FileModel("Фото 3", FileModel.TYPE_PHOTO));
-//    filesList.add(new FileModel("Файл 3", FileModel.TYPE_COMMON));
-//    filesList.add(new FileModel("Приложение 2", FileModel.TYPE_APPLICATION));
-//    filesList.add(new FileModel("Файл 4", FileModel.TYPE_COMMON));
-//    filesList.add(new FileModel("Приложение 3", FileModel.TYPE_APPLICATION));
-//    fileListAdapter = new FileListAdapter(filesList);
-//    rvFilesList.setAdapter(fileListAdapter);
+    File dir = new File(Environment.getExternalStorageDirectory() + "/"
+            + getApplicationContext().getPackageName());
 
+    File[] receivedFiles = dir.listFiles();
+
+    if (receivedFiles == null) {
+      receivedFiles = new File[] {};
+    }
+
+    FilesAdapter filesAdapter = new FilesAdapter(SendFileActivity.this, receivedFiles);
+    rvFilesList.setAdapter(filesAdapter);
+
+    fileServerAsyncTask = new FileServerAsyncTask(
+            (SendFileActivity.this),
+            (serverSocket),
+            (filesAdapter));
+
+    fileServerAsyncTask.execute();
 
     Log.d("Send Activity", "onCreate");
 
@@ -147,7 +168,6 @@ public class SendFileActivity extends AppCompatActivity {
 
     peersAdapter = new PeersAdapter(peerList, this, p2pManager, channel, this, infoListener);
 
-    rvDevicesList = findViewById(R.id.rvDevicesList);
     rvDevicesList.setAdapter(peersAdapter);
 
     RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(
@@ -185,20 +205,56 @@ public class SendFileActivity extends AppCompatActivity {
   @Override
   protected void onDestroy() {
     super.onDestroy();
-    p2pManager.cancelConnect(channel, new WifiP2pManager.ActionListener() {
+
+    p2pManager.cancelConnect(channel, null);
+    p2pManager.stopPeerDiscovery(channel, null);
+    new Handler().post(() -> {
+      try {
+        serverSocket.close();
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+    });
+
+    try {
+      fileServerAsyncTask.cancel(true);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+
+    fileServerAsyncTask = null;
+    Log.d("Reciever", "End Reached");
+    p2pManager.removeGroup(channel, new WifiP2pManager.ActionListener() {
       @Override
       public void onSuccess() {
-        Toast.makeText(getApplicationContext(), "Disconnection successful", Toast.LENGTH_LONG).show();
+        Log.d("Reciever", "Groups Removed");
       }
 
       @Override
       public void onFailure(int reason) {
-        Toast.makeText(getApplicationContext(), "Disconnection Failed", Toast.LENGTH_LONG).show();
+        Log.d("Reciever", "Groups Not Removed");
       }
     });
+
+    deletePersistentGroups();
     unregisterReceiver(myBroadcastReciever);
-    p2pManager.stopPeerDiscovery(channel, null);
     Log.d("Send Activity", "onDestroy");
+  }
+
+  private void deletePersistentGroups() {
+    try {
+      Method[] methods = WifiP2pManager.class.getMethods();
+      for (Method method : methods) {
+        if (method.getName().equals("deletePersistentGroup")) {
+          // Delete any persistent group
+          for (int netid = 0; netid < 32; netid++) {
+            method.invoke(p2pManager, channel, netid, null);
+          }
+        }
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
   }
 
   @Override

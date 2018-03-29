@@ -104,7 +104,8 @@ public class ReceiveFileActivity extends AppCompatActivity {
     rvFilesList.setLayoutManager(filesListLayoutManager);
 
 
-    File dir = new File(Environment.getExternalStorageDirectory() + "/");
+    File dir = new File(Environment.getExternalStorageDirectory() + "/"
+            + getApplicationContext().getPackageName());
     File[] receivedFiles = dir.listFiles();
 
     if (receivedFiles == null) {
