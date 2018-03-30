@@ -43,7 +43,7 @@ public class TransferData extends AsyncTask<Void, Void, Void> {
     byte buf[] = new byte[1024];
 
     Log.d("Data Transfer", "Transfer Starter");
-    //Log.d("Data Transfer IP",(new InetSocketAddress(port)).toString());
+//    Log.d("Data Transfer IP", (new InetSocketAddress(port)).toString());
 
     Socket socket = new Socket();
 

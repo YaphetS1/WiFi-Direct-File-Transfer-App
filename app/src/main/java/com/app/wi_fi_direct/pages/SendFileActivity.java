@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.Uri;
 import android.net.wifi.p2p.WifiP2pManager;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -28,7 +29,6 @@ import com.app.wi_fi_direct.helpers.PathUtil;
 import com.app.wi_fi_direct.helpers.TransferData;
 
 import java.io.File;
-import java.lang.reflect.Method;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.util.ArrayList;
@@ -37,8 +37,6 @@ public class SendFileActivity extends AppCompatActivity {
 
   private RecyclerView rvDevicesList;
   private RecyclerView rvFilesList;
-
-  public FileServerAsyncTask fileServerAsyncTask;
 
   public WifiP2pManager p2pManager;
   public WifiP2pManager.Channel channel;
@@ -50,6 +48,7 @@ public class SendFileActivity extends AppCompatActivity {
   public InetAddress serverAddress;
   public WifiP2pManager.ConnectionInfoListener infoListener;
   public ServerSocket serverSocket;
+  public FileServerAsyncTask fileServerAsyncTask;
 
   @Override
   public void onStart() {
@@ -61,9 +60,6 @@ public class SendFileActivity extends AppCompatActivity {
     TextView tvBottomNavSend = findViewById(R.id.tvSend);
     TextView tvBottomNavReceive = findViewById(R.id.tvReceive);
     TextView tvBottomNavSetting = findViewById(R.id.tvSettings);
-
-    rvFilesList = findViewById(R.id.rvFilesList);
-    rvDevicesList = findViewById(R.id.rvDevicesList);
 
     ivBottomNavReceive.setOnClickListener(v -> {
       SendFileActivity.this.finish();
@@ -89,9 +85,23 @@ public class SendFileActivity extends AppCompatActivity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_send_file);
 
+    rvFilesList = findViewById(R.id.rvFilesList);
     LinearLayoutManager filesListLayoutManager = new LinearLayoutManager(
-            this, LinearLayoutManager.VERTICAL, false);
+        this, LinearLayoutManager.VERTICAL, false);
     rvFilesList.setLayoutManager(filesListLayoutManager);
+
+    File dir = new File(Environment.getExternalStorageDirectory() + "/"
+        + getApplicationContext().getPackageName());
+    File[] receivedFiles = dir.listFiles();
+
+    if (receivedFiles == null) {
+      receivedFiles = new File[]{};
+    }
+
+    FilesAdapter filesAdapter = new FilesAdapter(SendFileActivity.this, receivedFiles);
+    rvFilesList.setAdapter(filesAdapter);
+
+    Log.d("Reciever", "first " + (serverSocket == null));
 
     try {
       serverSocket = new ServerSocket(8888);
@@ -99,22 +109,15 @@ public class SendFileActivity extends AppCompatActivity {
       e.printStackTrace();
     }
 
-    File dir = new File(Environment.getExternalStorageDirectory() + "/"
-            + getApplicationContext().getPackageName());
-
-    File[] receivedFiles = dir.listFiles();
-
-    if (receivedFiles == null) {
-      receivedFiles = new File[] {};
+    Log.d("Reciever", "Group Created");
+    if (fileServerAsyncTask != null) {
+      Log.d("Reciever", "Woah!");
+      return;
     }
-
-    FilesAdapter filesAdapter = new FilesAdapter(SendFileActivity.this, receivedFiles);
-    rvFilesList.setAdapter(filesAdapter);
-
     fileServerAsyncTask = new FileServerAsyncTask(
-            (SendFileActivity.this),
-            (serverSocket),
-            (filesAdapter));
+        (SendFileActivity.this),
+        (serverSocket),
+        (filesAdapter));
 
     fileServerAsyncTask.execute();
 
@@ -168,6 +171,7 @@ public class SendFileActivity extends AppCompatActivity {
 
     peersAdapter = new PeersAdapter(peerList, this, p2pManager, channel, this, infoListener);
 
+    rvDevicesList = findViewById(R.id.rvDevicesList);
     rvDevicesList.setAdapter(peersAdapter);
 
     RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(
@@ -205,56 +209,20 @@ public class SendFileActivity extends AppCompatActivity {
   @Override
   protected void onDestroy() {
     super.onDestroy();
-
-    p2pManager.cancelConnect(channel, null);
-    p2pManager.stopPeerDiscovery(channel, null);
-    new Handler().post(() -> {
-      try {
-        serverSocket.close();
-      } catch (Exception e) {
-        e.printStackTrace();
-      }
-    });
-
-    try {
-      fileServerAsyncTask.cancel(true);
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-
-    fileServerAsyncTask = null;
-    Log.d("Reciever", "End Reached");
-    p2pManager.removeGroup(channel, new WifiP2pManager.ActionListener() {
+    p2pManager.cancelConnect(channel, new WifiP2pManager.ActionListener() {
       @Override
       public void onSuccess() {
-        Log.d("Reciever", "Groups Removed");
+        Toast.makeText(getApplicationContext(), "Disconnection successful", Toast.LENGTH_LONG).show();
       }
 
       @Override
       public void onFailure(int reason) {
-        Log.d("Reciever", "Groups Not Removed");
+        Toast.makeText(getApplicationContext(), "Disconnection Failed", Toast.LENGTH_LONG).show();
       }
     });
-
-    deletePersistentGroups();
     unregisterReceiver(myBroadcastReciever);
+    p2pManager.stopPeerDiscovery(channel, null);
     Log.d("Send Activity", "onDestroy");
-  }
-
-  private void deletePersistentGroups() {
-    try {
-      Method[] methods = WifiP2pManager.class.getMethods();
-      for (Method method : methods) {
-        if (method.getName().equals("deletePersistentGroup")) {
-          // Delete any persistent group
-          for (int netid = 0; netid < 32; netid++) {
-            method.invoke(p2pManager, channel, netid, null);
-          }
-        }
-      }
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
   }
 
   @Override
@@ -270,8 +238,9 @@ public class SendFileActivity extends AppCompatActivity {
           File file = new File(fileName);
           fileName = FilesUtil.getFileName(fileName);
           Log.d("File Path", fileName);
-          TransferData transferData = new TransferData(this, file, fileName, serverAddress);
-          transferData.execute();
+          TransferData transferData = new TransferData(SendFileActivity.this, file, fileName, serverAddress);
+//          transferData.execute();
+          transferData.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         } catch (Exception e) {
           e.printStackTrace();
         }
