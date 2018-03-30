@@ -2,11 +2,9 @@ package com.app.wi_fi_direct.pages;
 
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.net.wifi.p2p.WifiP2pDevice;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
@@ -16,17 +14,15 @@ import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.app.wi_fi_direct.helpers.MyBroadcastReciever;
-import com.app.wi_fi_direct.adapters.PeersAdapter;
 import com.app.wi_fi_direct.R;
 import com.app.wi_fi_direct.adapters.FilesAdapter;
+import com.app.wi_fi_direct.adapters.PeersAdapter;
 import com.app.wi_fi_direct.helpers.FileServerAsyncTask;
+import com.app.wi_fi_direct.helpers.MyBroadcastReciever;
 
-import java.io.File;
 import java.lang.reflect.Method;
 import java.net.ServerSocket;
 import java.util.ArrayList;
-import java.util.List;
 
 public class ReceiveFileActivity extends AppCompatActivity {
 
@@ -104,15 +100,7 @@ public class ReceiveFileActivity extends AppCompatActivity {
     rvFilesList.setLayoutManager(filesListLayoutManager);
 
 
-    File dir = new File(Environment.getExternalStorageDirectory() + "/"
-            + getApplicationContext().getPackageName());
-    File[] receivedFiles = dir.listFiles();
-
-    if (receivedFiles == null) {
-      receivedFiles = new File[] {};
-    }
-
-    FilesAdapter filesAdapter = new FilesAdapter(ReceiveFileActivity.this, receivedFiles);
+    FilesAdapter filesAdapter = new FilesAdapter(ReceiveFileActivity.this);
     rvFilesList.setAdapter(filesAdapter);
 
     Log.d("Reciever", "first " + (serverSocket == null));

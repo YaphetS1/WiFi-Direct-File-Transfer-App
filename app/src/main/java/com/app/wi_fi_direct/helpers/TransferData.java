@@ -37,7 +37,7 @@ public class TransferData extends AsyncTask<Void, Void, Void> {
     // Toast.makeText(context,(new InetSocketAddress(port)).toString(),Toast.LENGTH_LONG).show();
   }
 
-  public void sendData(Context context, Uri uri) {
+  private void sendData(Context context, Uri uri) {
 
     int len;
     byte buf[] = new byte[1024];
@@ -79,13 +79,11 @@ public class TransferData extends AsyncTask<Void, Void, Void> {
       Log.d("Data Transfer", e.toString());
       e.printStackTrace();
     } finally {
-      if (socket != null) {
-        if (socket.isConnected()) {
-          try {
-            socket.close();
-          } catch (Exception e) {
-            e.printStackTrace();
-          }
+      if (socket.isConnected()) {
+        try {
+          socket.close();
+        } catch (Exception e) {
+          e.printStackTrace();
         }
       }
     }

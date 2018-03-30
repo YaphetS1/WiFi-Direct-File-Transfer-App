@@ -7,8 +7,6 @@ import android.net.wifi.p2p.WifiP2pManager;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
-import android.os.Handler;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -61,14 +59,14 @@ public class SendFileActivity extends AppCompatActivity {
     TextView tvBottomNavReceive = findViewById(R.id.tvReceive);
     TextView tvBottomNavSetting = findViewById(R.id.tvSettings);
 
-    ivBottomNavReceive.setOnClickListener(v -> {
-      SendFileActivity.this.finish();
-      Intent intent = new Intent(SendFileActivity.this, ReceiveFileActivity.class);
-      startActivity(intent);
-    });
+//    ivBottomNavReceive.setOnClickListener(v -> {
+//      SendFileActivity.this.finish();
+//      Intent intent = new Intent(SendFileActivity.this, ReceiveFileActivity.class);
+//      startActivity(intent);
+//    });
 
-    ivBottomNavSetting.setOnClickListener(v -> {
-    });
+//    ivBottomNavSetting.setOnClickListener(v -> {
+//    });
 
     ivBottomNavSend.setImageResource(R.drawable.d_bottom_nav_send_active);
     ivBottomNavReceive.setImageResource(R.drawable.d_bottom_nav_download);
@@ -90,15 +88,7 @@ public class SendFileActivity extends AppCompatActivity {
         this, LinearLayoutManager.VERTICAL, false);
     rvFilesList.setLayoutManager(filesListLayoutManager);
 
-    File dir = new File(Environment.getExternalStorageDirectory() + "/"
-        + getApplicationContext().getPackageName());
-    File[] receivedFiles = dir.listFiles();
-
-    if (receivedFiles == null) {
-      receivedFiles = new File[]{};
-    }
-
-    FilesAdapter filesAdapter = new FilesAdapter(SendFileActivity.this, receivedFiles);
+    FilesAdapter filesAdapter = new FilesAdapter(SendFileActivity.this);
     rvFilesList.setAdapter(filesAdapter);
 
     Log.d("Reciever", "first " + (serverSocket == null));
@@ -108,12 +98,8 @@ public class SendFileActivity extends AppCompatActivity {
     } catch (Exception e) {
       e.printStackTrace();
     }
-
     Log.d("Reciever", "Group Created");
-    if (fileServerAsyncTask != null) {
-      Log.d("Reciever", "Woah!");
-      return;
-    }
+
     fileServerAsyncTask = new FileServerAsyncTask(
         (SendFileActivity.this),
         (serverSocket),
@@ -228,7 +214,6 @@ public class SendFileActivity extends AppCompatActivity {
   @Override
   protected void onActivityResult(int requestCode, int resultCode, Intent data) {
     super.onActivityResult(requestCode, resultCode, data);
-    Log.d("DEBUG", String.valueOf(requestCode));
     switch (requestCode) {
       case ChooseFile.FILE_TRANSFER_CODE:
         if (data == null) return;

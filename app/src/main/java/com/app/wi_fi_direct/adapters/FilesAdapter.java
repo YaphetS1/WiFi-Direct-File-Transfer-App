@@ -1,6 +1,7 @@
 package com.app.wi_fi_direct.adapters;
 
 import android.content.Context;
+import android.os.Environment;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,8 +21,8 @@ public class FilesAdapter extends RecyclerView.Adapter<FilesAdapter.FilesViewHol
   private File[] receivedFiles;
   private Context context;
 
-  public FilesAdapter(Context context, File[] receivedFiles) {
-    this.receivedFiles = receivedFiles;
+  public FilesAdapter(Context context) {
+    this.receivedFiles = getFilesFromStorage(context);
     this.context = context;
   }
 
@@ -41,9 +42,21 @@ public class FilesAdapter extends RecyclerView.Adapter<FilesAdapter.FilesViewHol
     return receivedFiles.length;
   }
 
-
   public void notifyAdapter() {
+    this.receivedFiles = this.getFilesFromStorage(this.context);
     this.notifyDataSetChanged();
+  }
+
+  private File[] getFilesFromStorage(Context context) {
+    File dir = new File(Environment.getExternalStorageDirectory() + "/"
+        + context.getApplicationContext().getPackageName());
+
+    File[] receivedFiles = dir.listFiles();
+
+    if (receivedFiles == null) {
+      return new File[]{};
+    }
+    return receivedFiles;
   }
 
 

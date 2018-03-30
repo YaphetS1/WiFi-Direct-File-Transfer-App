@@ -123,6 +123,8 @@ public class FileServerAsyncTask extends AsyncTask<Void, CustomObject, Void> {
   @Override
   protected void onProgressUpdate(CustomObject... values) {
     super.onProgressUpdate(values);
+
+    //TODO: Add progress bar to any files
 //    if (progressBar.getVisibility() != View.VISIBLE) progressBar.setVisibility(View.VISIBLE);
 //    if (tvFileName.getText().equals("")) tvFileName.setText(values[0].name);
 //    progressBar.setProgress((int) ((values[0].totalProgress * 100) / fileSize));
