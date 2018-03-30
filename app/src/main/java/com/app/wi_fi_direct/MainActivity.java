@@ -7,7 +7,6 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 
 import com.app.wi_fi_direct.pages.SendFileActivity;
 
@@ -42,13 +41,11 @@ public class MainActivity extends AppCompatActivity {
   @Override
   public void onRequestPermissionsResult(int requestCode,
                                          @NonNull String permissions[], @NonNull int[] grantResults) {
-    Log.d("DEBUG::;", String.valueOf(requestCode));
     switch (requestCode) {
       case 49: {
         if (!checkPermissions()) {
           ActivityCompat.requestPermissions(MainActivity.this, permissions, 49);
         } else {
-          Log.d("DEBUG::;", "vse horosho");
           Intent intent = new Intent(MainActivity.this, SendFileActivity.class);
 //          intent.setFlags(intent.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
           this.startActivity(intent);

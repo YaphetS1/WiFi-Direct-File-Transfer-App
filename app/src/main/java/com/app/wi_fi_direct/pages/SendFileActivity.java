@@ -27,6 +27,7 @@ import com.app.wi_fi_direct.helpers.PathUtil;
 import com.app.wi_fi_direct.helpers.TransferData;
 
 import java.io.File;
+import java.lang.reflect.Method;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.util.ArrayList;
@@ -195,6 +196,7 @@ public class SendFileActivity extends AppCompatActivity {
   @Override
   protected void onDestroy() {
     super.onDestroy();
+
     p2pManager.cancelConnect(channel, new WifiP2pManager.ActionListener() {
       @Override
       public void onSuccess() {
@@ -209,6 +211,30 @@ public class SendFileActivity extends AppCompatActivity {
     unregisterReceiver(myBroadcastReciever);
     p2pManager.stopPeerDiscovery(channel, null);
     Log.d("Send Activity", "onDestroy");
+
+    try {
+      serverSocket.close();
+      fileServerAsyncTask.cancel(true);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    deletePersistentGroups();
+  }
+
+  private void deletePersistentGroups() {
+    try {
+      Method[] methods = WifiP2pManager.class.getMethods();
+      for (Method method : methods) {
+        if (method.getName().equals("deletePersistentGroup")) {
+          // Delete any persistent group
+          for (int netid = 0; netid < 32; netid++) {
+            method.invoke(p2pManager, channel, netid, null);
+          }
+        }
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
   }
 
   @Override

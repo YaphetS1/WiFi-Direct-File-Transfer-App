@@ -176,10 +176,12 @@ public class ReceiveFileActivity extends AppCompatActivity {
   @Override
   protected void onDestroy() {
     super.onDestroy();
+
     Log.d("onDestroy", "yup");
     unregisterReceiver(myBroadcastReciever);
     p2pManager.cancelConnect(channel, null);
     p2pManager.stopPeerDiscovery(channel, null);
+
     new Handler().post(() -> {
       try {
         serverSocket.close();
@@ -193,7 +195,6 @@ public class ReceiveFileActivity extends AppCompatActivity {
     } catch (Exception e) {
       e.printStackTrace();
     }
-    fileServerAsyncTask = null;
     Log.d("Reciever", "End Reached");
     p2pManager.removeGroup(channel, new WifiP2pManager.ActionListener() {
       @Override
