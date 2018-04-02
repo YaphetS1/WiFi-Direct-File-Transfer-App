@@ -56,51 +56,59 @@ public class FileServerAsyncTask extends AsyncTask<Void, CustomObject, Void> {
       InputStream inputStream1 = client.getInputStream();
       ObjectInputStream inputStream = new ObjectInputStream(inputStream1);
 
-      String fileName = inputStream.readUTF();
-      fileSize = inputStream.readLong();
-      file = new File(Environment.getExternalStorageDirectory() + "/" + context.getApplicationContext().getPackageName() + "/" + fileName);
-      Log.d("Reciever", file.getPath());
+      int sizeOfItems = inputStream.readInt();
+
+      for (int i = 0; i < sizeOfItems; i++) {
+
+        String fileName = inputStream.readUTF();
+        fileSize = inputStream.readLong();
+        file = new File(Environment.getExternalStorageDirectory() + "/"
+            + context.getApplicationContext().getPackageName() + "/" + fileName);
+        Log.d("Reciever", file.getPath());
 
 
-      File dir = file.getParentFile();
-      if (!dir.exists()) dir.mkdirs();
-      if (file.exists()) file.delete();
-      if (file.createNewFile()) {
-        Log.d("Reciever", "File Created");
+        File dir = file.getParentFile();
+        if (!dir.exists()) dir.mkdirs();
+        if (file.exists()) file.delete();
+        if (file.createNewFile()) {
+          Log.d("Reciever", "File Created");
 
-      } else Log.d("Reciever", "File Not Created");
+        } else Log.d("Reciever", "File Not Created");
 
 
-      OutputStream outputStream = new FileOutputStream(file);
-      CustomObject progress = new CustomObject();
-      progress.name = fileName;
-      progress.dataIncrement = 0;
-      progress.totalProgress = 0;
+        OutputStream outputStream = new FileOutputStream(file);
+        CustomObject progress = new CustomObject();
+        progress.name = fileName;
+        progress.dataIncrement = 0;
+        progress.totalProgress = 0;
 
-      try {
-        while (((len = inputStream.read(buf)) != -1)) {
+        try {
+          while (((len = inputStream.read(buf)) != -1)) {
 
-          outputStream.write(buf, 0, len);
-          progress.dataIncrement = (long) len;
-          if (((int) (progress.totalProgress * 100 / fileSize)) == ((int) ((progress.totalProgress + progress.dataIncrement) * 100 / fileSize))) {
+            outputStream.write(buf, 0, len);
+            progress.dataIncrement = (long) len;
+            if (((int) (progress.totalProgress * 100 / fileSize)) == ((int) ((progress.totalProgress + progress.dataIncrement) * 100 / fileSize))) {
+              progress.totalProgress += progress.dataIncrement;
+              continue;
+            }
+
             progress.totalProgress += progress.dataIncrement;
-            continue;
+            publishProgress(progress);
+            if (this.isCancelled()) return;
+            //Log.d("Reciever","Writing Data    -"+len);
           }
 
-          progress.totalProgress += progress.dataIncrement;
-          publishProgress(progress);
-          if (this.isCancelled()) return;
-          //Log.d("Reciever","Writing Data    -"+len);
+          Log.d("Reciever", "Writing Data Final   -" + len);
+        } catch (Exception e) {
+          Log.d("Reciever", "oops");
+          e.printStackTrace();
         }
 
-        Log.d("Reciever", "Writing Data Final   -" + len);
-      } catch (Exception e) {
-        Log.d("Reciever", "oops");
-        e.printStackTrace();
+        outputStream.flush();
+        outputStream.close();
+
       }
 
-      outputStream.flush();
-      outputStream.close();
       inputStream.close();
       //serverSocket.close();
       //client.close();

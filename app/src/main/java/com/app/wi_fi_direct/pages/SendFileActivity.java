@@ -22,7 +22,6 @@ import com.app.wi_fi_direct.helpers.ChooseFile;
 import com.app.wi_fi_direct.helpers.FileServerAsyncTask;
 import com.app.wi_fi_direct.helpers.FilesUtil;
 import com.app.wi_fi_direct.helpers.MyBroadcastReciever;
-import com.app.wi_fi_direct.helpers.PathUtil;
 import com.app.wi_fi_direct.helpers.TransferData;
 
 import java.io.File;
@@ -105,7 +104,6 @@ public class SendFileActivity extends AppCompatActivity {
         (serverSocket),
         (filesAdapter));
 
-//    fileServerAsyncTask.execute();
     fileServerAsyncTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
     Log.d("Send Activity", "onCreate");
@@ -258,26 +256,40 @@ public class SendFileActivity extends AppCompatActivity {
     switch (requestCode) {
       case ChooseFile.FILE_TRANSFER_CODE:
         if (data == null) return;
-        Uri uri = data.getData();
-        try {
-          ArrayList<Uri> Uris = new ArrayList<>();
 
+        ArrayList<Uri> uris = new ArrayList<>();
+        ArrayList<File> files = new ArrayList<>();
+        ArrayList<String> fileNames = new ArrayList<>();
+
+        try {
           ClipData clipData = data.getClipData();
+
           if (clipData != null) {
             for (int i = 0; i < clipData.getItemCount(); i++) {
-              Uris.add(clipData.getItemAt(i).getUri());
+              uris.add(clipData.getItemAt(i).getUri());
+
+              String fileName = clipData.getItemAt(i).getUri().getPath();
+              files.add(new File(fileName));
+
+              fileName = FilesUtil.getFileName(fileName);
+              fileNames.add(fileName);
+
+              Log.d("File URI", clipData.getItemAt(i).getUri().toString());
+              Log.d("File Path", fileName);
             }
-          }
-          else {
-            Uris.add(data.getData());
+          } else {
+            Uri uri = data.getData();
+            uris.add(uri);
+
+            String fileName = uri.getPath();
+            files.add(new File(fileName));
+
+            fileName = FilesUtil.getFileName(fileName);
+            fileNames.add(fileName);
           }
 
-          String fileName = PathUtil.getPath(getApplicationContext(), uri);
-          File file = new File(fileName);
-          fileName = FilesUtil.getFileName(fileName);
-//          Log.d("File Path", fileName);
-
-          TransferData transferData = new TransferData(SendFileActivity.this, file, fileName, serverAddress);
+          TransferData transferData = new TransferData(SendFileActivity.this,
+              uris, fileNames, files, serverAddress);
           transferData.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
 

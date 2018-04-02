@@ -14,20 +14,24 @@ import java.io.OutputStream;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Socket;
-
+import java.util.ArrayList;
 
 public class TransferData extends AsyncTask<Void, Void, Void> {
   public Context context;
-  public Uri uri;
+  public ArrayList<Uri> uris;
+  public ArrayList<String> fileNames;
   public InetAddress serverAddress;
-  public String fileName;
-  private File file;
 
-  public TransferData(Context context, File file, String fileName, InetAddress serverAddress) {
+  private ArrayList<File> files;
+
+  public TransferData(Context context, ArrayList<Uri> uris,
+                      ArrayList<String> fileNames, ArrayList<File> files, InetAddress serverAddress) {
     this.context = context;
-    this.uri = Uri.fromFile(file);
-    this.file = file;
-    this.fileName = fileName;
+
+    this.uris = uris;
+    this.fileNames = fileNames;
+    this.files = files;
+
     this.serverAddress = serverAddress;
 
     Log.d(" DEBUG::::   ", serverAddress.getHostAddress());
@@ -35,19 +39,17 @@ public class TransferData extends AsyncTask<Void, Void, Void> {
     Toast.makeText(context, "Transfer Started", Toast.LENGTH_SHORT).show();
   }
 
-  private void sendData(Context context, Uri uri) {
+  private void sendData(Context context, ArrayList<Uri> uris) {
 
     int len;
-    byte buf[] = new byte[1024];
+    byte buf[] = new byte[16 * 1024];
 
     Log.d("Data Transfer", "Transfer Starter");
-//    Log.d("Data Transfer IP", (new InetSocketAddress(port)).toString());
 
     Socket socket = new Socket();
 
     try {
       socket.bind(null);
-      //socket.bind(new InetSocketAddress(8888));
       Log.d("Client Address", socket.getLocalSocketAddress().toString());
 
       socket.connect(new InetSocketAddress(serverAddress, 8888));
@@ -56,17 +58,25 @@ public class TransferData extends AsyncTask<Void, Void, Void> {
       OutputStream outputStream = socket.getOutputStream();
       ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
       ContentResolver cr = context.getContentResolver();
-      InputStream inputStream = cr.openInputStream(uri);
-      objectOutputStream.writeUTF(fileName);
-      objectOutputStream.writeLong(file.length());
 
-      Log.d("Sender", (file.length() + "  file size"));
-      while ((len = inputStream.read(buf)) != -1) {
-        objectOutputStream.write(buf, 0, len);
+      objectOutputStream.writeInt(uris.size());
 
-        Log.d("Sender","Writing Data");
+      for (int i = 0; i < uris.size(); i++) {
+
+        InputStream inputStream = cr.openInputStream(uris.get(i));
+        objectOutputStream.writeUTF(fileNames.get(i));
+        objectOutputStream.writeLong(files.get(i).length());
+
+        Log.d("Sender", (files.get(i).length() + "  file size"));
+
+        while ((len = inputStream.read(buf)) != -1) {
+          objectOutputStream.write(buf, 0, len);
+
+          Log.d("Sender", "Writing Data");
+        }
+        inputStream.close();
       }
-      inputStream.close();
+
       objectOutputStream.close();
       socket.close();
 
@@ -87,7 +97,7 @@ public class TransferData extends AsyncTask<Void, Void, Void> {
 
   @Override
   protected Void doInBackground(Void... params) {
-    sendData(context, uri);
+    sendData(context, uris);
     return null;
   }
 
