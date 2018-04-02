@@ -18,6 +18,8 @@ import java.util.List;
 
 public class PeersAdapter extends RecyclerView.Adapter<PeersViewHolder> {
 
+  private PeersViewHolder tempHolder;
+
   List<WifiP2pDevice> peersList;
   Context context;
   WifiP2pManager manager;
@@ -38,14 +40,16 @@ public class PeersAdapter extends RecyclerView.Adapter<PeersViewHolder> {
     this.channel = channel;
     this.activity = activity;
     this.infoListener = infoListener;
+
     listener = new WifiP2pManager.ActionListener() {
       @Override
       public void onSuccess() {
         Toast.makeText(context, "Connected!", Toast.LENGTH_LONG).show();
-        manager.requestConnectionInfo(channel,infoListener);
-        //TODO: When connected start fileChooser
-//        ChooseFile.fileChooser(activity);
+        manager.requestConnectionInfo(channel, infoListener);
         Log.d("ConnectPeer ","Success");
+        //        ChooseFile.fileChooser(activity);
+
+        tempHolder.statePeer.setImageResource(R.drawable.d_icon_done);
       }
 
       @Override
@@ -73,6 +77,9 @@ public class PeersAdapter extends RecyclerView.Adapter<PeersViewHolder> {
       holder.peerView.setOnClickListener(v -> {
         Log.d("peerButton", "ON CLICK");
         ConnectPeer.connect(deviceAddress, manager, channel, context, listener);
+        holder.statePeer.setImageResource(R.drawable.d_icon_refresh);
+
+        tempHolder = holder;
       });
     } catch (Exception e) {
       e.printStackTrace();

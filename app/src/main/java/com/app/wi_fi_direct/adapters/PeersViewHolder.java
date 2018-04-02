@@ -4,7 +4,7 @@ import android.net.wifi.p2p.WifiP2pDevice;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
-import android.widget.LinearLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.app.wi_fi_direct.R;
@@ -12,6 +12,7 @@ import com.app.wi_fi_direct.R;
 public class PeersViewHolder extends RecyclerView.ViewHolder {
 
   private TextView peerName;
+  public ImageView statePeer;
 
   public View peerView;
   public WifiP2pDevice device;
@@ -20,6 +21,8 @@ public class PeersViewHolder extends RecyclerView.ViewHolder {
   public PeersViewHolder(View itemView) {
     super(itemView);
     peerName = itemView.findViewById(R.id.tvItemTitle);
+    statePeer = itemView.findViewById(R.id.imgState);
+
     peerView = itemView;
   }
 

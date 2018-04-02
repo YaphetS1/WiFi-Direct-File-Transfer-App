@@ -31,10 +31,8 @@ public class TransferData extends AsyncTask<Void, Void, Void> {
     this.serverAddress = serverAddress;
 
     Log.d(" DEBUG::::   ", serverAddress.getHostAddress());
-//    Log.d("DEBUG::::   ", serverAddress.getHostName());
 
     Toast.makeText(context, "Transfer Started", Toast.LENGTH_SHORT).show();
-    // Toast.makeText(context,(new InetSocketAddress(port)).toString(),Toast.LENGTH_LONG).show();
   }
 
   private void sendData(Context context, Uri uri) {
@@ -55,8 +53,6 @@ public class TransferData extends AsyncTask<Void, Void, Void> {
       socket.connect(new InetSocketAddress(serverAddress, 8888));
       Log.d("Client", "Client Connected");
 
-      //OutputStream outputStream = socket.getOutputStream();
-      //ObjectOutputStream objectOutputStream=new ObjectOutputStream(outputStream);
       OutputStream outputStream = socket.getOutputStream();
       ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
       ContentResolver cr = context.getContentResolver();
@@ -67,15 +63,14 @@ public class TransferData extends AsyncTask<Void, Void, Void> {
       Log.d("Sender", (file.length() + "  file size"));
       while ((len = inputStream.read(buf)) != -1) {
         objectOutputStream.write(buf, 0, len);
-        //Log.d("Sender","Writing Data");
+
+        Log.d("Sender","Writing Data");
       }
-      //objectOutputStream.write(-1);
       inputStream.close();
       objectOutputStream.close();
       socket.close();
 
     } catch (Exception e) {
-      //Toast.makeText(context,e.toString(),Toast.LENGTH_SHORT).show();
       Log.d("Data Transfer", e.toString());
       e.printStackTrace();
     } finally {

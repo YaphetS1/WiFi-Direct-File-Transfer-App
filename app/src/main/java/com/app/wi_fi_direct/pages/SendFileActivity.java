@@ -1,13 +1,12 @@
 package com.app.wi_fi_direct.pages;
 
+import android.content.ClipData;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.Uri;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -16,13 +15,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.app.wi_fi_direct.adapters.FilesAdapter;
-import com.app.wi_fi_direct.helpers.FileServerAsyncTask;
-import com.app.wi_fi_direct.helpers.MyBroadcastReciever;
-import com.app.wi_fi_direct.adapters.PeersAdapter;
 import com.app.wi_fi_direct.R;
+import com.app.wi_fi_direct.adapters.FilesAdapter;
+import com.app.wi_fi_direct.adapters.PeersAdapter;
 import com.app.wi_fi_direct.helpers.ChooseFile;
+import com.app.wi_fi_direct.helpers.FileServerAsyncTask;
 import com.app.wi_fi_direct.helpers.FilesUtil;
+import com.app.wi_fi_direct.helpers.MyBroadcastReciever;
 import com.app.wi_fi_direct.helpers.PathUtil;
 import com.app.wi_fi_direct.helpers.TransferData;
 
@@ -106,7 +105,8 @@ public class SendFileActivity extends AppCompatActivity {
         (serverSocket),
         (filesAdapter));
 
-    fileServerAsyncTask.execute();
+//    fileServerAsyncTask.execute();
+    fileServerAsyncTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
     Log.d("Send Activity", "onCreate");
 
@@ -116,7 +116,6 @@ public class SendFileActivity extends AppCompatActivity {
       peerList.addAll(peers.getDeviceList());
       peersAdapter.updateList(peerList);
       peersAdapter.notifyDataSetChanged();
-      //Toast.makeText(getApplicationContext(),String.valueOf(peers.getDeviceList().size()),Toast.LENGTH_LONG).show();
     };
 
     infoListener = info -> {
@@ -131,6 +130,23 @@ public class SendFileActivity extends AppCompatActivity {
 
     p2pManager = (WifiP2pManager) getSystemService(WIFI_P2P_SERVICE);
     channel = p2pManager.initialize(this, getMainLooper(), null);
+
+
+    try {
+      Class<?> wifiManager = Class
+          .forName("android.net.wifi.p2p.WifiP2pManager");
+
+      Method method = wifiManager
+          .getMethod("enableP2p",
+              WifiP2pManager.Channel.class);
+
+      method.invoke(p2pManager, channel);
+
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+
+
     p2pManager.removeGroup(channel, new WifiP2pManager.ActionListener() {
       @Override
       public void onSuccess() {
@@ -192,7 +208,6 @@ public class SendFileActivity extends AppCompatActivity {
     Log.d("Send Activity", "onPause");
   }
 
-  @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
   @Override
   protected void onDestroy() {
     super.onDestroy();
@@ -245,13 +260,27 @@ public class SendFileActivity extends AppCompatActivity {
         if (data == null) return;
         Uri uri = data.getData();
         try {
+          ArrayList<Uri> Uris = new ArrayList<>();
+
+          ClipData clipData = data.getClipData();
+          if (clipData != null) {
+            for (int i = 0; i < clipData.getItemCount(); i++) {
+              Uris.add(clipData.getItemAt(i).getUri());
+            }
+          }
+          else {
+            Uris.add(data.getData());
+          }
+
           String fileName = PathUtil.getPath(getApplicationContext(), uri);
           File file = new File(fileName);
           fileName = FilesUtil.getFileName(fileName);
-          Log.d("File Path", fileName);
+//          Log.d("File Path", fileName);
+
           TransferData transferData = new TransferData(SendFileActivity.this, file, fileName, serverAddress);
-//          transferData.execute();
           transferData.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+
+
         } catch (Exception e) {
           e.printStackTrace();
         }

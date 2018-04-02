@@ -36,6 +36,12 @@ public class MyBroadcastReciever extends BroadcastReceiver {
       p2pManager.requestPeers(channel, peerListListener);
       Toast.makeText(context, WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION, Toast.LENGTH_SHORT).show();
     } else if (WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION.equals(action)) {
+      int state = intent.getIntExtra(WifiP2pManager.EXTRA_WIFI_STATE, -1);
+      if (state == WifiP2pManager.WIFI_P2P_STATE_ENABLED) {
+//        context.setIsWifiP2pEnabled(true);
+      } else {
+//        context.setIsWifiP2pEnabled(false);
+      }
       //Toast.makeText(context,WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION,Toast.LENGTH_SHORT).show();
     } else if (WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION.equals(action)) {
       NetworkInfo networkInfo = intent.getParcelableExtra(WifiP2pManager.EXTRA_NETWORK_INFO);
