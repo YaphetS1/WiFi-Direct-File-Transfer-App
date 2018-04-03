@@ -6,6 +6,18 @@
     android:layout_height="wrap_content"
     tools:layout_editor_absoluteY="25dp">
 
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="@android:style/Widget.ProgressBar.Horizontal"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:progress="60"
+        android:progressDrawable="@drawable/progressbar_drawable"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <ImageView
         android:id="@+id/ivItemType"
         android:layout_width="wrap_content"
