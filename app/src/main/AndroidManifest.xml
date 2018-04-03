@@ -43,7 +43,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".pages.SendFileActivity" />
-        <activity android:name=".pages.ReceiveFileActivity"></activity>
+        <activity android:name=".pages.ReceiveFileActivity" />
+        <activity android:name=".pages.SettingsActivity"></activity>
     </application>
 
 </manifest>

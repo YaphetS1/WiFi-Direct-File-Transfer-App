@@ -287,7 +287,7 @@ public class SendFileActivity extends AppCompatActivity {
     tvSendOrReceive = findViewById(R.id.tvSendOrReceive);
     NavService.init(this
         , (Callback) () -> {
-          Toast.makeText(SendFileActivity.this, "recommendations", Toast.LENGTH_SHORT).show();
+          Toast.makeText(SendFileActivity.this, "Some action will be here!", Toast.LENGTH_SHORT).show();
         }
         , (Callback) () -> {
           tvSendOrReceive.setText(R.string.sending);
@@ -300,7 +300,7 @@ public class SendFileActivity extends AppCompatActivity {
           rvReceivingFilesList.setVisibility(View.VISIBLE);
         }
         , (Callback) () -> {
-          Toast.makeText(SendFileActivity.this, "settings", Toast.LENGTH_SHORT).show();
+          
         }
         , NavService.TAB_SEND
     );
