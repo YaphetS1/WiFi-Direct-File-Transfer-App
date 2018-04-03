@@ -15,20 +15,19 @@
         app:layout_constraintTop_toTopOf="parent"
         />
 
-
     <LinearLayout
-        android:id="@+id/linearLayout2"
-        android:layout_width="90dp"
+        android:id="@+id/llRecommendations"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/linearLayout"
+        app:layout_constraintEnd_toStartOf="@+id/llSend"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent">
 
         <ImageView
-            android:id="@+id/imageView4"
+            android:id="@+id/ivRecommendations"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -37,60 +36,27 @@
             tools:layout_editor_absoluteY="16dp" />
 
         <TextView
-            android:id="@+id/textView4"
+            android:id="@+id/tvRecommendations"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:fontFamily="@font/r_r"
-            android:textSize="12sp"
             android:paddingTop="3dp"
             android:text="@string/recomendations"
-            android:textAlignment="center" />
+            android:textAlignment="center"
+            android:textSize="12sp" />
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/linearLayout4"
+        android:id="@+id/llSend"
         android:layout_width="70dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/llReceive"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/linearLayout3">
-
-        <ImageView
-            android:id="@+id/ivSettings"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            app:srcCompat="@drawable/d_bottom_nav_settings"
-            tools:layout_editor_absoluteX="58dp"
-            tools:layout_editor_absoluteY="16dp" />
-
-        <TextView
-            android:id="@+id/tvSettings"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:fontFamily="@font/r_r"
-            android:textSize="12sp"
-            android:paddingTop="3dp"
-            android:text="@string/settings"
-            android:textAlignment="center" />
-    </LinearLayout>
-
-
-    <LinearLayout
-        android:id="@+id/linearLayout"
-        android:layout_width="70dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/linearLayout3"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/linearLayout2">
+        app:layout_constraintStart_toEndOf="@+id/llRecommendations">
 
         <ImageView
             android:id="@+id/ivSend"
@@ -107,23 +73,22 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:fontFamily="@font/r_r"
-            android:textSize="12sp"
             android:paddingTop="3dp"
             android:text="@string/send"
-            android:textAlignment="center" />
-
+            android:textAlignment="center"
+            android:textSize="12sp" />
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/linearLayout3"
+        android:id="@+id/llReceive"
         android:layout_width="70dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/linearLayout4"
+        app:layout_constraintEnd_toStartOf="@+id/llSettings"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/linearLayout">
+        app:layout_constraintStart_toEndOf="@+id/llSend">
 
         <ImageView
             android:id="@+id/ivReceive"
@@ -146,5 +111,38 @@
             android:textAlignment="center" />
 
     </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/llSettings"
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/llReceive">
+
+        <ImageView
+            android:id="@+id/ivSettings"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            app:srcCompat="@drawable/d_bottom_nav_settings"
+            tools:layout_editor_absoluteX="58dp"
+            tools:layout_editor_absoluteY="16dp" />
+
+        <TextView
+            android:id="@+id/tvSettings"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:fontFamily="@font/r_r"
+            android:textSize="12sp"
+            android:paddingTop="3dp"
+            android:text="@string/settings"
+            android:textAlignment="center" />
+    </LinearLayout>
+
 
 </android.support.constraint.ConstraintLayout>

@@ -11,18 +11,18 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.app.wi_fi_direct.R;
 import com.app.wi_fi_direct.adapters.FilesAdapter;
 import com.app.wi_fi_direct.adapters.PeersAdapter;
+import com.app.wi_fi_direct.helpers.Callback;
 import com.app.wi_fi_direct.helpers.ChooseFile;
 import com.app.wi_fi_direct.helpers.FileServerAsyncTask;
 import com.app.wi_fi_direct.helpers.FilesUtil;
 import com.app.wi_fi_direct.helpers.MyBroadcastReciever;
 import com.app.wi_fi_direct.helpers.TransferData;
+import com.app.wi_fi_direct.services.NavService;
 
 import java.io.File;
 import java.lang.reflect.Method;
@@ -51,13 +51,6 @@ public class SendFileActivity extends AppCompatActivity {
   public void onStart() {
     super.onStart();
 
-    ImageView ivBottomNavSend = findViewById(R.id.ivSend);
-    ImageView ivBottomNavReceive = findViewById(R.id.ivReceive);
-    ImageView ivBottomNavSetting = findViewById(R.id.ivSettings);
-    TextView tvBottomNavSend = findViewById(R.id.tvSend);
-    TextView tvBottomNavReceive = findViewById(R.id.tvReceive);
-    TextView tvBottomNavSetting = findViewById(R.id.tvSettings);
-
 //    ivBottomNavReceive.setOnClickListener(v -> {
 //      SendFileActivity.this.finish();
 //      Intent intent = new Intent(SendFileActivity.this, ReceiveFileActivity.class);
@@ -67,14 +60,21 @@ public class SendFileActivity extends AppCompatActivity {
 //    ivBottomNavSetting.setOnClickListener(v -> {
 //    });
 
-    ivBottomNavSend.setImageResource(R.drawable.d_bottom_nav_send_active);
-    ivBottomNavReceive.setImageResource(R.drawable.d_bottom_nav_download);
-    ivBottomNavSetting.setImageResource(R.drawable.d_bottom_nav_settings);
-
-    tvBottomNavSend.setTextColor(getResources().getColor(R.color.cTextPrimary));
-    tvBottomNavReceive.setTextColor(getResources().getColor(R.color.cTextGrey));
-    tvBottomNavSetting.setTextColor(getResources().getColor(R.color.cTextGrey));
-
+    NavService.init(this
+        , (Callback) () -> {
+          Toast.makeText(SendFileActivity.this, "recommendations", Toast.LENGTH_SHORT).show();
+        }
+        , (Callback) () -> {
+          Toast.makeText(SendFileActivity.this, "send", Toast.LENGTH_SHORT).show();
+        }
+        , (Callback) () -> {
+          Toast.makeText(SendFileActivity.this, "receive", Toast.LENGTH_SHORT).show();
+        }
+        , (Callback) () -> {
+          Toast.makeText(SendFileActivity.this, "settings", Toast.LENGTH_SHORT).show();
+        }
+        , NavService.TAB_SEND
+    );
   }
 
   @Override
