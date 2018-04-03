@@ -11,6 +11,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.app.wi_fi_direct.R;
@@ -33,7 +35,8 @@ import java.util.ArrayList;
 public class SendFileActivity extends AppCompatActivity {
 
   private RecyclerView rvDevicesList;
-  private RecyclerView rvFilesList;
+  private RecyclerView rvSendingFilesList;
+  private RecyclerView rvReceivingFilesList;
 
   public WifiP2pManager p2pManager;
   public WifiP2pManager.Channel channel;
@@ -47,34 +50,12 @@ public class SendFileActivity extends AppCompatActivity {
   public ServerSocket serverSocket;
   public FileServerAsyncTask fileServerAsyncTask;
 
+  private TextView tvSendOrReceive;
+
+
   @Override
   public void onStart() {
     super.onStart();
-
-//    ivBottomNavReceive.setOnClickListener(v -> {
-//      SendFileActivity.this.finish();
-//      Intent intent = new Intent(SendFileActivity.this, ReceiveFileActivity.class);
-//      startActivity(intent);
-//    });
-
-//    ivBottomNavSetting.setOnClickListener(v -> {
-//    });
-
-    NavService.init(this
-        , (Callback) () -> {
-          Toast.makeText(SendFileActivity.this, "recommendations", Toast.LENGTH_SHORT).show();
-        }
-        , (Callback) () -> {
-          Toast.makeText(SendFileActivity.this, "send", Toast.LENGTH_SHORT).show();
-        }
-        , (Callback) () -> {
-          Toast.makeText(SendFileActivity.this, "receive", Toast.LENGTH_SHORT).show();
-        }
-        , (Callback) () -> {
-          Toast.makeText(SendFileActivity.this, "settings", Toast.LENGTH_SHORT).show();
-        }
-        , NavService.TAB_SEND
-    );
   }
 
   @Override
@@ -82,15 +63,18 @@ public class SendFileActivity extends AppCompatActivity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_send_file);
 
-    rvFilesList = findViewById(R.id.rvFilesList);
+    rvSendingFilesList = findViewById(R.id.rvSendingFilesList);
     LinearLayoutManager filesListLayoutManager = new LinearLayoutManager(
         this, LinearLayoutManager.VERTICAL, false);
-    rvFilesList.setLayoutManager(filesListLayoutManager);
-
+    rvSendingFilesList.setLayoutManager(filesListLayoutManager);
     FilesAdapter filesAdapter = new FilesAdapter(SendFileActivity.this);
-    rvFilesList.setAdapter(filesAdapter);
-
+    rvSendingFilesList.setAdapter(filesAdapter);
     Log.d("Reciever", "first " + (serverSocket == null));
+
+    rvReceivingFilesList = findViewById(R.id.rvReceivingFilesList);
+    //init navigation
+    initNav();
+
 
     try {
       serverSocket = new ServerSocket(8888);
@@ -297,7 +281,28 @@ public class SendFileActivity extends AppCompatActivity {
           e.printStackTrace();
         }
     }
-
   }
 
+  private void initNav() {
+    tvSendOrReceive = findViewById(R.id.tvSendOrReceive);
+    NavService.init(this
+        , (Callback) () -> {
+          Toast.makeText(SendFileActivity.this, "recommendations", Toast.LENGTH_SHORT).show();
+        }
+        , (Callback) () -> {
+          tvSendOrReceive.setText(R.string.sending);
+          rvSendingFilesList.setVisibility(View.VISIBLE);
+          rvReceivingFilesList.setVisibility(View.INVISIBLE);
+        }
+        , (Callback) () -> {
+          tvSendOrReceive.setText(R.string.receiving);
+          rvSendingFilesList.setVisibility(View.INVISIBLE);
+          rvReceivingFilesList.setVisibility(View.VISIBLE);
+        }
+        , (Callback) () -> {
+          Toast.makeText(SendFileActivity.this, "settings", Toast.LENGTH_SHORT).show();
+        }
+        , NavService.TAB_SEND
+    );
+  }
 }

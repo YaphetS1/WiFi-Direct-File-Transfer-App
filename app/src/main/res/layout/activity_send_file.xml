@@ -28,7 +28,7 @@
             android:layout_height="wrap_content">
 
             <TextView
-                android:id="@+id/textView2"
+                android:id="@+id/tvAvailableDevices"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="12dp"
@@ -48,11 +48,11 @@
                 android:background="@color/cWhite"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/textView2"
+                app:layout_constraintTop_toBottomOf="@id/tvAvailableDevices"
                 tools:listitem="@layout/device_list_item" />
 
             <TextView
-                android:id="@+id/textView3"
+                android:id="@+id/tvSendOrReceive"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="12dp"
@@ -64,7 +64,7 @@
                 app:layout_constraintTop_toBottomOf="@id/rvDevicesList"/>
 
             <android.support.v7.widget.RecyclerView
-                android:id="@+id/rvFilesList"
+                android:id="@+id/rvSendingFilesList"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 tools:layout_height="100dp"
@@ -72,7 +72,19 @@
                 android:background="@color/cWhite"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/textView3"
+                app:layout_constraintTop_toBottomOf="@id/tvSendOrReceive"
+                tools:listitem="@layout/file_list_item_new" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rvReceivingFilesList"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                tools:layout_height="100dp"
+                android:layout_marginTop="4dp"
+                android:background="@color/cWhite"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvSendOrReceive"
                 tools:listitem="@layout/file_list_item_new" />
 
         </android.support.constraint.ConstraintLayout>
