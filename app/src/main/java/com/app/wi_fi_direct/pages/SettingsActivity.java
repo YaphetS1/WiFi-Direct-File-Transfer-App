@@ -16,10 +16,11 @@ public class SettingsActivity extends AppCompatActivity {
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_settings);
+    initNav();
   }
 
   private void initNav() {
-    NavService.setupTopNav(this, R.string.app_main_title, true);
+    NavService.setupTopNav(this, R.string.settings, false);
     NavService.init(this
         , (Callback) () -> {
           Toast.makeText(SettingsActivity.this, "Some action will be here!", Toast.LENGTH_SHORT).show();
