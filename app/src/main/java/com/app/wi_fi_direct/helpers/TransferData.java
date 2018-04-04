@@ -7,7 +7,6 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
 
-import java.io.File;
 import java.io.InputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
@@ -17,12 +16,11 @@ import java.net.Socket;
 import java.util.ArrayList;
 
 public class TransferData extends AsyncTask<Void, Void, Void> {
-  public Context context;
-  public ArrayList<Uri> uris;
-  public ArrayList<String> fileNames;
-  public InetAddress serverAddress;
+  private Context context;
+  private ArrayList<Uri> uris;
+  private ArrayList<String> fileNames;
+  private InetAddress serverAddress;
 
-  private ArrayList<File> files;
   private ArrayList<Long> filesLength;
 
   public TransferData(Context context, ArrayList<Uri> uris,

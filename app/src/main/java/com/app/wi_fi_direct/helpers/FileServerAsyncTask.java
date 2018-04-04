@@ -4,9 +4,11 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Environment;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import com.app.wi_fi_direct.adapters.FilesAdapter;
+import com.app.wi_fi_direct.adapters.FilesViewHolder;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -28,10 +30,8 @@ public class FileServerAsyncTask extends AsyncTask<Void, CustomObject, Void> {
   private Socket client;
   private File file;
   private Long fileSize;
+  private Long fileSizeOriginal;
   private FilesAdapter fileList;
-
-//  private TextView tvFileName;
-//  private ProgressBar progressBar;
 
   public FileServerAsyncTask(Context contextWeakReference,
                              ServerSocket reference,
@@ -66,6 +66,7 @@ public class FileServerAsyncTask extends AsyncTask<Void, CustomObject, Void> {
 
         String fileName = fileNames.get(i);
         fileSize = fileSizes.get(i);
+        fileSizeOriginal = fileSizes.get(i);
         file = new File(Environment.getExternalStorageDirectory() + "/"
             + context.getApplicationContext().getPackageName() + "/" + fileName);
         Log.d("Reciever", file.getPath());
@@ -88,22 +89,22 @@ public class FileServerAsyncTask extends AsyncTask<Void, CustomObject, Void> {
         try {
 //          while (((len = inputStream.read(buf)) != -1))
           while (fileSize > 0 &&
-              (len = inputStream.read(buf, 0, (int)Math.min(buf.length, fileSize))) != -1) {
+              (len = inputStream.read(buf, 0, (int) Math.min(buf.length, fileSize))) != -1) {
 
             outputStream.write(buf, 0, len);
             fileSize -= len;
 
-//            progress.dataIncrement = (long) len;
-//            if (((int) (progress.totalProgress * 100 / fileSize)) ==
-//                ((int) ((progress.totalProgress + progress.dataIncrement) * 100 / fileSize))) {
-//              progress.totalProgress += progress.dataIncrement;
-//              continue;
-//            }
-//
-//            progress.totalProgress += progress.dataIncrement;
-//            publishProgress(progress);
+            progress.dataIncrement = (long) len;
+            if (((int) (progress.totalProgress * 100 / fileSizeOriginal)) ==
+                ((int) ((progress.totalProgress + progress.dataIncrement) * 100 / fileSizeOriginal))) {
+              progress.totalProgress += progress.dataIncrement;
+              continue;
+            }
+
+            progress.totalProgress += progress.dataIncrement;
+            publishProgress(progress);
             if (this.isCancelled()) return;
-//            Log.d("Reciever", "Writing Data IN WHILE   - " + len);
+
           }
 
           Log.d("Reciever", "Writing Data Final   -" + len);
@@ -130,17 +131,26 @@ public class FileServerAsyncTask extends AsyncTask<Void, CustomObject, Void> {
 
   @Override
   protected Void doInBackground(Void... params) {
-
     recieveData();
     return null;
-
   }
 
   @Override
   protected void onProgressUpdate(CustomObject... values) {
     super.onProgressUpdate(values);
 
-    //TODO: Add progress bar to any files
+    for (int i = 0; i < this.fileList.receivedFiles.length; i++) {
+      if (this.fileList.receivedFiles[i].getName().equals(values[0].name)) {
+        FilesViewHolder holder = this.fileList.filesViewHolders.get(i);
+        if (holder.progressBar.getVisibility() != View.VISIBLE) {
+          holder.progressBar.setVisibility(View.VISIBLE);
+        }
+        holder.progressBar.setProgress((int) ((values[0].totalProgress * 100) / fileSizeOriginal));
+      } else {
+        this.fileList.notifyAdapter();
+      }
+    }
+
 //    if (progressBar.getVisibility() != View.VISIBLE) progressBar.setVisibility(View.VISIBLE);
 //    if (tvFileName.getText().equals("")) tvFileName.setText(values[0].name);
 //    progressBar.setProgress((int) ((values[0].totalProgress * 100) / fileSize));
