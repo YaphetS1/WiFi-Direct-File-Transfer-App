@@ -285,6 +285,7 @@ public class SendFileActivity extends AppCompatActivity {
 
   private void initNav() {
     tvSendOrReceive = findViewById(R.id.tvSendOrReceive);
+    NavService.setupTopNav(this, R.string.app_main_title, true);
     NavService.init(this
         , (Callback) () -> {
           Toast.makeText(SendFileActivity.this, "Some action will be here!", Toast.LENGTH_SHORT).show();

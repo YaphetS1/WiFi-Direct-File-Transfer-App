@@ -2,8 +2,10 @@ package com.app.wi_fi_direct.services;
 
 import android.app.Activity;
 import android.content.pm.PackageManager;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import com.app.wi_fi_direct.R;
@@ -78,6 +80,17 @@ public class NavService {
       default: {
         
       }
+    }
+  }
+
+  public static void setupTopNav(Activity activity, int titleRes, boolean showSwitch) {
+    TextView tvTopNavTitle = activity.findViewById(R.id.tvTopNavTitle);
+    Switch swEnableWifiDirect = activity.findViewById(R.id.swEnableWifiDirect);
+    tvTopNavTitle.setText(titleRes);
+    if (showSwitch) {
+      swEnableWifiDirect.setVisibility(View.VISIBLE);
+    } else {
+      swEnableWifiDirect.setVisibility(View.INVISIBLE);
     }
   }
 
