@@ -98,6 +98,7 @@
                 android:id="@+id/clHistory"
                 android:layout_width="0dp"
                 android:layout_height="54dp"
+                android:background="?attr/selectableItemBackground"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" >
@@ -147,6 +148,7 @@
                 android:id="@+id/clStoreLocation"
                 android:layout_width="0dp"
                 android:layout_height="54dp"
+                android:background="?attr/selectableItemBackground"
                 app:layout_constraintTop_toBottomOf="@id/clHistory"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" >
@@ -188,6 +190,7 @@
                 android:id="@+id/clRate"
                 android:layout_width="0dp"
                 android:layout_height="54dp"
+                android:background="?attr/selectableItemBackground"
                 app:layout_constraintTop_toBottomOf="@id/clStoreLocation"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" >
@@ -229,6 +232,7 @@
                 android:id="@+id/clSettingsOfWifiDirect"
                 android:layout_width="0dp"
                 android:layout_height="54dp"
+                android:background="?attr/selectableItemBackground"
                 app:layout_constraintTop_toBottomOf="@id/clRate"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" >
@@ -270,6 +274,7 @@
                 android:id="@+id/clAbout"
                 android:layout_width="0dp"
                 android:layout_height="54dp"
+                android:background="?attr/selectableItemBackground"
                 app:layout_constraintTop_toBottomOf="@id/clSettingsOfWifiDirect"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" >
@@ -311,6 +316,7 @@
                 android:id="@+id/clCleanCache"
                 android:layout_width="0dp"
                 android:layout_height="54dp"
+                android:background="?attr/selectableItemBackground"
                 app:layout_constraintTop_toBottomOf="@id/clAbout"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" >
@@ -352,6 +358,7 @@
                 android:id="@+id/clMailTo"
                 android:layout_width="0dp"
                 android:layout_height="54dp"
+                android:background="?attr/selectableItemBackground"
                 app:layout_constraintTop_toBottomOf="@id/clCleanCache"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" >
@@ -388,9 +395,7 @@
                     app:layout_constraintStart_toStartOf="parent" />
 
             </android.support.constraint.ConstraintLayout>
-
         </android.support.constraint.ConstraintLayout>
-
     </ScrollView>
 
 
