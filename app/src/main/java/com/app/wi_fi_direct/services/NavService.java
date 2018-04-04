@@ -12,6 +12,7 @@ import com.app.wi_fi_direct.R;
 import com.app.wi_fi_direct.helpers.Callback;
 
 public class NavService {
+  public static final String TAB = "TAB";
   public static final int TAB_RECOMMENDATIONS = 0;
   public static final int TAB_SEND = 1;
   public static final int TAB_RECEIVE = 2;
@@ -94,7 +95,8 @@ public class NavService {
     }
   }
 
-  public static void init(Activity activity
+  public static void init(
+      Activity activity
       , Callback recommendationsTabAction
       , Callback sendTabAction
       , Callback receiveTabAction
@@ -105,7 +107,8 @@ public class NavService {
     set(activity, activeTab);
   }
 
-  public static void init(Activity activity
+  public static void init(
+      Activity activity
       , Callback recommendationsTabAction
       , Callback sendTabAction
       , Callback receiveTabAction

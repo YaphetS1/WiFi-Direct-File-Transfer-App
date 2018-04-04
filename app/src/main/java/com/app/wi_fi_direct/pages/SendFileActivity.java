@@ -276,7 +276,6 @@ public class SendFileActivity extends AppCompatActivity {
               uris, fileNames, files, serverAddress);
           transferData.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
-
         } catch (Exception e) {
           e.printStackTrace();
         }
@@ -284,26 +283,40 @@ public class SendFileActivity extends AppCompatActivity {
   }
 
   private void initNav() {
+    Intent intent = getIntent();
+    int activeTab = intent.getIntExtra(NavService.TAB, NavService.TAB_SEND);
     tvSendOrReceive = findViewById(R.id.tvSendOrReceive);
     NavService.setupTopNav(this, R.string.app_main_title, true);
+
+    Callback recommendationsTabAction = () -> {
+      Toast.makeText(SendFileActivity.this, "Some action will be here!", Toast.LENGTH_SHORT).show();
+    };
+
+    Callback sendTabAction = () -> {
+      tvSendOrReceive.setText(R.string.sending);
+      rvSendingFilesList.setVisibility(View.VISIBLE);
+      rvReceivingFilesList.setVisibility(View.INVISIBLE);
+    };
+
+    Callback receiveTabAction = () -> {
+      tvSendOrReceive.setText(R.string.receiving);
+      rvSendingFilesList.setVisibility(View.INVISIBLE);
+      rvReceivingFilesList.setVisibility(View.VISIBLE);
+    };
+
+    Callback settingsTabAction = () -> {
+      Toast.makeText(SendFileActivity.this, "Some action will be here!", Toast.LENGTH_SHORT).show();
+    };
+
     NavService.init(this
-        , (Callback) () -> {
-          Toast.makeText(SendFileActivity.this, "Some action will be here!", Toast.LENGTH_SHORT).show();
-        }
-        , (Callback) () -> {
-          tvSendOrReceive.setText(R.string.sending);
-          rvSendingFilesList.setVisibility(View.VISIBLE);
-          rvReceivingFilesList.setVisibility(View.INVISIBLE);
-        }
-        , (Callback) () -> {
-          tvSendOrReceive.setText(R.string.receiving);
-          rvSendingFilesList.setVisibility(View.INVISIBLE);
-          rvReceivingFilesList.setVisibility(View.VISIBLE);
-        }
-        , (Callback) () -> {
-          
-        }
-        , NavService.TAB_SEND
+        , recommendationsTabAction
+        , sendTabAction
+        , receiveTabAction
+        , settingsTabAction
+        , activeTab
     );
+    if (activeTab == NavService.TAB_RECEIVE) {
+      receiveTabAction.call();
+    }
   }
 }
