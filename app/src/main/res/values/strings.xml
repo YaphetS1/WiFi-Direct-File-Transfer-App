@@ -27,4 +27,9 @@
     <string name="receive">Принять</string>
     <string name="settings">Настройки</string>
     <string name="syncing">Сопряжение</string>
+
+    <string name="ad_title">Предупреждение</string>
+    <string name="ad_message">Лалка пес тебе в очко</string>
+    <string name="ad_yes">Ok</string>
+    <string name="ad_no">No</string>
 </resources>

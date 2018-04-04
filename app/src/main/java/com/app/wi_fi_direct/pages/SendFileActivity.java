@@ -1,12 +1,14 @@
 package com.app.wi_fi_direct.pages;
 
 import android.content.ClipData;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.Uri;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -307,7 +309,30 @@ public class SendFileActivity extends AppCompatActivity {
     };
 
     Callback settingsTabAction = () -> {
-      Toast.makeText(SendFileActivity.this, "Some action will be here!", Toast.LENGTH_SHORT).show();
+      AlertDialog.Builder ad = new AlertDialog.Builder(SendFileActivity.this);
+      ad.setTitle(R.string.ad_title);  // заголовок
+      ad.setMessage(R.string.ad_message); // сообщение
+      ad.setPositiveButton(R.string.ad_yes, new DialogInterface.OnClickListener() {
+        public void onClick(DialogInterface dialog, int arg1) {
+          Toast.makeText(SendFileActivity.this, "Вы сделали правильный выбор",
+              Toast.LENGTH_LONG).show();
+        }
+      });
+      ad.setNegativeButton(R.string.ad_no, new DialogInterface.OnClickListener() {
+        public void onClick(DialogInterface dialog, int arg1) {
+          Toast.makeText(SendFileActivity.this, "Возможно вы правы", Toast.LENGTH_LONG)
+              .show();
+        }
+      });
+      ad.setCancelable(true);
+      ad.setOnCancelListener(new DialogInterface.OnCancelListener() {
+        public void onCancel(DialogInterface dialog) {
+          Toast.makeText(SendFileActivity.this, "Вы ничего не выбрали",
+              Toast.LENGTH_LONG).show();
+        }
+      });
+
+      ad.show();
     };
 
     NavService.init(this
