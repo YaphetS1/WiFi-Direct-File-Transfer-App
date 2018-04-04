@@ -15,6 +15,7 @@ import java.io.ObjectInputStream;
 import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 
 /**
  * Created by dmitryMarinin on 23.03.2018.
@@ -42,7 +43,7 @@ public class FileServerAsyncTask extends AsyncTask<Void, CustomObject, Void> {
 
   private void recieveData() {
     byte buf[] = new byte[1024];
-    int len;
+    int len = 0;
 
     try {
       Log.d("Reciever", "Server Listening");
@@ -58,10 +59,13 @@ public class FileServerAsyncTask extends AsyncTask<Void, CustomObject, Void> {
 
       int sizeOfItems = inputStream.readInt();
 
+      ArrayList<String> fileNames = (ArrayList<String>) inputStream.readObject();
+      ArrayList<Long> fileSizes = (ArrayList<Long>) inputStream.readObject();
+
       for (int i = 0; i < sizeOfItems; i++) {
 
-        String fileName = inputStream.readUTF();
-        fileSize = inputStream.readLong();
+        String fileName = fileNames.get(i);
+        fileSize = fileSizes.get(i);
         file = new File(Environment.getExternalStorageDirectory() + "/"
             + context.getApplicationContext().getPackageName() + "/" + fileName);
         Log.d("Reciever", file.getPath());
@@ -75,7 +79,6 @@ public class FileServerAsyncTask extends AsyncTask<Void, CustomObject, Void> {
 
         } else Log.d("Reciever", "File Not Created");
 
-
         OutputStream outputStream = new FileOutputStream(file);
         CustomObject progress = new CustomObject();
         progress.name = fileName;
@@ -83,19 +86,24 @@ public class FileServerAsyncTask extends AsyncTask<Void, CustomObject, Void> {
         progress.totalProgress = 0;
 
         try {
-          while (((len = inputStream.read(buf)) != -1)) {
+//          while (((len = inputStream.read(buf)) != -1))
+          while (fileSize > 0 &&
+              (len = inputStream.read(buf, 0, (int)Math.min(buf.length, fileSize))) != -1) {
 
             outputStream.write(buf, 0, len);
-            progress.dataIncrement = (long) len;
-            if (((int) (progress.totalProgress * 100 / fileSize)) == ((int) ((progress.totalProgress + progress.dataIncrement) * 100 / fileSize))) {
-              progress.totalProgress += progress.dataIncrement;
-              continue;
-            }
+            fileSize -= len;
 
-            progress.totalProgress += progress.dataIncrement;
-            publishProgress(progress);
+//            progress.dataIncrement = (long) len;
+//            if (((int) (progress.totalProgress * 100 / fileSize)) ==
+//                ((int) ((progress.totalProgress + progress.dataIncrement) * 100 / fileSize))) {
+//              progress.totalProgress += progress.dataIncrement;
+//              continue;
+//            }
+//
+//            progress.totalProgress += progress.dataIncrement;
+//            publishProgress(progress);
             if (this.isCancelled()) return;
-            //Log.d("Reciever","Writing Data    -"+len);
+//            Log.d("Reciever", "Writing Data IN WHILE   - " + len);
           }
 
           Log.d("Reciever", "Writing Data Final   -" + len);

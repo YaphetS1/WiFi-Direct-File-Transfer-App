@@ -23,14 +23,15 @@ public class TransferData extends AsyncTask<Void, Void, Void> {
   public InetAddress serverAddress;
 
   private ArrayList<File> files;
+  private ArrayList<Long> filesLength;
 
   public TransferData(Context context, ArrayList<Uri> uris,
-                      ArrayList<String> fileNames, ArrayList<File> files, InetAddress serverAddress) {
+                      ArrayList<String> fileNames, ArrayList<Long> filesLength, InetAddress serverAddress) {
     this.context = context;
 
     this.uris = uris;
     this.fileNames = fileNames;
-    this.files = files;
+    this.filesLength = filesLength;
 
     this.serverAddress = serverAddress;
 
@@ -42,7 +43,7 @@ public class TransferData extends AsyncTask<Void, Void, Void> {
   private void sendData(Context context, ArrayList<Uri> uris) {
 
     int len;
-    byte buf[] = new byte[16 * 1024];
+    byte buf[] = new byte[1024];
 
     Log.d("Data Transfer", "Transfer Starter");
 
@@ -61,18 +62,20 @@ public class TransferData extends AsyncTask<Void, Void, Void> {
 
       objectOutputStream.writeInt(uris.size());
 
+      objectOutputStream.writeObject(fileNames);
+      objectOutputStream.flush();
+
+      objectOutputStream.writeObject(filesLength);
+      objectOutputStream.flush();
+
       for (int i = 0; i < uris.size(); i++) {
 
         InputStream inputStream = cr.openInputStream(uris.get(i));
-        objectOutputStream.writeUTF(fileNames.get(i));
-        objectOutputStream.writeLong(files.get(i).length());
-
-        Log.d("Sender", (files.get(i).length() + "  file size"));
 
         while ((len = inputStream.read(buf)) != -1) {
           objectOutputStream.write(buf, 0, len);
 
-          Log.d("Sender", "Writing Data");
+//          Log.d("Sender", "Writing Data");
         }
         inputStream.close();
       }

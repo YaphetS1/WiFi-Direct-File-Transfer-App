@@ -22,6 +22,7 @@ import com.app.wi_fi_direct.helpers.ChooseFile;
 import com.app.wi_fi_direct.helpers.FileServerAsyncTask;
 import com.app.wi_fi_direct.helpers.FilesUtil;
 import com.app.wi_fi_direct.helpers.MyBroadcastReciever;
+import com.app.wi_fi_direct.helpers.PathUtil;
 import com.app.wi_fi_direct.helpers.TransferData;
 
 import java.io.File;
@@ -258,7 +259,7 @@ public class SendFileActivity extends AppCompatActivity {
         if (data == null) return;
 
         ArrayList<Uri> uris = new ArrayList<>();
-        ArrayList<File> files = new ArrayList<>();
+        ArrayList<Long> filesLength = new ArrayList<>();
         ArrayList<String> fileNames = new ArrayList<>();
 
         try {
@@ -268,8 +269,9 @@ public class SendFileActivity extends AppCompatActivity {
             for (int i = 0; i < clipData.getItemCount(); i++) {
               uris.add(clipData.getItemAt(i).getUri());
 
-              String fileName = clipData.getItemAt(i).getUri().getPath();
-              files.add(new File(fileName));
+              String fileName =
+                  PathUtil.getPath(getApplicationContext(), clipData.getItemAt(i).getUri());
+              filesLength.add(new File(fileName).length());
 
               fileName = FilesUtil.getFileName(fileName);
               fileNames.add(fileName);
@@ -281,15 +283,15 @@ public class SendFileActivity extends AppCompatActivity {
             Uri uri = data.getData();
             uris.add(uri);
 
-            String fileName = uri.getPath();
-            files.add(new File(fileName));
+            String fileName = PathUtil.getPath(getApplicationContext(), uri);
+            filesLength.add(new File(fileName).length());
 
             fileName = FilesUtil.getFileName(fileName);
             fileNames.add(fileName);
           }
 
           TransferData transferData = new TransferData(SendFileActivity.this,
-              uris, fileNames, files, serverAddress);
+              uris, fileNames, filesLength, serverAddress);
           transferData.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
 
