@@ -11,19 +11,21 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.widget.ImageView;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.app.wi_fi_direct.R;
 import com.app.wi_fi_direct.adapters.FilesAdapter;
 import com.app.wi_fi_direct.adapters.PeersAdapter;
+import com.app.wi_fi_direct.helpers.Callback;
 import com.app.wi_fi_direct.helpers.ChooseFile;
 import com.app.wi_fi_direct.helpers.FileServerAsyncTask;
 import com.app.wi_fi_direct.helpers.FilesUtil;
 import com.app.wi_fi_direct.helpers.MyBroadcastReciever;
 import com.app.wi_fi_direct.helpers.PathUtil;
 import com.app.wi_fi_direct.helpers.TransferData;
+import com.app.wi_fi_direct.services.NavService;
 
 import java.io.File;
 import java.lang.reflect.Method;
@@ -34,7 +36,8 @@ import java.util.ArrayList;
 public class SendFileActivity extends AppCompatActivity {
 
   private RecyclerView rvDevicesList;
-  private RecyclerView rvFilesList;
+  private RecyclerView rvSendingFilesList;
+  private RecyclerView rvReceivingFilesList;
 
   public WifiP2pManager p2pManager;
   public WifiP2pManager.Channel channel;
@@ -48,34 +51,12 @@ public class SendFileActivity extends AppCompatActivity {
   public ServerSocket serverSocket;
   public FileServerAsyncTask fileServerAsyncTask;
 
+  private TextView tvSendOrReceive;
+
+
   @Override
   public void onStart() {
     super.onStart();
-
-    ImageView ivBottomNavSend = findViewById(R.id.ivSend);
-    ImageView ivBottomNavReceive = findViewById(R.id.ivReceive);
-    ImageView ivBottomNavSetting = findViewById(R.id.ivSettings);
-    TextView tvBottomNavSend = findViewById(R.id.tvSend);
-    TextView tvBottomNavReceive = findViewById(R.id.tvReceive);
-    TextView tvBottomNavSetting = findViewById(R.id.tvSettings);
-
-//    ivBottomNavReceive.setOnClickListener(v -> {
-//      SendFileActivity.this.finish();
-//      Intent intent = new Intent(SendFileActivity.this, ReceiveFileActivity.class);
-//      startActivity(intent);
-//    });
-
-//    ivBottomNavSetting.setOnClickListener(v -> {
-//    });
-
-    ivBottomNavSend.setImageResource(R.drawable.d_bottom_nav_send_active);
-    ivBottomNavReceive.setImageResource(R.drawable.d_bottom_nav_download);
-    ivBottomNavSetting.setImageResource(R.drawable.d_bottom_nav_settings);
-
-    tvBottomNavSend.setTextColor(getResources().getColor(R.color.cTextPrimary));
-    tvBottomNavReceive.setTextColor(getResources().getColor(R.color.cTextGrey));
-    tvBottomNavSetting.setTextColor(getResources().getColor(R.color.cTextGrey));
-
   }
 
   @Override
@@ -83,15 +64,18 @@ public class SendFileActivity extends AppCompatActivity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_send_file);
 
-    rvFilesList = findViewById(R.id.rvFilesList);
+    rvSendingFilesList = findViewById(R.id.rvSendingFilesList);
     LinearLayoutManager filesListLayoutManager = new LinearLayoutManager(
         this, LinearLayoutManager.VERTICAL, false);
-    rvFilesList.setLayoutManager(filesListLayoutManager);
-
+    rvSendingFilesList.setLayoutManager(filesListLayoutManager);
     FilesAdapter filesAdapter = new FilesAdapter(SendFileActivity.this);
-    rvFilesList.setAdapter(filesAdapter);
-
+    rvSendingFilesList.setAdapter(filesAdapter);
     Log.d("Reciever", "first " + (serverSocket == null));
+
+    rvReceivingFilesList = findViewById(R.id.rvReceivingFilesList);
+    //init navigation
+    initNav();
+
 
     try {
       serverSocket = new ServerSocket(8888);
@@ -294,12 +278,47 @@ public class SendFileActivity extends AppCompatActivity {
               uris, fileNames, filesLength, serverAddress);
           transferData.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
-
         } catch (Exception e) {
           e.printStackTrace();
         }
     }
-
   }
 
+  private void initNav() {
+    Intent intent = getIntent();
+    int activeTab = intent.getIntExtra(NavService.TAB, NavService.TAB_SEND);
+    tvSendOrReceive = findViewById(R.id.tvSendOrReceive);
+    NavService.setupTopNav(this, R.string.app_main_title, true);
+
+    Callback recommendationsTabAction = () -> {
+      Toast.makeText(SendFileActivity.this, "Some action will be here!", Toast.LENGTH_SHORT).show();
+    };
+
+    Callback sendTabAction = () -> {
+      tvSendOrReceive.setText(R.string.sending);
+      rvSendingFilesList.setVisibility(View.VISIBLE);
+      rvReceivingFilesList.setVisibility(View.INVISIBLE);
+    };
+
+    Callback receiveTabAction = () -> {
+      tvSendOrReceive.setText(R.string.receiving);
+      rvSendingFilesList.setVisibility(View.INVISIBLE);
+      rvReceivingFilesList.setVisibility(View.VISIBLE);
+    };
+
+    Callback settingsTabAction = () -> {
+      Toast.makeText(SendFileActivity.this, "Some action will be here!", Toast.LENGTH_SHORT).show();
+    };
+
+    NavService.init(this
+        , recommendationsTabAction
+        , sendTabAction
+        , receiveTabAction
+        , settingsTabAction
+        , activeTab
+    );
+    if (activeTab == NavService.TAB_RECEIVE) {
+      receiveTabAction.call();
+    }
+  }
 }

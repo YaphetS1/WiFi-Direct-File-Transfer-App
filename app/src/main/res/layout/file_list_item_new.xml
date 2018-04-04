@@ -6,6 +6,18 @@
     android:layout_height="wrap_content"
     tools:layout_editor_absoluteY="25dp">
 
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="@android:style/Widget.ProgressBar.Horizontal"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:progress="74"
+        android:progressDrawable="@drawable/progressbar_drawable"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <ImageView
         android:id="@+id/ivItemType"
         android:layout_width="wrap_content"
@@ -31,23 +43,35 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Файл 1" />
 
+    <TextView
+        android:id="@+id/tvItemSyncing"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/r_r"
+        android:paddingEnd="10dp"
+        android:text="@string/syncing"
+        android:textColor="@color/cDeviceListItemSyncing"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/ivItemStatus"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <ImageView
-        android:id="@+id/ivItemType2"
+        android:id="@+id/ivItemStatus"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="17dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/d_icon_done" />
+        app:srcCompat="@drawable/d_icon_refresh" />
 
     <View
         android:layout_width="0dp"
         android:layout_height="1dp"
         android:background="@color/cDivider"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </android.support.constraint.ConstraintLayout>
