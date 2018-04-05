@@ -10,7 +10,7 @@ public class ConnectPeer {
   public static void connect(String deviceAddress, final WifiP2pManager manager, final WifiP2pManager.Channel channel, final Context context, WifiP2pManager.ActionListener listener) {
     final WifiP2pConfig config = new WifiP2pConfig();
     config.deviceAddress = deviceAddress;
-    config.groupOwnerIntent = 0;
+//    config.groupOwnerIntent = 0;
 
     Log.d("Connect", "initiated");
     manager.connect(channel, config, listener);
@@ -21,12 +21,12 @@ public class ConnectPeer {
     manager.cancelConnect(channel, new WifiP2pManager.ActionListener() {
       @Override
       public void onSuccess() {
-        Log.d("CONNECT PEER", "onSuccess");
+        Log.d("Disconnect PEER", "onSuccess");
       }
 
       @Override
       public void onFailure(int reason) {
-        Log.d("CONNECT PEER", "onFailure" + String.valueOf(reason));
+        Log.d("Disconnect PEER", "onFailure" + String.valueOf(reason));
       }
     });
   }

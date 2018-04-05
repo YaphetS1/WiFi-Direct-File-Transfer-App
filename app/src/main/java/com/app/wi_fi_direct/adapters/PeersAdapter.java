@@ -14,10 +14,12 @@ import android.widget.Toast;
 import com.app.wi_fi_direct.R;
 import com.app.wi_fi_direct.helpers.ConnectPeer;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class PeersAdapter extends RecyclerView.Adapter<PeersViewHolder> {
 
+  public ArrayList<PeersViewHolder> peersViewHolders = new ArrayList<>();
   private PeersViewHolder tempHolder;
 
   List<WifiP2pDevice> peersList;
@@ -44,7 +46,6 @@ public class PeersAdapter extends RecyclerView.Adapter<PeersViewHolder> {
     listener = new WifiP2pManager.ActionListener() {
       @Override
       public void onSuccess() {
-        Toast.makeText(context, "Connected!", Toast.LENGTH_LONG).show();
         tempHolder.statePeer.setImageResource(R.drawable.d_icon_done);
         tempHolder.itemSyncing.setVisibility(View.INVISIBLE);
 
@@ -63,19 +64,18 @@ public class PeersAdapter extends RecyclerView.Adapter<PeersViewHolder> {
   @Override
   public PeersViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
     View view = LayoutInflater.from(context).inflate(R.layout.device_list_item, parent, false);
-
     return new PeersViewHolder(view);
   }
 
   @Override
   public void onBindViewHolder(PeersViewHolder holder, int position) {
-    Log.d("onBind", "test");
     holder.setPeer(peersList.get(position));
+    peersViewHolders.add(holder);
+
     try {
       final String deviceAddress = holder.device.deviceAddress;
 
       holder.peerView.setOnClickListener(v -> {
-        Log.d("peerButton", "ON CLICK");
         ConnectPeer.connect(deviceAddress, manager, channel, context, listener);
         holder.statePeer.setImageResource(R.drawable.d_icon_refresh);
         holder.statePeer.setVisibility(View.VISIBLE);
@@ -95,7 +95,8 @@ public class PeersAdapter extends RecyclerView.Adapter<PeersViewHolder> {
 
   public void updateList(List<WifiP2pDevice> devices) {
     peersList = devices;
-    Log.d("Adapter ", "YOLO");
-    Log.d("Adapter ", String.valueOf(peersList.size()));
+    peersViewHolders.clear();
+
+    Log.d("Adapter ", "ON UPDATE LIST");
   }
 }

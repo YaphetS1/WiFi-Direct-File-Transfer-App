@@ -61,7 +61,7 @@ public class TransferData extends AsyncTask<Void, Void, Void> {
       Log.d("Client Address", socket.getLocalSocketAddress().toString());
 
       socket.connect(new InetSocketAddress(serverAddress, 8888));
-      Log.d("Client", "Client Connected");
+      Log.d("Client", "Client Connected 8888");
 
       OutputStream outputStream = socket.getOutputStream();
       ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);

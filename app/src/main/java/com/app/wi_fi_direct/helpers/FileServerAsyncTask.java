@@ -56,13 +56,13 @@ public class FileServerAsyncTask extends AsyncTask<Void, CustomObject, Void> {
       Log.d("Reciever", "Server Connected");
       if (isCancelled()) return;
 
-      InputStream inputStream1 = client.getInputStream();
-      ObjectInputStream inputStream = new ObjectInputStream(inputStream1);
+      InputStream inputStream = client.getInputStream();
+      ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
 
-      int sizeOfItems = inputStream.readInt();
+      int sizeOfItems = objectInputStream.readInt();
 
-      ArrayList<String> fileNames = (ArrayList<String>) inputStream.readObject();
-      ArrayList<Long> fileSizes = (ArrayList<Long>) inputStream.readObject();
+      ArrayList<String> fileNames = (ArrayList<String>) objectInputStream.readObject();
+      ArrayList<Long> fileSizes = (ArrayList<Long>) objectInputStream.readObject();
 
       for (int i = 0; i < sizeOfItems; i++) {
 
@@ -172,7 +172,6 @@ public class FileServerAsyncTask extends AsyncTask<Void, CustomObject, Void> {
 //      serverSocket.close();
       client.close();
       referenceCallback.call();
-//      this.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     } catch (Exception e) {
       e.printStackTrace();
     }
@@ -184,11 +183,13 @@ public class FileServerAsyncTask extends AsyncTask<Void, CustomObject, Void> {
     super.onCancelled();
     Toast.makeText(context, "Transfer Cancelled", Toast.LENGTH_LONG).show();
     Log.d("Reciever", "Transfer Cancelled");
-//    try {
+    try {
 //      if (client.isConnected()) serverSocket.close();
-//    } catch (Exception e) {
-//      e.printStackTrace();
-//    }
+      client.close();
+      referenceCallback.call();
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
   }
 }
 

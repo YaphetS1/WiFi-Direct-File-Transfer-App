@@ -20,11 +20,13 @@ import com.app.wi_fi_direct.adapters.FilesAdapter;
 import com.app.wi_fi_direct.adapters.PeersAdapter;
 import com.app.wi_fi_direct.helpers.Callback;
 import com.app.wi_fi_direct.helpers.ChooseFile;
+import com.app.wi_fi_direct.helpers.DeviceInfoServerAsyncTask;
 import com.app.wi_fi_direct.helpers.FileServerAsyncTask;
 import com.app.wi_fi_direct.helpers.FilesUtil;
 import com.app.wi_fi_direct.helpers.MyBroadcastReciever;
 import com.app.wi_fi_direct.helpers.PathUtil;
 import com.app.wi_fi_direct.helpers.TransferData;
+import com.app.wi_fi_direct.helpers.TransferNameDevice;
 import com.app.wi_fi_direct.services.NavService;
 
 import java.io.File;
@@ -49,10 +51,13 @@ public class SendFileActivity extends AppCompatActivity {
   public InetAddress serverAddress;
   public WifiP2pManager.ConnectionInfoListener infoListener;
   public ServerSocket serverSocket;
+  public ServerSocket serverSocketDevice;
   public FileServerAsyncTask fileServerAsyncTask;
+  public DeviceInfoServerAsyncTask deviceInfoServerAsyncTask;
 
   private TextView tvSendOrReceive;
-  private Callback callback;
+  private Callback callbackReInitServers;
+  public Callback callbackSendThisDeviceName;
 
 
   @Override
@@ -82,28 +87,10 @@ public class SendFileActivity extends AppCompatActivity {
     rvReceivingFilesList.setAdapter(receiveFilesAdapter);
 
     //init navigation
-    initNav();
+    this.initNav();
 
-
-    try {
-      serverSocket = new ServerSocket(8888);
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-
-    callback = () -> {
-      fileServerAsyncTask = new FileServerAsyncTask(
-          (SendFileActivity.this),
-          (serverSocket),
-          (receiveFilesAdapter), SendFileActivity.this.callback);
-      fileServerAsyncTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-    };
-
-    fileServerAsyncTask = new FileServerAsyncTask(
-        (SendFileActivity.this),
-        (serverSocket),
-        (receiveFilesAdapter), callback);
-    fileServerAsyncTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+    this.initSockets();
+    callbackReInitServers = () -> SendFileActivity.this.initServers(receiveFilesAdapter);
 
     peerListListener = peers -> {
       peerList.clear();
@@ -112,19 +99,24 @@ public class SendFileActivity extends AppCompatActivity {
       peersAdapter.notifyDataSetChanged();
     };
 
+    callbackSendThisDeviceName = () -> {
+      TransferNameDevice transferNameDevice = new TransferNameDevice(serverAddress);
+      transferNameDevice.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+    };
+
     infoListener = info -> {
       serverAddress = info.groupOwnerAddress;
       if (serverAddress == null) return;
-      Toast.makeText(getApplicationContext(), "Am I Group Owner" + String.valueOf(info.isGroupOwner), Toast.LENGTH_LONG).show();
-      Toast.makeText(SendFileActivity.this, "Info Recieved " + serverAddress.toString(), Toast.LENGTH_LONG).show();
-      Log.d("Server Data", info.toString());
-      Toast.makeText(getApplicationContext(), "Info " + info.groupFormed, Toast.LENGTH_LONG).show();
 
+      SendFileActivity.this.callbackSendThisDeviceName.call();
       ChooseFile.fileChooser(SendFileActivity.this);
     };
 
     p2pManager = (WifiP2pManager) getSystemService(WIFI_P2P_SERVICE);
     channel = p2pManager.initialize(this, getMainLooper(), null);
+    peersAdapter = new PeersAdapter(peerList, this,
+        p2pManager, channel, this, infoListener);
+    this.initServers(receiveFilesAdapter);
 
     try {
       Class<?> wifiManager = Class
@@ -155,8 +147,6 @@ public class SendFileActivity extends AppCompatActivity {
 
     registerReceiver(myBroadcastReciever, intentFilter);
 
-    peersAdapter = new PeersAdapter(peerList, this,
-        p2pManager, channel, this, infoListener);
 
     rvDevicesList = findViewById(R.id.rvDevicesList);
     rvDevicesList.setAdapter(peersAdapter);
@@ -296,6 +286,29 @@ public class SendFileActivity extends AppCompatActivity {
     );
     if (activeTab == NavService.TAB_RECEIVE) {
       receiveTabAction.call();
+    }
+  }
+
+  private void initServers(FilesAdapter receiveFilesAdapter) {
+
+    fileServerAsyncTask = new FileServerAsyncTask(
+        (SendFileActivity.this),
+        (serverSocket),
+        (receiveFilesAdapter), callbackReInitServers);
+    fileServerAsyncTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+
+    deviceInfoServerAsyncTask = new DeviceInfoServerAsyncTask(
+        (serverSocketDevice),
+        (peersAdapter), callbackReInitServers);
+    deviceInfoServerAsyncTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+  }
+
+  private void initSockets() {
+    try {
+      serverSocketDevice = new ServerSocket(8887);
+      serverSocket = new ServerSocket(8888);
+    } catch (Exception e) {
+      e.printStackTrace();
     }
   }
 }

@@ -7,17 +7,18 @@ import android.net.NetworkInfo;
 import android.net.wifi.p2p.WifiP2pDevice;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.util.Log;
-import android.widget.TextView;
 import android.widget.Toast;
 
 public class MyBroadcastReciever extends BroadcastReceiver {
+
+  public static String thisDeviceName = "";
 
   WifiP2pManager p2pManager;
   Context context;
   WifiP2pManager.Channel channel;
   WifiP2pManager.PeerListListener peerListListener;
   WifiP2pManager.ConnectionInfoListener infoListener;
-  TextView textView;
+//  TextView textView;
 
   public MyBroadcastReciever(WifiP2pManager p2pManager, WifiP2pManager.Channel channel, Context context, WifiP2pManager.ConnectionInfoListener infoListener) {
     super();
@@ -55,11 +56,9 @@ public class MyBroadcastReciever extends BroadcastReceiver {
       Log.d("BroadCast", "WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION");
 
     } else if (WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION.equals(action)) {
-      if (textView == null) return;
       WifiP2pDevice device = intent.getParcelableExtra(WifiP2pManager.EXTRA_WIFI_P2P_DEVICE);
-      String thisDeviceName = device.deviceName;
+      MyBroadcastReciever.thisDeviceName = device.deviceName;
 //      textView.setText(thisDeviceName);
-      //Toast.makeText(context,WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION,Toast.LENGTH_SHORT).show();
     }
 
 
