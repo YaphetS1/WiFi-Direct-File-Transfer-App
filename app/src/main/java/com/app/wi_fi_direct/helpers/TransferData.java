@@ -116,8 +116,6 @@ public class TransferData extends AsyncTask<Void, Void, Void> {
     super.onPostExecute(aVoid);
     Toast.makeText(context, "Data Transferred!", Toast.LENGTH_SHORT).show();
     Log.d("Sender", "Finished!");
-
-//    ConnectPeer.disconnect(manager, channel);
   }
 
   @Override

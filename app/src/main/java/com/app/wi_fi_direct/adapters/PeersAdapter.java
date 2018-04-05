@@ -50,7 +50,6 @@ public class PeersAdapter extends RecyclerView.Adapter<PeersViewHolder> {
 
         manager.requestConnectionInfo(channel, infoListener);
         Log.d("ConnectPeer ","Success");
-        //        ChooseFile.fileChooser(activity);
       }
 
       @Override

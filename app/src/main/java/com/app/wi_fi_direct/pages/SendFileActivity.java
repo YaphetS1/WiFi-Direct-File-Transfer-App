@@ -52,6 +52,7 @@ public class SendFileActivity extends AppCompatActivity {
   public FileServerAsyncTask fileServerAsyncTask;
 
   private TextView tvSendOrReceive;
+  private Callback callback;
 
 
   @Override
@@ -90,10 +91,18 @@ public class SendFileActivity extends AppCompatActivity {
       e.printStackTrace();
     }
 
+    callback = () -> {
+      fileServerAsyncTask = new FileServerAsyncTask(
+          (SendFileActivity.this),
+          (serverSocket),
+          (receiveFilesAdapter), SendFileActivity.this.callback);
+      fileServerAsyncTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+    };
+
     fileServerAsyncTask = new FileServerAsyncTask(
         (SendFileActivity.this),
         (serverSocket),
-        (receiveFilesAdapter));
+        (receiveFilesAdapter), callback);
     fileServerAsyncTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
     peerListListener = peers -> {
@@ -110,6 +119,7 @@ public class SendFileActivity extends AppCompatActivity {
       Toast.makeText(SendFileActivity.this, "Info Recieved " + serverAddress.toString(), Toast.LENGTH_LONG).show();
       Log.d("Server Data", info.toString());
       Toast.makeText(getApplicationContext(), "Info " + info.groupFormed, Toast.LENGTH_LONG).show();
+
       ChooseFile.fileChooser(SendFileActivity.this);
     };
 

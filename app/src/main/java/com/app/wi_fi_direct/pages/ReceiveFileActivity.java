@@ -154,12 +154,12 @@ public class ReceiveFileActivity extends AppCompatActivity {
             Log.d("Reciever", "Woah!");
             return;
           }
-          fileServerAsyncTask = new FileServerAsyncTask(
-              (ReceiveFileActivity.this),
-              (serverSocket),
-              (filesAdapter));
+//          fileServerAsyncTask = new FileServerAsyncTask(
+//              (ReceiveFileActivity.this),
+//              (serverSocket),
+//              (filesAdapter));
 
-          fileServerAsyncTask.execute();
+//          fileServerAsyncTask.execute();
         }
 
         @Override

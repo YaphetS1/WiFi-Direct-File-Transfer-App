@@ -32,13 +32,15 @@ public class FileServerAsyncTask extends AsyncTask<Void, CustomObject, Void> {
   private Long fileSize;
   private Long fileSizeOriginal;
   private FilesAdapter fileList;
+  private Callback referenceCallback;
 
   public FileServerAsyncTask(Context contextWeakReference,
                              ServerSocket reference,
-                             FilesAdapter fileListAdapterWeakReference) {
+                             FilesAdapter fileListAdapterWeakReference, Callback callback) {
     this.context = contextWeakReference;
     this.serverSocket = reference;
     this.fileList = fileListAdapterWeakReference;
+    this.referenceCallback = callback;
   }
 
   private void recieveData() {
@@ -167,8 +169,10 @@ public class FileServerAsyncTask extends AsyncTask<Void, CustomObject, Void> {
     Toast.makeText(context, "File Transferred!", Toast.LENGTH_LONG).show();
     Log.d("Reciever", "onPostExecute");
     try {
-      serverSocket.close();
+//      serverSocket.close();
       client.close();
+      referenceCallback.call();
+//      this.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     } catch (Exception e) {
       e.printStackTrace();
     }
@@ -180,11 +184,11 @@ public class FileServerAsyncTask extends AsyncTask<Void, CustomObject, Void> {
     super.onCancelled();
     Toast.makeText(context, "Transfer Cancelled", Toast.LENGTH_LONG).show();
     Log.d("Reciever", "Transfer Cancelled");
-    try {
-      if (client.isConnected()) serverSocket.close();
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
+//    try {
+//      if (client.isConnected()) serverSocket.close();
+//    } catch (Exception e) {
+//      e.printStackTrace();
+//    }
   }
 }
 
