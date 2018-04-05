@@ -28,9 +28,7 @@ public class FilesViewHolder extends RecyclerView.ViewHolder {
 
     tvItemTitle = itemView.findViewById(R.id.tvItemTitle);
     ivItemType = itemView.findViewById(R.id.ivItemType);
-
-//      progressBar = itemView.findViewById(R.id.receiveProgressBar);
-//      progressBar.setVisibility(View.INVISIBLE);
+    progressBar = itemView.findViewById(R.id.progressBar);
   }
 
   void bind(FileModel fileModel) {

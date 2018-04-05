@@ -45,11 +45,12 @@ public class PeersAdapter extends RecyclerView.Adapter<PeersViewHolder> {
       @Override
       public void onSuccess() {
         Toast.makeText(context, "Connected!", Toast.LENGTH_LONG).show();
+        tempHolder.statePeer.setImageResource(R.drawable.d_icon_done);
+        tempHolder.itemSyncing.setVisibility(View.INVISIBLE);
+
         manager.requestConnectionInfo(channel, infoListener);
         Log.d("ConnectPeer ","Success");
         //        ChooseFile.fileChooser(activity);
-
-        tempHolder.statePeer.setImageResource(R.drawable.d_icon_done);
       }
 
       @Override
@@ -78,6 +79,8 @@ public class PeersAdapter extends RecyclerView.Adapter<PeersViewHolder> {
         Log.d("peerButton", "ON CLICK");
         ConnectPeer.connect(deviceAddress, manager, channel, context, listener);
         holder.statePeer.setImageResource(R.drawable.d_icon_refresh);
+        holder.statePeer.setVisibility(View.VISIBLE);
+        holder.itemSyncing.setVisibility(View.VISIBLE);
 
         tempHolder = holder;
       });

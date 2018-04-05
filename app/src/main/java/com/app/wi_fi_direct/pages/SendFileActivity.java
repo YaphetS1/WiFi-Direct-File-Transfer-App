@@ -68,11 +68,18 @@ public class SendFileActivity extends AppCompatActivity {
     LinearLayoutManager filesListLayoutManager = new LinearLayoutManager(
         this, LinearLayoutManager.VERTICAL, false);
     rvSendingFilesList.setLayoutManager(filesListLayoutManager);
-    FilesAdapter filesAdapter = new FilesAdapter(SendFileActivity.this);
-    rvSendingFilesList.setAdapter(filesAdapter);
-    Log.d("Reciever", "first " + (serverSocket == null));
+//    FilesAdapter sendFilesAdapter = new FilesAdapter(SendFileActivity.this);
+//    rvSendingFilesList.setAdapter(sendFilesAdapter);
+
 
     rvReceivingFilesList = findViewById(R.id.rvReceivingFilesList);
+    LinearLayoutManager receiveFilesListLayoutManager = new LinearLayoutManager(
+        this, LinearLayoutManager.VERTICAL, false);
+    rvReceivingFilesList.setLayoutManager(receiveFilesListLayoutManager);
+    FilesAdapter receiveFilesAdapter = new FilesAdapter(SendFileActivity.this);
+
+    rvReceivingFilesList.setAdapter(receiveFilesAdapter);
+
     //init navigation
     initNav();
 
@@ -82,19 +89,14 @@ public class SendFileActivity extends AppCompatActivity {
     } catch (Exception e) {
       e.printStackTrace();
     }
-    Log.d("Reciever", "Group Created");
 
     fileServerAsyncTask = new FileServerAsyncTask(
         (SendFileActivity.this),
         (serverSocket),
-        (filesAdapter));
-
+        (receiveFilesAdapter));
     fileServerAsyncTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
-    Log.d("Send Activity", "onCreate");
-
     peerListListener = peers -> {
-//      peerList = new ArrayList();
       peerList.clear();
       peerList.addAll(peers.getDeviceList());
       peersAdapter.updateList(peerList);
@@ -114,7 +116,6 @@ public class SendFileActivity extends AppCompatActivity {
     p2pManager = (WifiP2pManager) getSystemService(WIFI_P2P_SERVICE);
     channel = p2pManager.initialize(this, getMainLooper(), null);
 
-
     try {
       Class<?> wifiManager = Class
           .forName("android.net.wifi.p2p.WifiP2pManager");
@@ -129,22 +130,11 @@ public class SendFileActivity extends AppCompatActivity {
       e.printStackTrace();
     }
 
-
-    p2pManager.removeGroup(channel, new WifiP2pManager.ActionListener() {
-      @Override
-      public void onSuccess() {
-        Toast.makeText(getApplicationContext(), "SuccessrG", Toast.LENGTH_SHORT).show();
-      }
-
-      @Override
-      public void onFailure(int reason) {
-        Toast.makeText(getApplicationContext(), "FailrG", Toast.LENGTH_SHORT).show();
-        Log.d("reason", reason + "");
-      }
-    });
+    p2pManager.removeGroup(channel, null);
     //Toast.makeText(this,channel.toString(),Toast.LENGTH_LONG).show();
 
-    myBroadcastReciever = new MyBroadcastReciever(p2pManager, channel, this, infoListener);
+    myBroadcastReciever = new MyBroadcastReciever(p2pManager, channel,
+        this, infoListener);
     myBroadcastReciever.setPeerListListener(peerListListener);
 
     intentFilter = new IntentFilter();
@@ -155,7 +145,8 @@ public class SendFileActivity extends AppCompatActivity {
 
     registerReceiver(myBroadcastReciever, intentFilter);
 
-    peersAdapter = new PeersAdapter(peerList, this, p2pManager, channel, this, infoListener);
+    peersAdapter = new PeersAdapter(peerList, this,
+        p2pManager, channel, this, infoListener);
 
     rvDevicesList = findViewById(R.id.rvDevicesList);
     rvDevicesList.setAdapter(peersAdapter);
@@ -164,31 +155,7 @@ public class SendFileActivity extends AppCompatActivity {
         this, LinearLayoutManager.VERTICAL, false);
     rvDevicesList.setLayoutManager(mLayoutManager);
 
-    p2pManager.discoverPeers(channel, new WifiP2pManager.ActionListener() {
-      @Override
-      public void onSuccess() {
-        Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_SHORT).show();
-      }
-
-      @Override
-      public void onFailure(int reason) {
-        Toast.makeText(getApplicationContext(), "Fail", Toast.LENGTH_SHORT).show();
-      }
-    });
-  }
-
-
-  @Override
-  protected void onResume() {
-    super.onResume();
-//    registerReceiver(myBroadcastReciever, intentFilter);
-    Log.d("Send Activity", "onResume");
-  }
-
-  @Override
-  protected void onPause() {
-    super.onPause();
-    Log.d("Send Activity", "onPause");
+    p2pManager.discoverPeers(channel, null);
   }
 
   @Override
@@ -275,7 +242,7 @@ public class SendFileActivity extends AppCompatActivity {
           }
 
           TransferData transferData = new TransferData(SendFileActivity.this,
-              uris, fileNames, filesLength, serverAddress);
+              uris, fileNames, filesLength, serverAddress, p2pManager, channel);
           transferData.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
         } catch (Exception e) {

@@ -42,6 +42,7 @@ public class FileServerAsyncTask extends AsyncTask<Void, CustomObject, Void> {
   }
 
   private void recieveData() {
+
     byte buf[] = new byte[1024];
     int len = 0;
 
@@ -49,7 +50,6 @@ public class FileServerAsyncTask extends AsyncTask<Void, CustomObject, Void> {
       Log.d("Reciever", "Server Listening");
       Log.d("Reciever Address", serverSocket.getLocalSocketAddress().toString());
       Log.d("Reciever Port", String.valueOf(serverSocket.getLocalPort()));
-      //serverSocket.setSoTimeout(1000000);
       client = serverSocket.accept();
       Log.d("Reciever", "Server Connected");
       if (isCancelled()) return;
@@ -138,32 +138,34 @@ public class FileServerAsyncTask extends AsyncTask<Void, CustomObject, Void> {
   @Override
   protected void onProgressUpdate(CustomObject... values) {
     super.onProgressUpdate(values);
+    boolean isNotContain = true;
 
     for (int i = 0; i < this.fileList.receivedFiles.length; i++) {
       if (this.fileList.receivedFiles[i].getName().equals(values[0].name)) {
+        isNotContain = false;
+        if (this.fileList.filesViewHolders.size() != this.fileList.receivedFiles.length) {
+          break;
+        }
         FilesViewHolder holder = this.fileList.filesViewHolders.get(i);
         if (holder.progressBar.getVisibility() != View.VISIBLE) {
           holder.progressBar.setVisibility(View.VISIBLE);
         }
         holder.progressBar.setProgress((int) ((values[0].totalProgress * 100) / fileSizeOriginal));
-      } else {
-        this.fileList.notifyAdapter();
       }
     }
-
-//    if (progressBar.getVisibility() != View.VISIBLE) progressBar.setVisibility(View.VISIBLE);
-//    if (tvFileName.getText().equals("")) tvFileName.setText(values[0].name);
-//    progressBar.setProgress((int) ((values[0].totalProgress * 100) / fileSize));
+    if (isNotContain) {
+      this.fileList.notifyAdapter();
+    }
   }
 
   @Override
   protected void onPostExecute(Void aVoid) {
     super.onPostExecute(aVoid);
-//    progressBar.setProgress(100);
-    fileList.notifyAdapter();
+    this.fileList.filesViewHolders.get(fileList.receivedFiles.length - 1).progressBar.setVisibility(View.INVISIBLE);
+    this.fileList.notifyAdapter();
+
     Toast.makeText(context, "File Transferred!", Toast.LENGTH_LONG).show();
     Log.d("Reciever", "onPostExecute");
-    Log.d("Reciever", file.length() + " file size");
     try {
       serverSocket.close();
       client.close();

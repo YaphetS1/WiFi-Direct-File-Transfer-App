@@ -13,6 +13,7 @@ public class PeersViewHolder extends RecyclerView.ViewHolder {
 
   private TextView peerName;
   public ImageView statePeer;
+  public TextView itemSyncing;
 
   public View peerView;
   public WifiP2pDevice device;
@@ -21,7 +22,8 @@ public class PeersViewHolder extends RecyclerView.ViewHolder {
   public PeersViewHolder(View itemView) {
     super(itemView);
     peerName = itemView.findViewById(R.id.tvItemTitle);
-    statePeer = itemView.findViewById(R.id.imgState);
+    statePeer = itemView.findViewById(R.id.ivItemSyncStatus);
+    itemSyncing = itemView.findViewById(R.id.tvItemSyncing);
 
     peerView = itemView;
   }

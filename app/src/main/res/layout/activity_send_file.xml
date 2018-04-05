@@ -82,6 +82,7 @@
                 tools:layout_height="150dp"
                 android:layout_marginTop="4dp"
                 android:background="@color/cWhite"
+                android:visibility="invisible"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tvSendOrReceive"

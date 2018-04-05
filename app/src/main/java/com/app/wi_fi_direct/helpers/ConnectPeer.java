@@ -17,4 +17,18 @@ public class ConnectPeer {
 
   }
 
+  public static void disconnect(final WifiP2pManager manager, final WifiP2pManager.Channel channel) {
+    manager.cancelConnect(channel, new WifiP2pManager.ActionListener() {
+      @Override
+      public void onSuccess() {
+        Log.d("CONNECT PEER", "onSuccess");
+      }
+
+      @Override
+      public void onFailure(int reason) {
+        Log.d("CONNECT PEER", "onFailure" + String.valueOf(reason));
+      }
+    });
+  }
+
 }

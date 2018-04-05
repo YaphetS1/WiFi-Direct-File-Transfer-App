@@ -32,9 +32,9 @@ public class FilesAdapter extends RecyclerView.Adapter<FilesViewHolder> {
 
   @Override
   public void onBindViewHolder(final FilesViewHolder holder, int position) {
-    holder.bind(new FileModel(receivedFiles[position]));
-
     filesViewHolders.add(holder);
+
+    holder.bind(new FileModel(receivedFiles[position]));
   }
 
   @Override

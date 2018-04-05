@@ -3,6 +3,7 @@ package com.app.wi_fi_direct.helpers;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.net.Uri;
+import android.net.wifi.p2p.WifiP2pManager;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
@@ -20,12 +21,20 @@ public class TransferData extends AsyncTask<Void, Void, Void> {
   private ArrayList<Uri> uris;
   private ArrayList<String> fileNames;
   private InetAddress serverAddress;
+  private WifiP2pManager manager;
+  private WifiP2pManager.Channel channel;
 
   private ArrayList<Long> filesLength;
 
   public TransferData(Context context, ArrayList<Uri> uris,
-                      ArrayList<String> fileNames, ArrayList<Long> filesLength, InetAddress serverAddress) {
+                      ArrayList<String> fileNames,
+                      ArrayList<Long> filesLength,
+                      InetAddress serverAddress,
+                      final WifiP2pManager manager,
+                      final WifiP2pManager.Channel channel) {
     this.context = context;
+    this.channel = channel;
+    this.manager = manager;
 
     this.uris = uris;
     this.fileNames = fileNames;
@@ -107,6 +116,8 @@ public class TransferData extends AsyncTask<Void, Void, Void> {
     super.onPostExecute(aVoid);
     Toast.makeText(context, "Data Transferred!", Toast.LENGTH_SHORT).show();
     Log.d("Sender", "Finished!");
+
+//    ConnectPeer.disconnect(manager, channel);
   }
 
   @Override
