@@ -1,7 +1,6 @@
 package com.app.wi_fi_direct.helpers;
 
 import android.os.AsyncTask;
-import android.util.Log;
 import android.view.View;
 
 import com.app.wi_fi_direct.R;

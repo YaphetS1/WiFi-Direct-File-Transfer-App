@@ -60,3 +60,4 @@ public class FilesAdapter extends RecyclerView.Adapter<FilesViewHolder> {
   }
 
 }
+

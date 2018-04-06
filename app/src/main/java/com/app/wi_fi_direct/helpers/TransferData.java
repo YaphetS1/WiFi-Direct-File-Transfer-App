@@ -8,6 +8,9 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.app.wi_fi_direct.R;
+import com.app.wi_fi_direct.adapters.FilesSendAdapter;
+
 import java.io.InputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
@@ -16,8 +19,9 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.util.ArrayList;
 
-public class TransferData extends AsyncTask<Void, Void, Void> {
+public class TransferData extends AsyncTask<Void, Integer, Void> {
   private Context context;
+  private FilesSendAdapter sendFilesAdapter;
   private ArrayList<Uri> uris;
   private ArrayList<String> fileNames;
   private InetAddress serverAddress;
@@ -25,10 +29,9 @@ public class TransferData extends AsyncTask<Void, Void, Void> {
   private WifiP2pManager.Channel channel;
 
   private ArrayList<Long> filesLength;
+  private boolean needToUpdateIndex = false;
 
-  public TransferData(Context context, ArrayList<Uri> uris,
-                      ArrayList<String> fileNames,
-                      ArrayList<Long> filesLength,
+  public TransferData(Context context, FilesSendAdapter referenceSendFilesAdapter,
                       InetAddress serverAddress,
                       final WifiP2pManager manager,
                       final WifiP2pManager.Channel channel) {
@@ -36,9 +39,11 @@ public class TransferData extends AsyncTask<Void, Void, Void> {
     this.channel = channel;
     this.manager = manager;
 
-    this.uris = uris;
-    this.fileNames = fileNames;
-    this.filesLength = filesLength;
+    this.sendFilesAdapter = referenceSendFilesAdapter;
+
+    this.uris = referenceSendFilesAdapter.uris;
+    this.fileNames = referenceSendFilesAdapter.fileNames;
+    this.filesLength = referenceSendFilesAdapter.filesLength;
 
     this.serverAddress = serverAddress;
 
@@ -85,6 +90,7 @@ public class TransferData extends AsyncTask<Void, Void, Void> {
 //          Log.d("Sender", "Writing Data");
         }
         inputStream.close();
+        publishProgress();
       }
 
       objectOutputStream.close();
@@ -107,8 +113,31 @@ public class TransferData extends AsyncTask<Void, Void, Void> {
 
   @Override
   protected Void doInBackground(Void... params) {
+    if (this.sendFilesAdapter.isHaveNotTransferred()) {
+      this.needToUpdateIndex = true;
+      this.uris = (ArrayList<Uri>) this.uris.subList(this.sendFilesAdapter.index, this.uris.size());
+      this.fileNames = (ArrayList<String>) this.fileNames.subList(this.sendFilesAdapter.index, this.fileNames.size());
+      this.filesLength = (ArrayList<Long>) this.filesLength.subList(this.sendFilesAdapter.index, this.filesLength.size());
+    }
     sendData(context, uris);
     return null;
+  }
+
+  @Override
+  protected void onProgressUpdate(Integer... values) {
+    super.onProgressUpdate(values);
+    if (needToUpdateIndex) {
+      this.sendFilesAdapter.filesViewHolders
+          .get(
+              this.sendFilesAdapter.index + values[0]
+          ).stateFile.setImageResource(R.drawable.d_icon_done);
+    }
+    else {
+      this.sendFilesAdapter.filesViewHolders
+          .get(
+              values[0]
+          ).stateFile.setImageResource(R.drawable.d_icon_done);
+    }
   }
 
   @Override

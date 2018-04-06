@@ -12,11 +12,13 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.app.wi_fi_direct.R;
 import com.app.wi_fi_direct.adapters.FilesAdapter;
+import com.app.wi_fi_direct.adapters.FilesSendAdapter;
 import com.app.wi_fi_direct.adapters.PeersAdapter;
 import com.app.wi_fi_direct.helpers.Callback;
 import com.app.wi_fi_direct.helpers.ChooseFile;
@@ -54,8 +56,10 @@ public class SendFileActivity extends AppCompatActivity {
   public ServerSocket serverSocketDevice;
   public FileServerAsyncTask fileServerAsyncTask;
   public DeviceInfoServerAsyncTask deviceInfoServerAsyncTask;
+  private FilesSendAdapter sendFilesAdapter;
 
   private TextView tvSendOrReceive;
+  private ImageView ivAddFiles;
   private Callback callbackReInitServers;
   public Callback callbackSendThisDeviceName;
 
@@ -74,8 +78,8 @@ public class SendFileActivity extends AppCompatActivity {
     LinearLayoutManager filesListLayoutManager = new LinearLayoutManager(
         this, LinearLayoutManager.VERTICAL, false);
     rvSendingFilesList.setLayoutManager(filesListLayoutManager);
-//    FilesAdapter sendFilesAdapter = new FilesAdapter(SendFileActivity.this);
-//    rvSendingFilesList.setAdapter(sendFilesAdapter);
+    sendFilesAdapter = new FilesSendAdapter();
+    rvSendingFilesList.setAdapter(sendFilesAdapter);
 
 
     rvReceivingFilesList = findViewById(R.id.rvReceivingFilesList);
@@ -109,7 +113,8 @@ public class SendFileActivity extends AppCompatActivity {
       if (serverAddress == null) return;
 
       SendFileActivity.this.callbackSendThisDeviceName.call();
-      ChooseFile.fileChooser(SendFileActivity.this);
+
+      initTransferData();
     };
 
     p2pManager = (WifiP2pManager) getSystemService(WIFI_P2P_SERVICE);
@@ -156,6 +161,12 @@ public class SendFileActivity extends AppCompatActivity {
     rvDevicesList.setLayoutManager(mLayoutManager);
 
     p2pManager.discoverPeers(channel, null);
+
+    ivAddFiles = findViewById(R.id.addFiles);
+    ivAddFiles.setOnClickListener(c -> {
+      ChooseFile.fileChooser(SendFileActivity.this);
+    });
+
   }
 
   @Override
@@ -240,10 +251,11 @@ public class SendFileActivity extends AppCompatActivity {
             fileName = FilesUtil.getFileName(fileName);
             fileNames.add(fileName);
           }
+          sendFilesAdapter.notifyAdapter(uris, filesLength, fileNames);
 
-          TransferData transferData = new TransferData(SendFileActivity.this,
-              uris, fileNames, filesLength, serverAddress, p2pManager, channel);
-          transferData.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+          if (serverAddress != null) {
+            initTransferData();
+          }
 
         } catch (Exception e) {
           e.printStackTrace();
@@ -310,5 +322,11 @@ public class SendFileActivity extends AppCompatActivity {
     } catch (Exception e) {
       e.printStackTrace();
     }
+  }
+
+  private void initTransferData() {
+    TransferData transferData = new TransferData(SendFileActivity.this,
+        (sendFilesAdapter), serverAddress, p2pManager, channel);
+    transferData.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
   }
 }
