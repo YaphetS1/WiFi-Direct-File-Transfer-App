@@ -1,7 +1,6 @@
 package com.app.wi_fi_direct.pages;
 
 import android.content.ClipData;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.Uri;
@@ -19,6 +18,7 @@ import android.widget.Toast;
 
 import com.app.wi_fi_direct.R;
 import com.app.wi_fi_direct.adapters.FilesAdapter;
+import com.app.wi_fi_direct.adapters.FilesSendAdapter;
 import com.app.wi_fi_direct.adapters.PeersAdapter;
 import com.app.wi_fi_direct.helpers.Callback;
 import com.app.wi_fi_direct.helpers.ChooseFile;
@@ -26,6 +26,7 @@ import com.app.wi_fi_direct.helpers.DeviceInfoServerAsyncTask;
 import com.app.wi_fi_direct.helpers.FileServerAsyncTask;
 import com.app.wi_fi_direct.helpers.FilesUtil;
 import com.app.wi_fi_direct.helpers.MyBroadcastReciever;
+import com.app.wi_fi_direct.helpers.OnBackPressedListener;
 import com.app.wi_fi_direct.helpers.PathUtil;
 import com.app.wi_fi_direct.helpers.TransferData;
 import com.app.wi_fi_direct.helpers.TransferNameDevice;
@@ -39,9 +40,16 @@ import java.util.ArrayList;
 
 public class SendFileActivity extends AppCompatActivity {
 
+  int activeTab;
+
+  protected OnBackPressedListener onBackPressedListener;
+
   private RecyclerView rvDevicesList;
   private RecyclerView rvSendingFilesList;
   private RecyclerView rvReceivingFilesList;
+  private TextView tvSendOrReceive;
+  private Callback callbackReInitServers;
+  private FilesSendAdapter sendFilesAdapter;
 
   public WifiP2pManager p2pManager;
   public WifiP2pManager.Channel channel;
@@ -56,16 +64,24 @@ public class SendFileActivity extends AppCompatActivity {
   public ServerSocket serverSocketDevice;
   public FileServerAsyncTask fileServerAsyncTask;
   public DeviceInfoServerAsyncTask deviceInfoServerAsyncTask;
-
-  private TextView tvSendOrReceive;
-  private Callback callbackReInitServers;
   public Callback callbackSendThisDeviceName;
-
-  int activeTab;
 
   @Override
   public void onStart() {
     super.onStart();
+
+    this.onBackPressedListener = (() -> {
+      Toast.makeText(SendFileActivity.this, "Please press again to exit", Toast.LENGTH_SHORT).show();
+      SendFileActivity.this.onBackPressedListener = null;
+    });
+  }
+
+  @Override
+  public void onBackPressed() {
+    if (onBackPressedListener != null)
+      onBackPressedListener.doBack();
+    else
+      super.onBackPressed();
   }
 
   @Override
@@ -77,8 +93,8 @@ public class SendFileActivity extends AppCompatActivity {
     LinearLayoutManager filesListLayoutManager = new LinearLayoutManager(
         this, LinearLayoutManager.VERTICAL, false);
     rvSendingFilesList.setLayoutManager(filesListLayoutManager);
-//    FilesAdapter sendFilesAdapter = new FilesAdapter(SendFileActivity.this);
-//    rvSendingFilesList.setAdapter(sendFilesAdapter);
+    sendFilesAdapter = new FilesSendAdapter();
+    rvSendingFilesList.setAdapter(sendFilesAdapter);
 
 
     rvReceivingFilesList = findViewById(R.id.rvReceivingFilesList);
@@ -112,6 +128,7 @@ public class SendFileActivity extends AppCompatActivity {
       if (serverAddress == null) return;
 
       SendFileActivity.this.callbackSendThisDeviceName.call();
+
       ChooseFile.fileChooser(SendFileActivity.this);
     };
 
@@ -243,9 +260,10 @@ public class SendFileActivity extends AppCompatActivity {
             fileName = FilesUtil.getFileName(fileName);
             fileNames.add(fileName);
           }
+          sendFilesAdapter.notifyAdapter(uris, filesLength, fileNames);
 
           TransferData transferData = new TransferData(SendFileActivity.this,
-              uris, fileNames, filesLength, serverAddress, p2pManager, channel);
+              (sendFilesAdapter), serverAddress, p2pManager, channel);
           transferData.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
         } catch (Exception e) {
