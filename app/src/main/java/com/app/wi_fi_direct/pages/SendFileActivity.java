@@ -48,7 +48,8 @@ public class SendFileActivity extends AppCompatActivity {
   private RecyclerView rvSendingFilesList;
   private RecyclerView rvReceivingFilesList;
   private TextView tvSendOrReceive;
-  private Callback callbackReInitServers;
+  private Callback callbackReInitFileServer;
+  private Callback callbackReInitDeviceServer;
   private FilesSendAdapter sendFilesAdapter;
 
   public WifiP2pManager p2pManager;
@@ -109,7 +110,8 @@ public class SendFileActivity extends AppCompatActivity {
     this.initNav();
 
     this.initSockets();
-    callbackReInitServers = () -> SendFileActivity.this.initServers(receiveFilesAdapter);
+    callbackReInitFileServer = () -> SendFileActivity.this.initFileServer(receiveFilesAdapter);
+    callbackReInitDeviceServer = SendFileActivity.this::initDeviceInfoServers;
 
     peerListListener = peers -> {
       peerList.clear();
@@ -136,7 +138,9 @@ public class SendFileActivity extends AppCompatActivity {
     channel = p2pManager.initialize(this, getMainLooper(), null);
     peersAdapter = new PeersAdapter(peerList, this,
         p2pManager, channel, this, infoListener);
-    this.initServers(receiveFilesAdapter);
+
+    this.initFileServer(receiveFilesAdapter);
+    this.initDeviceInfoServers();
 
     try {
       Class<?> wifiManager = Class
@@ -321,18 +325,22 @@ public class SendFileActivity extends AppCompatActivity {
     }
   }
 
-  private void initServers(FilesAdapter receiveFilesAdapter) {
+  private void initDeviceInfoServers() {
+
+    deviceInfoServerAsyncTask = new DeviceInfoServerAsyncTask(
+        (serverSocketDevice),
+        (peersAdapter), callbackReInitDeviceServer);
+    deviceInfoServerAsyncTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+  }
+
+  private void initFileServer(FilesAdapter receiveFilesAdapter) {
 
     fileServerAsyncTask = new FileServerAsyncTask(
         (SendFileActivity.this),
         (serverSocket),
-        (receiveFilesAdapter), callbackReInitServers);
+        (receiveFilesAdapter), callbackReInitFileServer);
     fileServerAsyncTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
-    deviceInfoServerAsyncTask = new DeviceInfoServerAsyncTask(
-        (serverSocketDevice),
-        (peersAdapter), callbackReInitServers);
-    deviceInfoServerAsyncTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
   }
 
   private void initSockets() {
