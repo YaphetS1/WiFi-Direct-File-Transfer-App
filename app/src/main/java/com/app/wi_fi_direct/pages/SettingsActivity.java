@@ -1,6 +1,7 @@
 package com.app.wi_fi_direct.pages;
 
 import android.content.Intent;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -12,14 +13,23 @@ import com.app.wi_fi_direct.services.NavService;
 
 public class SettingsActivity extends AppCompatActivity {
 
+  private ConstraintLayout clStoreLocation;
+
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_settings);
+    initNav();
+
+    clStoreLocation = findViewById(R.id.clStoreLocation);
+    clStoreLocation.setOnClickListener(l -> {
+      Toast.makeText(this, "click", Toast.LENGTH_SHORT).show();
+    });
+
   }
 
   private void initNav() {
-    NavService.setupTopNav(this, R.string.app_main_title, true);
+    NavService.setupTopNav(this, R.string.settings, false);
     NavService.init(this
         , (Callback) () -> {
           Toast.makeText(SettingsActivity.this, "Some action will be here!", Toast.LENGTH_SHORT).show();

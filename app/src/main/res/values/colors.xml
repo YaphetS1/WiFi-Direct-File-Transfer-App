@@ -17,5 +17,6 @@
     <color name="cDivider">#f2f2f2</color>
 
     <color name="cProgressbar">#eff8f7</color>
+    <color name="cBannerBlock">#e7f1f1</color>
 
 </resources>

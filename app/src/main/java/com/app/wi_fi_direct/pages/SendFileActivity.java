@@ -1,12 +1,14 @@
 package com.app.wi_fi_direct.pages;
 
 import android.content.ClipData;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.Uri;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -59,6 +61,7 @@ public class SendFileActivity extends AppCompatActivity {
   private Callback callbackReInitServers;
   public Callback callbackSendThisDeviceName;
 
+  int activeTab;
 
   @Override
   public void onStart() {
@@ -253,7 +256,7 @@ public class SendFileActivity extends AppCompatActivity {
 
   private void initNav() {
     Intent intent = getIntent();
-    int activeTab = intent.getIntExtra(NavService.TAB, NavService.TAB_SEND);
+    activeTab = intent.getIntExtra(NavService.TAB, NavService.TAB_SEND);
     tvSendOrReceive = findViewById(R.id.tvSendOrReceive);
     NavService.setupTopNav(this, R.string.app_main_title, true);
 
@@ -262,19 +265,30 @@ public class SendFileActivity extends AppCompatActivity {
     };
 
     Callback sendTabAction = () -> {
+      activeTab = NavService.TAB_SEND;
       tvSendOrReceive.setText(R.string.sending);
       rvSendingFilesList.setVisibility(View.VISIBLE);
       rvReceivingFilesList.setVisibility(View.INVISIBLE);
     };
 
     Callback receiveTabAction = () -> {
+      activeTab = NavService.TAB_RECEIVE;
       tvSendOrReceive.setText(R.string.receiving);
       rvSendingFilesList.setVisibility(View.INVISIBLE);
       rvReceivingFilesList.setVisibility(View.VISIBLE);
     };
 
     Callback settingsTabAction = () -> {
-      Toast.makeText(SendFileActivity.this, "Some action will be here!", Toast.LENGTH_SHORT).show();
+      AlertDialog.Builder ad = new AlertDialog.Builder(SendFileActivity.this);
+      ad.setTitle(R.string.ad_title);  // заголовок
+      ad.setMessage(R.string.ad_message); // сообщение
+      ad.setPositiveButton(R.string.ad_yes, (dialog, arg1) -> {
+        startActivity(new Intent(SendFileActivity.this, SettingsActivity.class));
+      });
+      ad.setNegativeButton(R.string.ad_no, (dialog, arg1) -> NavService.set(SendFileActivity.this, activeTab));
+      ad.setCancelable(true);
+      ad.setOnCancelListener(dialog -> NavService.set(SendFileActivity.this, activeTab));
+      ad.show();
     };
 
     NavService.init(this
