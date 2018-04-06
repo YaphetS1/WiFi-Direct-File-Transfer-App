@@ -303,16 +303,16 @@ public class SendFileActivity extends AppCompatActivity {
 
   private void initServers(FilesAdapter receiveFilesAdapter) {
 
+    deviceInfoServerAsyncTask = new DeviceInfoServerAsyncTask(
+        (serverSocketDevice),
+        (peersAdapter), callbackReInitServers);
+    deviceInfoServerAsyncTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+
     fileServerAsyncTask = new FileServerAsyncTask(
         (SendFileActivity.this),
         (serverSocket),
         (receiveFilesAdapter), callbackReInitServers);
     fileServerAsyncTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-
-    deviceInfoServerAsyncTask = new DeviceInfoServerAsyncTask(
-        (serverSocketDevice),
-        (peersAdapter), callbackReInitServers);
-    deviceInfoServerAsyncTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
   }
 
   private void initSockets() {

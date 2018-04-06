@@ -1,6 +1,7 @@
 package com.app.wi_fi_direct.helpers;
 
 import android.os.AsyncTask;
+import android.util.Log;
 import android.view.View;
 
 import com.app.wi_fi_direct.R;
@@ -43,6 +44,7 @@ public class DeviceInfoServerAsyncTask extends AsyncTask<Void, Void, Void> {
       ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
 
       ourDeviceName = (String) objectInputStream.readObject();
+      Log.d("CLIENT::::", ourDeviceName);
       inputStream.close();
 
     } catch (Exception e) {

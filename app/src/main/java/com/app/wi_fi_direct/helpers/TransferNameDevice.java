@@ -30,6 +30,7 @@ public class TransferNameDevice extends AsyncTask<Void, Void, Void> {
       OutputStream outputStream = socket.getOutputStream();
       ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
       //TODO: Need to change it on mac address device
+      Log.d("CLIENT: ", MyBroadcastReciever.thisDeviceName);
       objectOutputStream.writeObject(MyBroadcastReciever.thisDeviceName);
       objectOutputStream.close();
       socket.close();

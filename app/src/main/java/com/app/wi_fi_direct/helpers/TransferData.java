@@ -90,7 +90,7 @@ public class TransferData extends AsyncTask<Void, Integer, Void> {
 //          Log.d("Sender", "Writing Data");
         }
         inputStream.close();
-        publishProgress();
+        publishProgress(i);
       }
 
       objectOutputStream.close();
@@ -115,11 +115,11 @@ public class TransferData extends AsyncTask<Void, Integer, Void> {
   protected Void doInBackground(Void... params) {
     if (this.sendFilesAdapter.isHaveNotTransferred()) {
       this.needToUpdateIndex = true;
-      this.uris = (ArrayList<Uri>) this.uris.subList(this.sendFilesAdapter.index, this.uris.size());
-      this.fileNames = (ArrayList<String>) this.fileNames.subList(this.sendFilesAdapter.index, this.fileNames.size());
-      this.filesLength = (ArrayList<Long>) this.filesLength.subList(this.sendFilesAdapter.index, this.filesLength.size());
+      this.uris = new ArrayList<>(this.uris.subList(this.sendFilesAdapter.index, this.uris.size()));
+      this.fileNames = new ArrayList<>(this.fileNames.subList(this.sendFilesAdapter.index, this.fileNames.size()));
+      this.filesLength = new ArrayList<>(this.filesLength.subList(this.sendFilesAdapter.index, this.filesLength.size()));
+      sendData(context, uris);
     }
-    sendData(context, uris);
     return null;
   }
 
