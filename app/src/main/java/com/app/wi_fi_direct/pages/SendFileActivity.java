@@ -113,6 +113,27 @@ public class SendFileActivity extends AppCompatActivity {
     callbackReInitFileServer = () -> SendFileActivity.this.initFileServer(receiveFilesAdapter);
     callbackReInitDeviceServer = SendFileActivity.this::initDeviceInfoServers;
 
+//    try {
+//      serverSocket = new ServerSocket(8888);
+//    } catch (Exception e) {
+//      e.printStackTrace();
+//    }
+//
+//    callback = () -> {
+//      fileServerAsyncTask = new FileServerAsyncTask(
+//          (SendFileActivity.this),
+//          (serverSocket),
+//          (receiveFilesAdapter), SendFileActivity.this.callback);
+//      fileServerAsyncTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+//    };
+//
+//    fileServerAsyncTask = new FileServerAsyncTask(
+//        (SendFileActivity.this),
+//        (serverSocket),
+//        (receiveFilesAdapter), callback);
+//    fileServerAsyncTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+    this.initFileServer((receiveFilesAdapter));
+
     peerListListener = peers -> {
       peerList.clear();
       peerList.addAll(peers.getDeviceList());
@@ -128,8 +149,10 @@ public class SendFileActivity extends AppCompatActivity {
     infoListener = info -> {
       serverAddress = info.groupOwnerAddress;
       if (serverAddress == null) return;
-
-      SendFileActivity.this.callbackSendThisDeviceName.call();
+      Toast.makeText(getApplicationContext(), "Am I Group Owner" + String.valueOf(info.isGroupOwner), Toast.LENGTH_LONG).show();
+      Toast.makeText(SendFileActivity.this, "Info Recieved " + serverAddress.toString(), Toast.LENGTH_LONG).show();
+      Log.d("Server Data", info.toString());
+      Toast.makeText(getApplicationContext(), "Info " + info.groupFormed, Toast.LENGTH_LONG).show();
 
       ChooseFile.fileChooser(SendFileActivity.this);
     };
@@ -170,7 +193,6 @@ public class SendFileActivity extends AppCompatActivity {
 
     peersAdapter = new PeersAdapter(peerList, this,
         p2pManager, channel, this, infoListener);
-    this.initDeviceInfoServers();
 
     rvDevicesList = findViewById(R.id.rvDevicesList);
     rvDevicesList.setAdapter(peersAdapter);
