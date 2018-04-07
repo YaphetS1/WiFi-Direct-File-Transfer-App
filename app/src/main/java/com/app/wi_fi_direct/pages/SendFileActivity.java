@@ -136,11 +136,8 @@ public class SendFileActivity extends AppCompatActivity {
 
     p2pManager = (WifiP2pManager) getSystemService(WIFI_P2P_SERVICE);
     channel = p2pManager.initialize(this, getMainLooper(), null);
-    peersAdapter = new PeersAdapter(peerList, this,
-        p2pManager, channel, this, infoListener);
 
     this.initFileServer(receiveFilesAdapter);
-    this.initDeviceInfoServers();
 
     try {
       Class<?> wifiManager = Class
@@ -171,6 +168,9 @@ public class SendFileActivity extends AppCompatActivity {
 
     registerReceiver(myBroadcastReciever, intentFilter);
 
+    peersAdapter = new PeersAdapter(peerList, this,
+        p2pManager, channel, this, infoListener);
+    this.initDeviceInfoServers();
 
     rvDevicesList = findViewById(R.id.rvDevicesList);
     rvDevicesList.setAdapter(peersAdapter);
