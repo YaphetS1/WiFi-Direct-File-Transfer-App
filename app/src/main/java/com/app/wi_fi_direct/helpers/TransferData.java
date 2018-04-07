@@ -19,7 +19,7 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.util.ArrayList;
 
-public class TransferData extends AsyncTask<Void, Integer, Void> {
+public class TransferData extends AsyncTask<Void, String, Void> {
   private Context context;
   private FilesSendAdapter sendFilesAdapter;
   private ArrayList<Uri> uris;
@@ -31,7 +31,11 @@ public class TransferData extends AsyncTask<Void, Integer, Void> {
   private ArrayList<Long> filesLength;
   private boolean needToUpdateIndex = false;
 
-  public TransferData(Context context, FilesSendAdapter referenceSendFilesAdapter,
+  public TransferData(Context context,
+                      ArrayList<Uri> uris,
+                      ArrayList<Long> filesLength,
+                      ArrayList<String> fileNames,
+                      FilesSendAdapter referenceSendFilesAdapter,
                       InetAddress serverAddress,
                       final WifiP2pManager manager,
                       final WifiP2pManager.Channel channel) {
@@ -41,9 +45,9 @@ public class TransferData extends AsyncTask<Void, Integer, Void> {
 
     this.sendFilesAdapter = referenceSendFilesAdapter;
 
-    this.uris = referenceSendFilesAdapter.uris;
-    this.fileNames = referenceSendFilesAdapter.fileNames;
-    this.filesLength = referenceSendFilesAdapter.filesLength;
+    this.uris = uris;
+    this.fileNames = fileNames;
+    this.filesLength = filesLength;
 
     this.serverAddress = serverAddress;
 
@@ -86,11 +90,9 @@ public class TransferData extends AsyncTask<Void, Integer, Void> {
 
         while ((len = inputStream.read(buf)) != -1) {
           objectOutputStream.write(buf, 0, len);
-          objectOutputStream.flush();
         }
         inputStream.close();
-        publishProgress(i);
-        if (this.isCancelled()) return;
+        publishProgress(fileNames.get(i));
 
         Log.d("TRANSFER", "Writing Data Final   -" + len);
 
@@ -121,11 +123,17 @@ public class TransferData extends AsyncTask<Void, Integer, Void> {
   }
 
   @Override
-  protected void onProgressUpdate(Integer... values) {
+  protected void onProgressUpdate(String... values) {
     super.onProgressUpdate(values);
     Log.d("DEBUGGGGG:::::::", this.sendFilesAdapter.filesViewHolders.toString());
-      this.sendFilesAdapter.filesViewHolders
-        .get(values[0]).stateFile.setImageResource(R.drawable.d_icon_done);
+    for (int i = 0; i < this.sendFilesAdapter.filesViewHolders.size(); i++) {
+      if (this.sendFilesAdapter.filesViewHolders.get(i).fileModel.getFileName().equals(values[0])) {
+        this.sendFilesAdapter.filesViewHolders
+            .get(i).stateFile.setImageResource(R.drawable.d_icon_done);
+      }
+    }
+//    this.sendFilesAdapter.filesViewHolders
+//        .get(values[0]).stateFile.setImageResource(R.drawable.d_icon_done);
   }
 
   @Override

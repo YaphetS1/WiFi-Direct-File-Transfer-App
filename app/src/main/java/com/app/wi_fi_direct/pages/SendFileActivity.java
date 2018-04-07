@@ -267,7 +267,7 @@ public class SendFileActivity extends AppCompatActivity {
           sendFilesAdapter.notifyAdapter(uris, filesLength, fileNames);
 
           TransferData transferData = new TransferData(SendFileActivity.this,
-              (sendFilesAdapter), serverAddress, p2pManager, channel);
+              uris, filesLength, fileNames, (sendFilesAdapter), serverAddress, p2pManager, channel);
           transferData.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
         } catch (Exception e) {
