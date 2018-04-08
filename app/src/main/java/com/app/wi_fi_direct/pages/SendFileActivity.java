@@ -115,7 +115,6 @@ public class SendFileActivity extends AppCompatActivity {
     callbackReInitDeviceServer = SendFileActivity.this::initDeviceInfoServers;
 
     this.initFileServer(); // Init file server for receiving data
-    this.initDeviceInfoServers(); // Init Device info server for receiving device name who connected
 
     peerListListener = peers -> {
       peerList.clear();
@@ -179,6 +178,7 @@ public class SendFileActivity extends AppCompatActivity {
 
     rvDevicesList = findViewById(R.id.rvDevicesList);
     rvDevicesList.setAdapter(peersAdapter);
+    this.initDeviceInfoServers(); // Init Device info server for receiving device name who connected
 
     RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(
         this, LinearLayoutManager.VERTICAL, false);
