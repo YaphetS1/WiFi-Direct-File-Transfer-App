@@ -165,10 +165,11 @@ public class FileServerAsyncTask extends AsyncTask<Void, CustomObject, Void> {
     super.onPostExecute(aVoid);
     this.fileList.notifyAdapter();
 
-    this.fileList.filesViewHolders
-        .get(fileList.receivedFiles.length - 1).progressBar.setVisibility(View.INVISIBLE);
+    if (fileList.receivedFiles.length != 0) {
+      this.fileList.filesViewHolders
+          .get(fileList.receivedFiles.length - 1).progressBar.setVisibility(View.INVISIBLE);
+    }
 
-    Toast.makeText(context, "File Transferred!", Toast.LENGTH_LONG).show();
     Log.d("Reciever", "onPostExecute");
     try {
 //      serverSocket.close();
@@ -183,7 +184,6 @@ public class FileServerAsyncTask extends AsyncTask<Void, CustomObject, Void> {
   @Override
   protected void onCancelled() {
     super.onCancelled();
-    Toast.makeText(context, "Transfer Cancelled", Toast.LENGTH_LONG).show();
     Log.d("Reciever", "Transfer Cancelled");
     try {
 //      if (client.isConnected()) serverSocket.close();

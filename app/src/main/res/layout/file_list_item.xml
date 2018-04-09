@@ -32,13 +32,15 @@
 
     <TextView
         android:id="@+id/tvItemTitle"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
         android:layout_marginStart="14dp"
         android:fontFamily="@font/r_r"
         android:textColor="@color/cDeviceListItemTitle"
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/ivItemStatus"
         app:layout_constraintStart_toEndOf="@+id/ivItemType"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Файл 1" />

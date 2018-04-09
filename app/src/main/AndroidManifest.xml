@@ -43,7 +43,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".pages.SendFileActivity" />
-        <activity android:name=".pages.SettingsActivity"></activity>
+        <activity
+            android:name=".pages.SettingsActivity"
+            android:noHistory="true" />
     </application>
 
 </manifest>
