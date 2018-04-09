@@ -1,7 +1,6 @@
 package com.app.wi_fi_direct.pages;
 
 import android.content.ClipData;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.Uri;
@@ -19,6 +18,7 @@ import android.widget.Toast;
 
 import com.app.wi_fi_direct.R;
 import com.app.wi_fi_direct.adapters.FilesAdapter;
+import com.app.wi_fi_direct.adapters.FilesSendAdapter;
 import com.app.wi_fi_direct.adapters.PeersAdapter;
 import com.app.wi_fi_direct.helpers.Callback;
 import com.app.wi_fi_direct.helpers.ChooseFile;
@@ -26,6 +26,7 @@ import com.app.wi_fi_direct.helpers.DeviceInfoServerAsyncTask;
 import com.app.wi_fi_direct.helpers.FileServerAsyncTask;
 import com.app.wi_fi_direct.helpers.FilesUtil;
 import com.app.wi_fi_direct.helpers.MyBroadcastReciever;
+import com.app.wi_fi_direct.helpers.OnBackPressedListener;
 import com.app.wi_fi_direct.helpers.PathUtil;
 import com.app.wi_fi_direct.helpers.TransferData;
 import com.app.wi_fi_direct.helpers.TransferNameDevice;
@@ -39,9 +40,18 @@ import java.util.ArrayList;
 
 public class SendFileActivity extends AppCompatActivity {
 
+  int activeTab;
+
+  protected OnBackPressedListener onBackPressedListener;
+
   private RecyclerView rvDevicesList;
   private RecyclerView rvSendingFilesList;
   private RecyclerView rvReceivingFilesList;
+  private TextView tvSendOrReceive;
+  private Callback callbackReInitFileServer;
+  private Callback callbackReInitDeviceServer;
+  private FilesSendAdapter sendFilesAdapter;
+  private FilesAdapter receiveFilesAdapter;
 
   public WifiP2pManager p2pManager;
   public WifiP2pManager.Channel channel;
@@ -56,16 +66,24 @@ public class SendFileActivity extends AppCompatActivity {
   public ServerSocket serverSocketDevice;
   public FileServerAsyncTask fileServerAsyncTask;
   public DeviceInfoServerAsyncTask deviceInfoServerAsyncTask;
-
-  private TextView tvSendOrReceive;
-  private Callback callbackReInitServers;
   public Callback callbackSendThisDeviceName;
-
-  int activeTab;
 
   @Override
   public void onStart() {
     super.onStart();
+
+    this.onBackPressedListener = (() -> {
+      Toast.makeText(SendFileActivity.this, "Please press again to exit", Toast.LENGTH_SHORT).show();
+      SendFileActivity.this.onBackPressedListener = null;
+    });
+  }
+
+  @Override
+  public void onBackPressed() {
+    if (onBackPressedListener != null)
+      onBackPressedListener.doBack();
+    else
+      super.onBackPressed();
   }
 
   @Override
@@ -77,15 +95,15 @@ public class SendFileActivity extends AppCompatActivity {
     LinearLayoutManager filesListLayoutManager = new LinearLayoutManager(
         this, LinearLayoutManager.VERTICAL, false);
     rvSendingFilesList.setLayoutManager(filesListLayoutManager);
-//    FilesAdapter sendFilesAdapter = new FilesAdapter(SendFileActivity.this);
-//    rvSendingFilesList.setAdapter(sendFilesAdapter);
+    sendFilesAdapter = new FilesSendAdapter();
+    rvSendingFilesList.setAdapter(sendFilesAdapter);
 
 
     rvReceivingFilesList = findViewById(R.id.rvReceivingFilesList);
     LinearLayoutManager receiveFilesListLayoutManager = new LinearLayoutManager(
         this, LinearLayoutManager.VERTICAL, false);
     rvReceivingFilesList.setLayoutManager(receiveFilesListLayoutManager);
-    FilesAdapter receiveFilesAdapter = new FilesAdapter(SendFileActivity.this);
+    receiveFilesAdapter = new FilesAdapter(this);
 
     rvReceivingFilesList.setAdapter(receiveFilesAdapter);
 
@@ -93,7 +111,10 @@ public class SendFileActivity extends AppCompatActivity {
     this.initNav();
 
     this.initSockets();
-    callbackReInitServers = () -> SendFileActivity.this.initServers(receiveFilesAdapter);
+    callbackReInitFileServer = SendFileActivity.this::initFileServer;
+    callbackReInitDeviceServer = SendFileActivity.this::initDeviceInfoServers;
+
+    this.initFileServer(); // Init file server for receiving data
 
     peerListListener = peers -> {
       peerList.clear();
@@ -110,16 +131,18 @@ public class SendFileActivity extends AppCompatActivity {
     infoListener = info -> {
       serverAddress = info.groupOwnerAddress;
       if (serverAddress == null) return;
+      Toast.makeText(getApplicationContext(), "Am I Group Owner" + String.valueOf(info.isGroupOwner), Toast.LENGTH_LONG).show();
+      Toast.makeText(SendFileActivity.this, "Info Recieved " + serverAddress.toString(), Toast.LENGTH_LONG).show();
+      Log.d("Server Data", info.toString());
+      Toast.makeText(getApplicationContext(), "Info " + info.groupFormed, Toast.LENGTH_LONG).show();
 
-      SendFileActivity.this.callbackSendThisDeviceName.call();
+      callbackSendThisDeviceName.call();
+
       ChooseFile.fileChooser(SendFileActivity.this);
     };
 
     p2pManager = (WifiP2pManager) getSystemService(WIFI_P2P_SERVICE);
     channel = p2pManager.initialize(this, getMainLooper(), null);
-    peersAdapter = new PeersAdapter(peerList, this,
-        p2pManager, channel, this, infoListener);
-    this.initServers(receiveFilesAdapter);
 
     try {
       Class<?> wifiManager = Class
@@ -150,9 +173,12 @@ public class SendFileActivity extends AppCompatActivity {
 
     registerReceiver(myBroadcastReciever, intentFilter);
 
+    peersAdapter = new PeersAdapter(peerList, this,
+        p2pManager, channel, this, infoListener);
 
     rvDevicesList = findViewById(R.id.rvDevicesList);
     rvDevicesList.setAdapter(peersAdapter);
+    this.initDeviceInfoServers(); // Init Device info server for receiving device name who connected
 
     RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(
         this, LinearLayoutManager.VERTICAL, false);
@@ -165,24 +191,15 @@ public class SendFileActivity extends AppCompatActivity {
   protected void onDestroy() {
     super.onDestroy();
 
-    p2pManager.cancelConnect(channel, new WifiP2pManager.ActionListener() {
-      @Override
-      public void onSuccess() {
-        Toast.makeText(getApplicationContext(), "Disconnection successful", Toast.LENGTH_LONG).show();
-      }
-
-      @Override
-      public void onFailure(int reason) {
-        Toast.makeText(getApplicationContext(), "Disconnection Failed", Toast.LENGTH_LONG).show();
-      }
-    });
+    p2pManager.cancelConnect(channel, null);
     unregisterReceiver(myBroadcastReciever);
     p2pManager.stopPeerDiscovery(channel, null);
-    Log.d("Send Activity", "onDestroy");
 
     try {
       serverSocket.close();
+      serverSocketDevice.close();
       fileServerAsyncTask.cancel(true);
+      deviceInfoServerAsyncTask.cancel(true);
     } catch (Exception e) {
       e.printStackTrace();
     }
@@ -243,9 +260,10 @@ public class SendFileActivity extends AppCompatActivity {
             fileName = FilesUtil.getFileName(fileName);
             fileNames.add(fileName);
           }
+          sendFilesAdapter.notifyAdapter(uris, filesLength, fileNames);
 
           TransferData transferData = new TransferData(SendFileActivity.this,
-              uris, fileNames, filesLength, serverAddress, p2pManager, channel);
+              uris, filesLength, fileNames, (sendFilesAdapter), serverAddress, p2pManager, channel);
           transferData.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
         } catch (Exception e) {
@@ -303,18 +321,22 @@ public class SendFileActivity extends AppCompatActivity {
     }
   }
 
-  private void initServers(FilesAdapter receiveFilesAdapter) {
+  private void initDeviceInfoServers() {
+
+    deviceInfoServerAsyncTask = new DeviceInfoServerAsyncTask(
+        (serverSocketDevice),
+        (SendFileActivity.this.peersAdapter), callbackReInitDeviceServer);
+    deviceInfoServerAsyncTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+  }
+
+  private void initFileServer() {
 
     fileServerAsyncTask = new FileServerAsyncTask(
         (SendFileActivity.this),
         (serverSocket),
-        (receiveFilesAdapter), callbackReInitServers);
+        (SendFileActivity.this.receiveFilesAdapter), callbackReInitFileServer);
     fileServerAsyncTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
-    deviceInfoServerAsyncTask = new DeviceInfoServerAsyncTask(
-        (serverSocketDevice),
-        (peersAdapter), callbackReInitServers);
-    deviceInfoServerAsyncTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
   }
 
   private void initSockets() {

@@ -163,8 +163,10 @@ public class FileServerAsyncTask extends AsyncTask<Void, CustomObject, Void> {
   @Override
   protected void onPostExecute(Void aVoid) {
     super.onPostExecute(aVoid);
-    this.fileList.filesViewHolders.get(fileList.receivedFiles.length - 1).progressBar.setVisibility(View.INVISIBLE);
     this.fileList.notifyAdapter();
+
+    this.fileList.filesViewHolders
+        .get(fileList.receivedFiles.length - 1).progressBar.setVisibility(View.INVISIBLE);
 
     Toast.makeText(context, "File Transferred!", Toast.LENGTH_LONG).show();
     Log.d("Reciever", "onPostExecute");

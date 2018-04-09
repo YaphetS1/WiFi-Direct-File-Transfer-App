@@ -10,7 +10,7 @@ public class ConnectPeer {
   public static void connect(String deviceAddress, final WifiP2pManager manager, final WifiP2pManager.Channel channel, final Context context, WifiP2pManager.ActionListener listener) {
     final WifiP2pConfig config = new WifiP2pConfig();
     config.deviceAddress = deviceAddress;
-//    config.groupOwnerIntent = 0;
+    config.groupOwnerIntent = 0;
 
     Log.d("Connect", "initiated");
     manager.connect(channel, config, listener);
