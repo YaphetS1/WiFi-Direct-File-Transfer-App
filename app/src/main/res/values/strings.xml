@@ -10,36 +10,51 @@
     <string name="receive_activity_second_heading">Current File Transfer</string>
     <string name="receive_activity_third_heading">Received Files</string>
 
-    <!--<string name="available_devices">Available Devices</string>-->
-    <!--<string name="sending">Sending</string>-->
-    <!--<string name="receiving">Receiving</string>-->
-    <!--<string name="recomendations">Recommendations</string>-->
-    <!--<string name="send">Send</string>-->
-    <!--<string name="receive">Receive</string>-->
-    <!--<string name="settings">Settings</string>-->
-    <!--<string name="syncing">Syncing</string>-->
+    <string name="available_devices">Available Devices</string>
+    <string name="sending">Sending</string>
+    <string name="receiving">Receiving</string>
+    <string name="recomendations">Recommendations</string>
+    <string name="send">Send</string>
+    <string name="receive">Receive</string>
+    <string name="settings">Settings</string>
+    <string name="syncing">Syncing</string>
 
-    <string name="available_devices">Доступные устройства</string>
-    <string name="sending">Отправляется</string>
-    <string name="receiving">Принимается</string>
-    <string name="recomendations">Рекомендации</string>
-    <string name="send">Отправить</string>
-    <string name="receive">Принять</string>
-    <string name="settings">Настройки</string>
-    <string name="syncing">Сопряжение</string>
+    <!--<string name="available_devices">Доступные устройства</string>-->
+    <!--<string name="sending">Отправляется</string>-->
+    <!--<string name="receiving">Принимается</string>-->
+    <!--<string name="recomendations">Рекомендации</string>-->
+    <!--<string name="send">Отправить</string>-->
+    <!--<string name="receive">Принять</string>-->
+    <!--<string name="settings">Настройки</string>-->
+    <!--<string name="syncing">Сопряжение</string>-->
 
-    <string name="ad_title">Предупреждение</string>
-    <string name="ad_message">Все входящие и исходящие соединения будут разорваны.</string>
-    <string name="ad_yes"> Ок</string>
-    <string name="ad_no">Отмена</string>
-    <string name="banner_title">Заголовок</string>
-    <string name="banner_text">Текст рекламы</string>
+    <string name="ad_title">Warning</string>
+    <string name="ad_message">All incoming and outgoing connections will be disconnected.</string>
+    <string name="ad_yes">OK</string>
+    <string name="ad_no">Cancel</string>
+    <string name="banner_title">Header</string>
+    <string name="banner_text">Text of advertising</string>
 
-    <string name="history">История</string>
-    <string name="store_location">Папка для загрузок</string>
-    <string name="rate_app">Оценить в Google Play</string>
-    <string name="settings_of_wifi_direct">Настройки Wi-Fi Direct</string>
-    <string name="about_app">О программе</string>
-    <string name="clean_cache">Очистить кеш</string>
-    <string name="mail_to_developers">Написать разработчику</string>
+    <!--<string name="ad_title">Предупреждение</string>-->
+    <!--<string name="ad_message">Все входящие и исходящие соединения будут разорваны.</string>-->
+    <!--<string name="ad_yes"> Ок</string>-->
+    <!--<string name="ad_no">Отмена</string>-->
+    <!--<string name="banner_title">Заголовок</string>-->
+    <!--<string name="banner_text">Текст рекламы</string>-->
+
+    <string name="history">History</string>
+    <string name="store_location">Folder for download</string>
+    <string name="rate_app">Appreciate on Google Play</string>
+    <string name="settings_of_wifi_direct">Settings Wi-Fi Direct</string>
+    <string name="about_app">About the program</string>
+    <string name="clean_cache">Clear cache</string>
+    <string name="mail_to_developers">Write to the developer</string>
+
+    <!--<string name="history">История</string>-->
+    <!--<string name="store_location">Папка для загрузок</string>-->
+    <!--<string name="rate_app">Оценить в Google Play</string>-->
+    <!--<string name="settings_of_wifi_direct">Настройки Wi-Fi Direct</string>-->
+    <!--<string name="about_app">О программе</string>-->
+    <!--<string name="clean_cache">Очистить кеш</string>-->
+    <!--<string name="mail_to_developers">Написать разработчику</string>-->
 </resources>
