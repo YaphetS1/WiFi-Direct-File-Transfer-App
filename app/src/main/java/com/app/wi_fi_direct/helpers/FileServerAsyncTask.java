@@ -89,9 +89,9 @@ public class FileServerAsyncTask extends AsyncTask<Void, CustomObject, Void> {
         progress.totalProgress = 0;
 
         try {
-//          while (((len = inputStream.read(buf)) != -1))
+//          while (((len = objectInputStream.read(buf)) != -1))
           while (fileSize > 0 &&
-              (len = inputStream.read(buf, 0, (int) Math.min(buf.length, fileSize))) != -1) {
+              (len = objectInputStream.read(buf, 0, (int) Math.min(buf.length, fileSize))) != -1) {
 
             outputStream.write(buf, 0, len);
             fileSize -= len;
@@ -120,7 +120,7 @@ public class FileServerAsyncTask extends AsyncTask<Void, CustomObject, Void> {
 
       }
 
-      inputStream.close();
+      objectInputStream.close();
       //serverSocket.close();
       //client.close();
 
