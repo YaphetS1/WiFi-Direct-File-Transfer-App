@@ -125,15 +125,12 @@ public class TransferData extends AsyncTask<Void, String, Void> {
   @Override
   protected void onProgressUpdate(String... values) {
     super.onProgressUpdate(values);
-    Log.d("DEBUGGGGG:::::::", this.sendFilesAdapter.filesViewHolders.toString());
     for (int i = 0; i < this.sendFilesAdapter.filesViewHolders.size(); i++) {
       if (this.sendFilesAdapter.filesViewHolders.get(i).fileModel.getFileName().equals(values[0])) {
         this.sendFilesAdapter.filesViewHolders
             .get(i).stateFile.setImageResource(R.drawable.d_icon_done);
       }
     }
-//    this.sendFilesAdapter.filesViewHolders
-//        .get(values[0]).stateFile.setImageResource(R.drawable.d_icon_done);
   }
 
   @Override

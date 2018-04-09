@@ -44,7 +44,6 @@ public class SendFileActivity extends AppCompatActivity {
 
   protected OnBackPressedListener onBackPressedListener;
 
-  private RecyclerView rvDevicesList;
   private RecyclerView rvSendingFilesList;
   private RecyclerView rvReceivingFilesList;
   private TextView tvSendOrReceive;
@@ -53,20 +52,17 @@ public class SendFileActivity extends AppCompatActivity {
   private FilesSendAdapter sendFilesAdapter;
   private FilesAdapter receiveFilesAdapter;
 
-  public WifiP2pManager p2pManager;
-  public WifiP2pManager.Channel channel;
-  public IntentFilter intentFilter;
-  public MyBroadcastReciever myBroadcastReciever;
-  public WifiP2pManager.PeerListListener peerListListener;
-  public ArrayList peerList = new ArrayList();
-  public PeersAdapter peersAdapter;
-  public InetAddress serverAddress;
-  public WifiP2pManager.ConnectionInfoListener infoListener;
-  public ServerSocket serverSocket;
-  public ServerSocket serverSocketDevice;
-  public FileServerAsyncTask fileServerAsyncTask;
-  public DeviceInfoServerAsyncTask deviceInfoServerAsyncTask;
-  public Callback callbackSendThisDeviceName;
+  private WifiP2pManager p2pManager;
+  private WifiP2pManager.Channel channel;
+  private MyBroadcastReciever myBroadcastReciever;
+  private ArrayList peerList = new ArrayList();
+  private PeersAdapter peersAdapter;
+  private InetAddress serverAddress;
+  private ServerSocket serverSocket;
+  private ServerSocket serverSocketDevice;
+  private FileServerAsyncTask fileServerAsyncTask;
+  private DeviceInfoServerAsyncTask deviceInfoServerAsyncTask;
+  private Callback callbackSendThisDeviceName;
 
   @Override
   public void onStart() {
@@ -116,7 +112,7 @@ public class SendFileActivity extends AppCompatActivity {
 
     this.initFileServer(); // Init file server for receiving data
 
-    peerListListener = peers -> {
+    WifiP2pManager.PeerListListener peerListListener = peers -> {
       peerList.clear();
       peerList.addAll(peers.getDeviceList());
       peersAdapter.updateList(peerList);
@@ -128,14 +124,9 @@ public class SendFileActivity extends AppCompatActivity {
       transferNameDevice.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     };
 
-    infoListener = info -> {
+    WifiP2pManager.ConnectionInfoListener infoListener = info -> {
       serverAddress = info.groupOwnerAddress;
       if (serverAddress == null) return;
-      Toast.makeText(getApplicationContext(), "Am I Group Owner" + String.valueOf(info.isGroupOwner), Toast.LENGTH_LONG).show();
-      Toast.makeText(SendFileActivity.this, "Info Recieved " + serverAddress.toString(), Toast.LENGTH_LONG).show();
-      Log.d("Server Data", info.toString());
-      Toast.makeText(getApplicationContext(), "Info " + info.groupFormed, Toast.LENGTH_LONG).show();
-
       callbackSendThisDeviceName.call();
 
       ChooseFile.fileChooser(SendFileActivity.this);
@@ -159,13 +150,12 @@ public class SendFileActivity extends AppCompatActivity {
     }
 
     p2pManager.removeGroup(channel, null);
-    //Toast.makeText(this,channel.toString(),Toast.LENGTH_LONG).show();
 
     myBroadcastReciever = new MyBroadcastReciever(p2pManager, channel,
         this, infoListener);
     myBroadcastReciever.setPeerListListener(peerListListener);
 
-    intentFilter = new IntentFilter();
+    IntentFilter intentFilter = new IntentFilter();
     intentFilter.addAction(WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION);
     intentFilter.addAction(WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION);
     intentFilter.addAction(WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION);
@@ -176,7 +166,7 @@ public class SendFileActivity extends AppCompatActivity {
     peersAdapter = new PeersAdapter(peerList, this,
         p2pManager, channel, this, infoListener);
 
-    rvDevicesList = findViewById(R.id.rvDevicesList);
+    RecyclerView rvDevicesList = findViewById(R.id.rvDevicesList);
     rvDevicesList.setAdapter(peersAdapter);
     this.initDeviceInfoServers(); // Init Device info server for receiving device name who connected
 
