@@ -52,8 +52,6 @@ public class TransferData extends AsyncTask<Void, String, Void> {
     this.serverAddress = serverAddress;
 
     Log.d(" DEBUG::::   ", serverAddress.getHostAddress());
-
-    Toast.makeText(context, "Transfer Started", Toast.LENGTH_SHORT).show();
   }
 
   private void sendData(Context context, ArrayList<Uri> uris) {
@@ -136,13 +134,11 @@ public class TransferData extends AsyncTask<Void, String, Void> {
   @Override
   protected void onPostExecute(Void aVoid) {
     super.onPostExecute(aVoid);
-    Toast.makeText(context, "Data Transferred!", Toast.LENGTH_SHORT).show();
     Log.d("Sender", "Finished!");
   }
 
   @Override
   protected void onCancelled() {
     super.onCancelled();
-    Log.d("Sender", "Cancelled!");
   }
 }

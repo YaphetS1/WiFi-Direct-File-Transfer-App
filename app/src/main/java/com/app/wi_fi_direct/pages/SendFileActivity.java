@@ -68,6 +68,9 @@ public class SendFileActivity extends AppCompatActivity {
   public void onStart() {
     super.onStart();
 
+    //init navigation
+    this.initNav();
+
     this.onBackPressedListener = (() -> {
       Toast.makeText(SendFileActivity.this, "Please press again to exit", Toast.LENGTH_SHORT).show();
       SendFileActivity.this.onBackPressedListener = null;
@@ -102,9 +105,6 @@ public class SendFileActivity extends AppCompatActivity {
     receiveFilesAdapter = new FilesAdapter(this);
 
     rvReceivingFilesList.setAdapter(receiveFilesAdapter);
-
-    //init navigation
-    this.initNav();
 
     this.initSockets();
     callbackReInitFileServer = SendFileActivity.this::initFileServer;
