@@ -7,7 +7,6 @@ import android.net.NetworkInfo;
 import android.net.wifi.p2p.WifiP2pDevice;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.util.Log;
-import android.widget.Toast;
 
 public class MyBroadcastReciever extends BroadcastReceiver {
 
@@ -35,7 +34,7 @@ public class MyBroadcastReciever extends BroadcastReceiver {
 
     if (WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION.equals(action)) {
       p2pManager.requestPeers(channel, peerListListener);
-      Toast.makeText(context, WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION, Toast.LENGTH_SHORT).show();
+//      Toast.makeText(context, WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION, Toast.LENGTH_SHORT).show();
     } else if (WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION.equals(action)) {
       int state = intent.getIntExtra(WifiP2pManager.EXTRA_WIFI_STATE, -1);
       if (state == WifiP2pManager.WIFI_P2P_STATE_ENABLED) {

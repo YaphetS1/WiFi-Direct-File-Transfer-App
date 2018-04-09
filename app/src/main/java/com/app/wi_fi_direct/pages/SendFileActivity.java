@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -146,7 +147,16 @@ public class SendFileActivity extends AppCompatActivity {
       method.invoke(p2pManager, channel);
 
     } catch (Exception e) {
-      e.printStackTrace();
+//      AlertDialog.Builder ad = new AlertDialog.Builder(SendFileActivity.this);
+//      ad.setTitle(R.string.alert);  // header
+//      ad.setMessage(R.string.enable_wifi_direct_before_using); // message
+//      ad.setPositiveButton(R.string.ad_yes, (dialog, arg1) -> {
+//        startActivity(new Intent(Settings.ACTION_SETTINGS));
+//      });
+//      ad.setNegativeButton(R.string.ad_no, (dialog, arg1) -> finish());
+//      ad.setCancelable(true);
+//      ad.setOnCancelListener(dialog -> NavService.set(SendFileActivity.this, activeTab));
+//      ad.show();
     }
 
     p2pManager.removeGroup(channel, null);
@@ -288,8 +298,8 @@ public class SendFileActivity extends AppCompatActivity {
 
     Callback settingsTabAction = () -> {
       AlertDialog.Builder ad = new AlertDialog.Builder(SendFileActivity.this);
-      ad.setTitle(R.string.ad_title);  // заголовок
-      ad.setMessage(R.string.ad_message); // сообщение
+      ad.setTitle(R.string.ad_title);  // header
+      ad.setMessage(R.string.ad_message); // message
       ad.setPositiveButton(R.string.ad_yes, (dialog, arg1) -> {
         startActivity(new Intent(SendFileActivity.this, SettingsActivity.class));
       });
