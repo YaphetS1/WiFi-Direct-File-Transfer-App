@@ -30,6 +30,7 @@ WARNING: The application does not work in the emulator, because the emulator doe
 ## Results
 
 [![ScreenShot](https://img.youtube.com/vi/WJID7NYT0GY/0.jpg)](https://www.youtube.com/watch?v=WJID7NYT0GY)
+[![ScreenShot](https://img.youtube.com/vi/NezpvBeRgrw/0.jpg)](https://www.youtube.com/watch?v=NezpvBeRgrw)
 
 WiFi Direct File Transfer works with good performances.<br/>
 The main problems are the "Discovery Phase" of this protocol and the Wi-Fi Direct's implementation in Android, in fact:<br/>
@@ -55,7 +56,7 @@ You can:<br/>
 - [x] Multiple files transfer
 - [x] Progress bar in receive file
 - [x] Who connected to your device check it in peer list
-- [ ] Fix corrupted files on specific devices (in fileServerAsyncTask) (current bug)
+- [x] Fix corrupted files on specific devices (in fileServerAsyncTask)
 - [ ] Connect more clients (now only possible between 2 devices)
 - [ ] Change device name
 - [ ] Change path to receive
