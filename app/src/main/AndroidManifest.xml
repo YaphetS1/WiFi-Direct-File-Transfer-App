@@ -42,7 +42,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".pages.SendFileActivity" />
+        <activity android:name=".pages.FileActivity" />
         <activity
             android:name=".pages.SettingsActivity"
             android:noHistory="true" />

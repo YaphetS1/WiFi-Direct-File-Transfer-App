@@ -39,7 +39,7 @@ import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.util.ArrayList;
 
-public class SendFileActivity extends AppCompatActivity {
+public class FileActivity extends AppCompatActivity {
 
   int activeTab;
 
@@ -73,8 +73,8 @@ public class SendFileActivity extends AppCompatActivity {
     this.initNav();
 
     this.onBackPressedListener = (() -> {
-      Toast.makeText(SendFileActivity.this, "Please press again to exit", Toast.LENGTH_SHORT).show();
-      SendFileActivity.this.onBackPressedListener = null;
+      Toast.makeText(FileActivity.this, "Please press again to exit", Toast.LENGTH_SHORT).show();
+      FileActivity.this.onBackPressedListener = null;
     });
   }
 
@@ -108,8 +108,8 @@ public class SendFileActivity extends AppCompatActivity {
     rvReceivingFilesList.setAdapter(receiveFilesAdapter);
 
     this.initSockets();
-    callbackReInitFileServer = SendFileActivity.this::initFileServer;
-    callbackReInitDeviceServer = SendFileActivity.this::initDeviceInfoServers;
+    callbackReInitFileServer = FileActivity.this::initFileServer;
+    callbackReInitDeviceServer = FileActivity.this::initDeviceInfoServers;
 
     this.initFileServer(); // Init file server for receiving data
 
@@ -130,7 +130,7 @@ public class SendFileActivity extends AppCompatActivity {
       if (serverAddress == null) return;
       callbackSendThisDeviceName.call();
 
-      ChooseFile.fileChooser(SendFileActivity.this);
+      ChooseFile.fileChooser(FileActivity.this);
     };
 
     p2pManager = (WifiP2pManager) getSystemService(WIFI_P2P_SERVICE);
@@ -147,16 +147,6 @@ public class SendFileActivity extends AppCompatActivity {
       method.invoke(p2pManager, channel);
 
     } catch (Exception e) {
-//      AlertDialog.Builder ad = new AlertDialog.Builder(SendFileActivity.this);
-//      ad.setTitle(R.string.alert);  // header
-//      ad.setMessage(R.string.enable_wifi_direct_before_using); // message
-//      ad.setPositiveButton(R.string.ad_yes, (dialog, arg1) -> {
-//        startActivity(new Intent(Settings.ACTION_SETTINGS));
-//      });
-//      ad.setNegativeButton(R.string.ad_no, (dialog, arg1) -> finish());
-//      ad.setCancelable(true);
-//      ad.setOnCancelListener(dialog -> NavService.set(SendFileActivity.this, activeTab));
-//      ad.show();
     }
 
     p2pManager.removeGroup(channel, null);
@@ -262,7 +252,7 @@ public class SendFileActivity extends AppCompatActivity {
           }
           sendFilesAdapter.notifyAdapter(uris, filesLength, fileNames);
 
-          TransferData transferData = new TransferData(SendFileActivity.this,
+          TransferData transferData = new TransferData(FileActivity.this,
               uris, filesLength, fileNames, (sendFilesAdapter), serverAddress, p2pManager, channel);
           transferData.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
@@ -279,7 +269,7 @@ public class SendFileActivity extends AppCompatActivity {
     NavService.setupTopNav(this, R.string.app_main_title, true);
 
     Callback recommendationsTabAction = () -> {
-      Toast.makeText(SendFileActivity.this, "Some action will be here!", Toast.LENGTH_SHORT).show();
+      Toast.makeText(FileActivity.this, "Some action will be here!", Toast.LENGTH_SHORT).show();
     };
 
     Callback sendTabAction = () -> {
@@ -297,15 +287,15 @@ public class SendFileActivity extends AppCompatActivity {
     };
 
     Callback settingsTabAction = () -> {
-      AlertDialog.Builder ad = new AlertDialog.Builder(SendFileActivity.this);
+      AlertDialog.Builder ad = new AlertDialog.Builder(FileActivity.this);
       ad.setTitle(R.string.ad_title);  // header
       ad.setMessage(R.string.ad_message); // message
       ad.setPositiveButton(R.string.ad_yes, (dialog, arg1) -> {
-        startActivity(new Intent(SendFileActivity.this, SettingsActivity.class));
+        startActivity(new Intent(FileActivity.this, SettingsActivity.class));
       });
-      ad.setNegativeButton(R.string.ad_no, (dialog, arg1) -> NavService.set(SendFileActivity.this, activeTab));
+      ad.setNegativeButton(R.string.ad_no, (dialog, arg1) -> NavService.set(FileActivity.this, activeTab));
       ad.setCancelable(true);
-      ad.setOnCancelListener(dialog -> NavService.set(SendFileActivity.this, activeTab));
+      ad.setOnCancelListener(dialog -> NavService.set(FileActivity.this, activeTab));
       ad.show();
     };
 
@@ -325,16 +315,16 @@ public class SendFileActivity extends AppCompatActivity {
 
     deviceInfoServerAsyncTask = new DeviceInfoServerAsyncTask(
         (serverSocketDevice),
-        (SendFileActivity.this.peersAdapter), callbackReInitDeviceServer);
+        (FileActivity.this.peersAdapter), callbackReInitDeviceServer);
     deviceInfoServerAsyncTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
   }
 
   private void initFileServer() {
 
     fileServerAsyncTask = new FileServerAsyncTask(
-        (SendFileActivity.this),
+        (FileActivity.this),
         (serverSocket),
-        (SendFileActivity.this.receiveFilesAdapter), callbackReInitFileServer);
+        (FileActivity.this.receiveFilesAdapter), callbackReInitFileServer);
     fileServerAsyncTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
   }
