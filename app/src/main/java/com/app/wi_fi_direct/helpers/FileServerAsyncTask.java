@@ -59,8 +59,10 @@ public class FileServerAsyncTask extends AsyncTask<Void, CustomObject, Void> {
       InputStream inputStream = client.getInputStream();
       ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
 
+      //We get size of items to be receive
       int sizeOfItems = objectInputStream.readInt();
 
+      //Get filenames and size for know to read file
       ArrayList<String> fileNames = (ArrayList<String>) objectInputStream.readObject();
       ArrayList<Long> fileSizes = (ArrayList<Long>) objectInputStream.readObject();
 
@@ -83,13 +85,15 @@ public class FileServerAsyncTask extends AsyncTask<Void, CustomObject, Void> {
         } else Log.d("Reciever", "File Not Created");
 
         OutputStream outputStream = new FileOutputStream(file);
+
+        //customObject need for progress update
         CustomObject progress = new CustomObject();
         progress.name = fileName;
         progress.dataIncrement = 0;
         progress.totalProgress = 0;
 
         try {
-//          while (((len = objectInputStream.read(buf)) != -1))
+
           while (fileSize > 0 &&
               (len = objectInputStream.read(buf, 0, (int) Math.min(buf.length, fileSize))) != -1) {
 
@@ -121,14 +125,9 @@ public class FileServerAsyncTask extends AsyncTask<Void, CustomObject, Void> {
       }
 
       objectInputStream.close();
-      //serverSocket.close();
-      //client.close();
-
     } catch (Exception e) {
       e.printStackTrace();
     }
-
-
   }
 
   @Override

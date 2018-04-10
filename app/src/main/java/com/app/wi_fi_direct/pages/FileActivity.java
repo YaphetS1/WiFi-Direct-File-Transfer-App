@@ -91,6 +91,7 @@ public class FileActivity extends AppCompatActivity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_send_file);
 
+    //Find sending file list and set adapter
     rvSendingFilesList = findViewById(R.id.rvSendingFilesList);
     LinearLayoutManager filesListLayoutManager = new LinearLayoutManager(
         this, LinearLayoutManager.VERTICAL, false);
@@ -98,21 +99,21 @@ public class FileActivity extends AppCompatActivity {
     sendFilesAdapter = new FilesSendAdapter();
     rvSendingFilesList.setAdapter(sendFilesAdapter);
 
-
+    //Find receiving file list and set adapter
     rvReceivingFilesList = findViewById(R.id.rvReceivingFilesList);
     LinearLayoutManager receiveFilesListLayoutManager = new LinearLayoutManager(
         this, LinearLayoutManager.VERTICAL, false);
     rvReceivingFilesList.setLayoutManager(receiveFilesListLayoutManager);
     receiveFilesAdapter = new FilesAdapter(this);
-
     rvReceivingFilesList.setAdapter(receiveFilesAdapter);
 
+    //init sockets for transport servers and callbacks for reinit servers
     this.initSockets();
     callbackReInitFileServer = FileActivity.this::initFileServer;
     callbackReInitDeviceServer = FileActivity.this::initDeviceInfoServers;
-
     this.initFileServer(); // Init file server for receiving data
 
+    //Set callback for update peers
     WifiP2pManager.PeerListListener peerListListener = peers -> {
       peerList.clear();
       peerList.addAll(peers.getDeviceList());
@@ -120,22 +121,26 @@ public class FileActivity extends AppCompatActivity {
       peersAdapter.notifyDataSetChanged();
     };
 
+    //Set callback for send device name to device, who was connected. (not available in Android’s official API)
     callbackSendThisDeviceName = () -> {
       TransferNameDevice transferNameDevice = new TransferNameDevice(serverAddress);
       transferNameDevice.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     };
 
+    //Set callback for connected device, there I calling send device name who connected to me,
+    // and another call it too, and call to start file manager
     WifiP2pManager.ConnectionInfoListener infoListener = info -> {
       serverAddress = info.groupOwnerAddress;
       if (serverAddress == null) return;
       callbackSendThisDeviceName.call();
-
       ChooseFile.fileChooser(FileActivity.this);
     };
 
+    //Set p2pManger and channel
     p2pManager = (WifiP2pManager) getSystemService(WIFI_P2P_SERVICE);
     channel = p2pManager.initialize(this, getMainLooper(), null);
 
+    //On the specified device p2p are disabled, to enable it I use
     try {
       Class<?> wifiManager = Class
           .forName("android.net.wifi.p2p.WifiP2pManager");
@@ -143,37 +148,38 @@ public class FileActivity extends AppCompatActivity {
       Method method = wifiManager
           .getMethod("enableP2p",
               WifiP2pManager.Channel.class);
-
       method.invoke(p2pManager, channel);
-
     } catch (Exception e) {
     }
 
+    //Just in case, I delete the group, since after an instant restart of the application,
+    // Dalvik doesn't clean the application immediately, but with it both the manager and the channel
     p2pManager.removeGroup(channel, null);
 
+    //My wrapper for defining peers
     myBroadcastReciever = new MyBroadcastReciever(p2pManager, channel,
         this, infoListener);
     myBroadcastReciever.setPeerListListener(peerListListener);
-
     IntentFilter intentFilter = new IntentFilter();
     intentFilter.addAction(WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION);
     intentFilter.addAction(WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION);
     intentFilter.addAction(WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION);
     intentFilter.addAction(WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION);
 
+    //Register receiver to ContextWrapper with filters
     registerReceiver(myBroadcastReciever, intentFilter);
 
+    //Setup peers adapter
     peersAdapter = new PeersAdapter(peerList, this,
         p2pManager, channel, this, infoListener);
-
     RecyclerView rvDevicesList = findViewById(R.id.rvDevicesList);
     rvDevicesList.setAdapter(peersAdapter);
-    this.initDeviceInfoServers(); // Init Device info server for receiving device name who connected
 
+    // Init Device info server for receiving device name who connected
+    this.initDeviceInfoServers();
     RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(
         this, LinearLayoutManager.VERTICAL, false);
     rvDevicesList.setLayoutManager(mLayoutManager);
-
     p2pManager.discoverPeers(channel, null);
   }
 
