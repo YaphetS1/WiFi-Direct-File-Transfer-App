@@ -35,12 +35,12 @@ public class SettingsActivity extends AppCompatActivity {
           Toast.makeText(SettingsActivity.this, "Some action will be here!", Toast.LENGTH_SHORT).show();
         }
         , (Callback) () -> {
-            Intent intent = new Intent(SettingsActivity.this, SendFileActivity.class);
+            Intent intent = new Intent(SettingsActivity.this, FileActivity.class);
             intent.putExtra(NavService.TAB, NavService.TAB_SEND);
             startActivity(intent);
         }
         , (Callback) () -> {
-          Intent intent = new Intent(SettingsActivity.this, SendFileActivity.class);
+          Intent intent = new Intent(SettingsActivity.this, FileActivity.class);
           intent.putExtra(NavService.TAB, NavService.TAB_RECEIVE);
           startActivity(intent);
         }
