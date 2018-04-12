@@ -8,7 +8,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 
-import com.app.wi_fi_direct.pages.SendFileActivity;
+import com.app.wi_fi_direct.pages.FileActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
     if (!checkPermissions()) {
       ActivityCompat.requestPermissions(MainActivity.this, permissions, 49);
     } else {
-      Intent intent = new Intent(MainActivity.this, SendFileActivity.class);
+      Intent intent = new Intent(MainActivity.this, FileActivity.class);
 //      intent.setFlags(intent.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
       this.startActivity(intent);
     }
@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
         if (!checkPermissions()) {
           ActivityCompat.requestPermissions(MainActivity.this, permissions, 49);
         } else {
-          Intent intent = new Intent(MainActivity.this, SendFileActivity.class);
+          Intent intent = new Intent(MainActivity.this, FileActivity.class);
 //          intent.setFlags(intent.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
           this.startActivity(intent);
         }
