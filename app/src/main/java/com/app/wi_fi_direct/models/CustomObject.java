@@ -1,4 +1,4 @@
-package com.app.wi_fi_direct.helpers;
+package com.app.wi_fi_direct.models;
 
 public class CustomObject {
   public String name;

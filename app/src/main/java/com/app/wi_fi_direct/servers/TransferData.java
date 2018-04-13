@@ -1,4 +1,4 @@
-package com.app.wi_fi_direct.helpers;
+package com.app.wi_fi_direct.servers;
 
 import android.content.ContentResolver;
 import android.content.Context;

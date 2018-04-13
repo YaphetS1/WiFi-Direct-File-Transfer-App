@@ -57,18 +57,21 @@ You can:<br/>
 - [x] Progress bar in receive file
 - [x] Who connected to your device check it in peer list
 - [x] Fix corrupted files on specific devices (in fileServerAsyncTask)
-- [ ] Connect more clients (now only possible between 2 devices)
+- [x] Change path to receive
 - [ ] Change device name
-- [ ] Change path to receive
+- [ ] Change transfer data between device, I mean read/write file by chunks
+- [ ] Connect more clients (now only possible between 2 devices)
 - [ ] and so on... ;)
 
 
 ## Images
 <br/>
-![alt tag](https://image.ibb.co/dH6ZUx/Screenshot_2018_04_09_00_29_52_964_com_app_wi_fi_direct.png)
-![alt tag](https://image.ibb.co/hsOEUx/Screenshot_2018_04_09_00_30_08.png)
-<br/>
 
+![alt tag](https://image.ibb.co/dH6ZUx/Screenshot_2018_04_09_00_29_52_964_com_app_wi_fi_direct.png)
+
+![alt tag](https://image.ibb.co/hsOEUx/Screenshot_2018_04_09_00_30_08.png)
+
+<br/>
 
 ## Usage
 ### General usage

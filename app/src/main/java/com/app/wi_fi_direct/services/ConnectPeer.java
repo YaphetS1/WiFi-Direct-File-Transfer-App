@@ -1,4 +1,4 @@
-package com.app.wi_fi_direct.helpers;
+package com.app.wi_fi_direct.services;
 
 import android.content.Context;
 import android.net.wifi.p2p.WifiP2pConfig;
