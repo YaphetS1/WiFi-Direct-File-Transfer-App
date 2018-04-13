@@ -1,14 +1,18 @@
-package com.app.wi_fi_direct.helpers;
+package com.app.wi_fi_direct.servers;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Environment;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
 
+import com.app.wi_fi_direct.Variables;
 import com.app.wi_fi_direct.adapters.FilesAdapter;
 import com.app.wi_fi_direct.adapters.FilesViewHolder;
+import com.app.wi_fi_direct.helpers.callbacks.Callback;
+import com.app.wi_fi_direct.models.CustomObject;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -33,11 +37,14 @@ public class FileServerAsyncTask extends AsyncTask<Void, CustomObject, Void> {
   private Long fileSizeOriginal;
   private FilesAdapter fileList;
   private Callback referenceCallback;
+  private SharedPreferences sharedPreferences;
+
 
   public FileServerAsyncTask(Context contextWeakReference,
                              ServerSocket reference,
                              FilesAdapter fileListAdapterWeakReference, Callback callback) {
     this.context = contextWeakReference;
+    this.sharedPreferences = PreferenceManager.getDefaultSharedPreferences(contextWeakReference);
     this.serverSocket = reference;
     this.fileList = fileListAdapterWeakReference;
     this.referenceCallback = callback;
@@ -71,8 +78,8 @@ public class FileServerAsyncTask extends AsyncTask<Void, CustomObject, Void> {
         String fileName = fileNames.get(i);
         fileSize = fileSizes.get(i);
         fileSizeOriginal = fileSizes.get(i);
-        file = new File(Environment.getExternalStorageDirectory() + "/"
-            + context.getApplicationContext().getPackageName() + "/" + fileName);
+        file = new File(sharedPreferences.getString(Variables.APP_TYPE, Environment.getExternalStorageDirectory() + "/"
+            + context.getApplicationContext().getPackageName()) + "/" + fileName);
         Log.d("Reciever", file.getPath());
 
 

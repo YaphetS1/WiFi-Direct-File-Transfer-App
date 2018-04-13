@@ -1,7 +1,6 @@
 package com.app.wi_fi_direct.services;
 
 import android.app.Activity;
-import android.content.pm.PackageManager;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -9,7 +8,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 import com.app.wi_fi_direct.R;
-import com.app.wi_fi_direct.helpers.Callback;
+import com.app.wi_fi_direct.helpers.callbacks.Callback;
 
 public class NavService {
   public static final String TAB = "TAB";

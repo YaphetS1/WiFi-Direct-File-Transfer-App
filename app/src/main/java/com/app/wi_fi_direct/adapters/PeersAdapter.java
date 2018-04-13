@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.app.wi_fi_direct.R;
-import com.app.wi_fi_direct.helpers.ConnectPeer;
+import com.app.wi_fi_direct.services.ConnectPeer;
 
 import java.util.ArrayList;
 import java.util.List;

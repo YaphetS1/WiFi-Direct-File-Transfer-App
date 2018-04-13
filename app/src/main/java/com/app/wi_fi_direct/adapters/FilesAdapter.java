@@ -2,12 +2,14 @@ package com.app.wi_fi_direct.adapters;
 
 import android.content.Context;
 import android.os.Environment;
+import android.preference.PreferenceManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.app.wi_fi_direct.R;
+import com.app.wi_fi_direct.Variables;
 import com.app.wi_fi_direct.models.FileModel;
 
 import java.io.File;
@@ -48,8 +50,9 @@ public class FilesAdapter extends RecyclerView.Adapter<FilesViewHolder> {
   }
 
   private File[] getFilesFromStorage(Context context) {
-    File dir = new File(Environment.getExternalStorageDirectory() + "/"
-        + context.getApplicationContext().getPackageName());
+    File dir = new File(PreferenceManager.getDefaultSharedPreferences(context)
+        .getString(Variables.APP_TYPE, Environment.getExternalStorageDirectory() + "/"
+            + context.getApplicationContext().getPackageName()));
 
     File[] receivedFiles = dir.listFiles();
 

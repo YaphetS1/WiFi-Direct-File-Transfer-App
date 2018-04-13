@@ -1,12 +1,12 @@
-package com.app.wi_fi_direct.helpers;
+package com.app.wi_fi_direct.servers;
 
 import android.os.AsyncTask;
-import android.util.Log;
 import android.view.View;
 
 import com.app.wi_fi_direct.R;
 import com.app.wi_fi_direct.adapters.PeersAdapter;
 import com.app.wi_fi_direct.adapters.PeersViewHolder;
+import com.app.wi_fi_direct.helpers.callbacks.Callback;
 
 import java.io.InputStream;
 import java.io.ObjectInputStream;

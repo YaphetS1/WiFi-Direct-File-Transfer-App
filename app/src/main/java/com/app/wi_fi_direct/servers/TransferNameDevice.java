@@ -1,7 +1,9 @@
-package com.app.wi_fi_direct.helpers;
+package com.app.wi_fi_direct.servers;
 
 import android.os.AsyncTask;
 import android.util.Log;
+
+import com.app.wi_fi_direct.services.MyBroadcastReciever;
 
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
