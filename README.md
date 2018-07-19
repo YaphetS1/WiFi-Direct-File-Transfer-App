@@ -1,5 +1,9 @@
 # WiFi-Direct-File-Transfer-App
 WiFi Direct File Transfer is a experimental app that will allow sharing of data between Android devices running Android 4.0 or higher using a WiFi direct connection without the use of a WiFi access point. This will enable data transfer between devices without relying on any existing network infrastructure
+<br>
+
+![green horizontal](https://user-images.githubusercontent.com/34623610/42958461-7cfcda86-8b7d-11e8-8ec7-ea3242eb6862.png)
+
 
 <br>
 
