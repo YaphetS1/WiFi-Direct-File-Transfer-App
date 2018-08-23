@@ -94,62 +94,62 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/clBanner">
 
-            <android.support.constraint.ConstraintLayout
-                android:id="@+id/clHistory"
-                android:layout_width="0dp"
-                android:layout_height="54dp"
-                android:background="?attr/selectableItemBackground"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" >
+            <!--<android.support.constraint.ConstraintLayout-->
+                <!--android:id="@+id/clHistory"-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_height="54dp"-->
+                <!--android:background="attr/selectableItemBackground"-->
+                <!--app:layout_constraintTop_toTopOf="parent"-->
+                <!--app:layout_constraintEnd_toEndOf="parent"-->
+                <!--app:layout_constraintStart_toStartOf="parent" >-->
 
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="1dp"
-                    android:background="@color/cDivider"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent" />
+                <!--<View-->
+                    <!--android:layout_width="0dp"-->
+                    <!--android:layout_height="1dp"-->
+                    <!--android:background="@color/cDivider"-->
+                    <!--app:layout_constraintTop_toTopOf="parent"-->
+                    <!--app:layout_constraintEnd_toEndOf="parent"-->
+                    <!--app:layout_constraintStart_toStartOf="parent" />-->
 
-                <ImageView
-                    android:id="@+id/imageView4"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="15dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/d_icon_history" />
+                <!--<ImageView-->
+                    <!--android:id="@+id/imageView4"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_marginStart="15dp"-->
+                    <!--app:layout_constraintBottom_toBottomOf="parent"-->
+                    <!--app:layout_constraintStart_toStartOf="parent"-->
+                    <!--app:layout_constraintTop_toTopOf="parent"-->
+                    <!--app:srcCompat="@drawable/d_icon_history" />-->
 
-                <TextView
-                    android:id="@+id/textView4"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="14dp"
-                    android:fontFamily="@font/r_r"
-                    android:text="@string/history"
-                    android:textSize="14sp"
-                    android:textColor="@color/cTextGrey"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/imageView4"
-                    app:layout_constraintTop_toTopOf="parent" />
+                <!--<TextView-->
+                    <!--android:id="@+id/textView4"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_marginStart="14dp"-->
+                    <!--android:fontFamily="@font/r_r"-->
+                    <!--android:text="@string/history"-->
+                    <!--android:textSize="14sp"-->
+                    <!--android:textColor="@color/cTextGrey"-->
+                    <!--app:layout_constraintBottom_toBottomOf="parent"-->
+                    <!--app:layout_constraintStart_toEndOf="@+id/imageView4"-->
+                    <!--app:layout_constraintTop_toTopOf="parent" />-->
 
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="1dp"
-                    android:background="@color/cDivider"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent" />
+                <!--<View-->
+                    <!--android:layout_width="0dp"-->
+                    <!--android:layout_height="1dp"-->
+                    <!--android:background="@color/cDivider"-->
+                    <!--app:layout_constraintBottom_toBottomOf="parent"-->
+                    <!--app:layout_constraintEnd_toEndOf="parent"-->
+                    <!--app:layout_constraintStart_toStartOf="parent" />-->
 
-            </android.support.constraint.ConstraintLayout>
+            <!--</android.support.constraint.ConstraintLayout>-->
 
             <android.support.constraint.ConstraintLayout
                 android:id="@+id/clStoreLocation"
                 android:layout_width="0dp"
                 android:layout_height="54dp"
                 android:background="?attr/selectableItemBackground"
-                app:layout_constraintTop_toBottomOf="@id/clHistory"
+                app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" >
 
@@ -312,54 +312,54 @@
 
             </android.support.constraint.ConstraintLayout>
 
-            <android.support.constraint.ConstraintLayout
-                android:id="@+id/clCleanCache"
-                android:layout_width="0dp"
-                android:layout_height="54dp"
-                android:background="?attr/selectableItemBackground"
-                app:layout_constraintTop_toBottomOf="@id/clAbout"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" >
+            <!--<android.support.constraint.ConstraintLayout-->
+                <!--android:id="@+id/clCleanCache"-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_height="54dp"-->
+                <!--android:background="attr/selectableItemBackground"-->
+                <!--app:layout_constraintTop_toBottomOf="@id/clAbout"-->
+                <!--app:layout_constraintEnd_toEndOf="parent"-->
+                <!--app:layout_constraintStart_toStartOf="parent" >-->
 
-                <ImageView
-                    android:id="@+id/imageView9"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="15dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/d_icon_delete" />
+                <!--<ImageView-->
+                    <!--android:id="@+id/imageView9"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_marginStart="15dp"-->
+                    <!--app:layout_constraintBottom_toBottomOf="parent"-->
+                    <!--app:layout_constraintStart_toStartOf="parent"-->
+                    <!--app:layout_constraintTop_toTopOf="parent"-->
+                    <!--app:srcCompat="@drawable/d_icon_delete" />-->
 
-                <TextView
-                    android:id="@+id/textView9"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="14dp"
-                    android:fontFamily="@font/r_r"
-                    android:text="@string/clean_cache"
-                    android:textSize="14sp"
-                    android:textColor="@color/cTextGrey"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/imageView9"
-                    app:layout_constraintTop_toTopOf="parent" />
+                <!--<TextView-->
+                    <!--android:id="@+id/textView9"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_marginStart="14dp"-->
+                    <!--android:fontFamily="@font/r_r"-->
+                    <!--android:text="@string/clean_cache"-->
+                    <!--android:textSize="14sp"-->
+                    <!--android:textColor="@color/cTextGrey"-->
+                    <!--app:layout_constraintBottom_toBottomOf="parent"-->
+                    <!--app:layout_constraintStart_toEndOf="@+id/imageView9"-->
+                    <!--app:layout_constraintTop_toTopOf="parent" />-->
 
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="1dp"
-                    android:background="@color/cDivider"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent" />
+                <!--<View-->
+                    <!--android:layout_width="0dp"-->
+                    <!--android:layout_height="1dp"-->
+                    <!--android:background="@color/cDivider"-->
+                    <!--app:layout_constraintBottom_toBottomOf="parent"-->
+                    <!--app:layout_constraintEnd_toEndOf="parent"-->
+                    <!--app:layout_constraintStart_toStartOf="parent" />-->
 
-            </android.support.constraint.ConstraintLayout>
+            <!--</android.support.constraint.ConstraintLayout>-->
 
             <android.support.constraint.ConstraintLayout
                 android:id="@+id/clMailTo"
                 android:layout_width="0dp"
                 android:layout_height="54dp"
                 android:background="?attr/selectableItemBackground"
-                app:layout_constraintTop_toBottomOf="@id/clCleanCache"
+                app:layout_constraintTop_toBottomOf="@id/clAbout"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" >
 

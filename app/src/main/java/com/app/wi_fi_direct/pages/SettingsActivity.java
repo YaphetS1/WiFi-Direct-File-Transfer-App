@@ -1,11 +1,17 @@
 package com.app.wi_fi_direct.pages;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
+import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.app.wi_fi_direct.R;
@@ -15,7 +21,6 @@ import com.app.wi_fi_direct.services.NavService;
 
 public class SettingsActivity extends AppCompatActivity {
 
-  private ConstraintLayout clStoreLocation;
   private String chosenDir = "";
   private boolean newFolderEnabled = true;
   private SharedPreferences sharedPreferences;
@@ -33,7 +38,11 @@ public class SettingsActivity extends AppCompatActivity {
     setContentView(R.layout.activity_settings);
     initNav();
 
-    clStoreLocation = findViewById(R.id.clStoreLocation);
+    ConstraintLayout clStoreLocation = findViewById(R.id.clStoreLocation);
+    ConstraintLayout clSettingsOfWifiDirect = findViewById(R.id.clSettingsOfWifiDirect);
+    ConstraintLayout clAbout = findViewById(R.id.clAbout);
+    ConstraintLayout clMailTo = findViewById(R.id.clMailTo);
+
     clStoreLocation.setOnClickListener(l -> {
 
       // Create DirectoryChooserDialog and register a callback
@@ -54,6 +63,44 @@ public class SettingsActivity extends AppCompatActivity {
       this.newFolderEnabled = !this.newFolderEnabled;
     });
 
+    clSettingsOfWifiDirect.setOnClickListener(l -> {
+
+      AlertDialog.Builder builder = new AlertDialog.Builder(this);
+      builder.setTitle(R.string.alert_dialog_title);
+      View view = View.inflate(this, R.layout.alert_dialog, (ViewGroup) null);
+      builder.setView(view);
+      builder.setNegativeButton(R.string.ad_no, null);
+      final EditText editText = view.findViewById(R.id.change_name_edittext);
+      builder.setPositiveButton(R.string.ad_yes, (dialog, which) -> {
+        String newName = editText.getText().toString();
+        if (newName.isEmpty()) return;
+        Log.d("DeviceUtil", (newName.isEmpty()) + "");
+
+        sharedPreferencesEditor = sharedPreferences.edit();
+        sharedPreferencesEditor.putString(Variables.NAME_DEVICE, newName);
+        sharedPreferencesEditor.commit();
+      });
+      builder.create().show();
+    });
+
+    clAbout.setOnClickListener(l -> {
+      Intent browserIntent = new Intent(Intent.ACTION_VIEW,
+          Uri.parse("https://github.com/YaphetS1/WiFi-Direct-File-Transfer-App"));
+      startActivity(browserIntent);
+    });
+
+    clMailTo.setOnClickListener(l -> {
+      Intent intent = new Intent(Intent.ACTION_SEND);
+      intent.setType("plain/text");
+      intent.putExtra(android.content.Intent.EXTRA_EMAIL, new String[]{
+          "436910463q@gmail.com"
+      });
+      intent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Feedback");
+      intent.putExtra(android.content.Intent.EXTRA_TEXT, "Dear developer. ");
+
+      /* Send it off to the Activity-Chooser */
+      startActivity(Intent.createChooser(intent, "Send"));
+    });
   }
 
   private void initNav() {

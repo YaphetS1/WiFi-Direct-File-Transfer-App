@@ -45,6 +45,7 @@ This shows that it's possible to extend the Wi-Fi Direct protocol in Android in 
 
 ## News
 - *09/04/2018* - **WiFi Direct File Transfer** Beta 1 public release
+- *23/08/2018* - **WiFi Direct File Transfer** Beta 2 public release
 
 
 ## Features
@@ -62,7 +63,7 @@ You can:<br/>
 - [x] Who connected to your device check it in peer list
 - [x] Fix corrupted files on specific devices (in fileServerAsyncTask)
 - [x] Change path to receive
-- [ ] Change device name
+- [x] Change device name
 - [ ] Change transfer data between device, I mean read/write file by chunks
 - [ ] Connect more clients (now only possible between 2 devices)
 - [ ] and so on... ;)
