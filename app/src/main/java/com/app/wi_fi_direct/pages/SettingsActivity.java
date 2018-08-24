@@ -74,7 +74,6 @@ public class SettingsActivity extends AppCompatActivity {
       builder.setPositiveButton(R.string.ad_yes, (dialog, which) -> {
         String newName = editText.getText().toString();
         if (newName.isEmpty()) return;
-        Log.d("DeviceUtil", (newName.isEmpty()) + "");
 
         sharedPreferencesEditor = sharedPreferences.edit();
         sharedPreferencesEditor.putString(Variables.NAME_DEVICE, newName);
