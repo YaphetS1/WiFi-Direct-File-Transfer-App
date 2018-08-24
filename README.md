@@ -64,7 +64,7 @@ You can:<br/>
 - [x] Fix corrupted files on specific devices (in fileServerAsyncTask)
 - [x] Change path to receive
 - [x] Change device name
-- [ ] Change transfer data between device, I mean read/write file by chunks
+- [x] Change transfer data between device, I mean read/write file by chunks
 - [ ] Connect more clients (now only possible between 2 devices)
 - [ ] and so on... ;)
 

@@ -52,7 +52,7 @@ public class FileServerAsyncTask extends AsyncTask<Void, CustomObject, Void> {
 
   private void recieveData() {
 
-    byte buf[] = new byte[1024];
+    byte buf[] = new byte[8192];
     int len = 0;
 
     try {
@@ -105,6 +105,8 @@ public class FileServerAsyncTask extends AsyncTask<Void, CustomObject, Void> {
               (len = objectInputStream.read(buf, 0, (int) Math.min(buf.length, fileSize))) != -1) {
 
             outputStream.write(buf, 0, len);
+            outputStream.flush();
+
             fileSize -= len;
 
             progress.dataIncrement = (long) len;

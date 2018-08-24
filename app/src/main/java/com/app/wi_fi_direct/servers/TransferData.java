@@ -57,7 +57,7 @@ public class TransferData extends AsyncTask<Void, String, Void> {
   private void sendData(Context context, ArrayList<Uri> uris) {
 
     int len = 0;
-    byte buf[] = new byte[1024];
+    byte buf[] = new byte[8192];
 
     Log.d("Data Transfer", "Transfer Starter");
 
@@ -88,6 +88,7 @@ public class TransferData extends AsyncTask<Void, String, Void> {
 
         while ((len = inputStream.read(buf)) != -1) {
           objectOutputStream.write(buf, 0, len);
+          objectOutputStream.flush();
         }
         inputStream.close();
         publishProgress(fileNames.get(i));
