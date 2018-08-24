@@ -153,6 +153,7 @@ public class FileActivity extends AppCompatActivity {
 //      DeviceUtil.callHiddenMethod(manager, channel, newName);
       DeviceUtil.callHiddenMethod(p2pManager, channel,
           sharedPreferences.getString(Variables.NAME_DEVICE, null));
+      this.initFileServer();
 
     } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
       e.printStackTrace();
