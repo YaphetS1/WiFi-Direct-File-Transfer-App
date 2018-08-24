@@ -3,10 +3,12 @@ package com.app.wi_fi_direct.pages;
 import android.content.ClipData;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -17,9 +19,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.app.wi_fi_direct.R;
+import com.app.wi_fi_direct.Variables;
 import com.app.wi_fi_direct.adapters.FilesAdapter;
 import com.app.wi_fi_direct.adapters.FilesSendAdapter;
 import com.app.wi_fi_direct.adapters.PeersAdapter;
+import com.app.wi_fi_direct.helpers.DeviceUtil;
 import com.app.wi_fi_direct.helpers.callbacks.Callback;
 import com.app.wi_fi_direct.helpers.ChooseFile;
 import com.app.wi_fi_direct.servers.DeviceInfoServerAsyncTask;
@@ -33,6 +37,7 @@ import com.app.wi_fi_direct.servers.TransferNameDevice;
 import com.app.wi_fi_direct.services.NavService;
 
 import java.io.File;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.InetAddress;
 import java.net.ServerSocket;
@@ -63,6 +68,8 @@ public class FileActivity extends AppCompatActivity {
   private FileServerAsyncTask fileServerAsyncTask;
   private DeviceInfoServerAsyncTask deviceInfoServerAsyncTask;
   private Callback callbackSendThisDeviceName;
+  private SharedPreferences sharedPreferences;
+
 
   @Override
   public void onStart() {
@@ -89,6 +96,9 @@ public class FileActivity extends AppCompatActivity {
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_send_file);
+
+    this.sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+
 
     //Find sending file list and set adapter
     rvSendingFilesList = findViewById(R.id.rvSendingFilesList);
@@ -139,6 +149,15 @@ public class FileActivity extends AppCompatActivity {
     p2pManager = (WifiP2pManager) getSystemService(WIFI_P2P_SERVICE);
     channel = p2pManager.initialize(this, getMainLooper(), null);
 
+    try {
+//      DeviceUtil.callHiddenMethod(manager, channel, newName);
+      DeviceUtil.callHiddenMethod(p2pManager, channel,
+          sharedPreferences.getString(Variables.NAME_DEVICE, null));
+
+    } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
+      e.printStackTrace();
+    }
+
     //On the specified device p2p are disabled, to enable it I use
     try {
       Class<?> wifiManager = Class
@@ -148,7 +167,7 @@ public class FileActivity extends AppCompatActivity {
           .getMethod("enableP2p",
               WifiP2pManager.Channel.class);
       method.invoke(p2pManager, channel);
-    } catch (Exception e) {
+    } catch (Exception ignored) {
     }
 
     //Just in case, I delete the group, since after an instant restart of the application,

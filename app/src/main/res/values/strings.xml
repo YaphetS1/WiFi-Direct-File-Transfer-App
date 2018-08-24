@@ -5,15 +5,11 @@
     <string name="open_drawer">Open</string>
     <string name="close_drawer">Close</string>
     <string name="alert_dialog_title">Change Device Name</string>
-    <string name="send_activity_first_heading">My Device Name</string>
-    <string name="send_activity_second_heading">Available Devices</string>
-    <string name="receive_activity_second_heading">Current File Transfer</string>
-    <string name="receive_activity_third_heading">Received Files</string>
 
     <string name="available_devices">Available Devices</string>
     <string name="sending">Sending</string>
     <string name="receiving">Receiving</string>
-    <string name="recomendations">Recommendations</string>
+    <string name="recomendations">Recommend</string>
     <string name="send">Send</string>
     <string name="receive">Receive</string>
     <string name="settings">Settings</string>
