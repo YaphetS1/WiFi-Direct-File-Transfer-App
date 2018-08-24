@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.app.wi_fi_direct.pages.SendFileActivity">
+    tools:context="com.app.wi_fi_direct.pages.FileActivity">
 
     <include
         android:id="@+id/layoutTopNav"
@@ -92,15 +92,15 @@
 
     </ScrollView>
 
-    <ImageView
-        android:id="@+id/imageView3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="7dp"
-        android:layout_marginEnd="8dp"
-        app:layout_constraintBottom_toTopOf="@id/layoutBottomNav"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@drawable/d_fab" />
+    <!--<ImageView-->
+        <!--android:id="@+id/imageView3"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginBottom="7dp"-->
+        <!--android:layout_marginEnd="8dp"-->
+        <!--app:layout_constraintBottom_toTopOf="@id/layoutBottomNav"-->
+        <!--app:layout_constraintEnd_toEndOf="parent"-->
+        <!--app:srcCompat="@drawable/d_fab" />-->
 
     <include
         android:id="@+id/layoutBottomNav"
