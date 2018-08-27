@@ -4,6 +4,9 @@ WiFi Direct File Transfer is a experimental app that will allow sharing of data 
 
 ![green horizontal](https://user-images.githubusercontent.com/34623610/42958461-7cfcda86-8b7d-11e8-8ec7-ea3242eb6862.png)
 
+Currently available on the Play store.
+
+<a href="https://play.google.com/store/apps/details?id=com.app.wi_fi_direct"><img alt="Get it on Google Play" src="https://play.google.com/intl/en_us/badges/images/generic/en-play-badge.png" height=36px /></a>
 
 <br>
 
