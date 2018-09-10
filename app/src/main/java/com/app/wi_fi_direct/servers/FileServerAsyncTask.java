@@ -173,11 +173,6 @@ public class FileServerAsyncTask extends AsyncTask<Void, CustomObject, Void> {
     super.onPostExecute(aVoid);
     this.fileList.notifyAdapter();
 
-    if (fileList.receivedFiles.length != 0) {
-      this.fileList.filesViewHolders
-          .get(fileList.receivedFiles.length - 1).progressBar.setVisibility(View.INVISIBLE);
-    }
-
     Log.d("Reciever", "onPostExecute");
     try {
 //      serverSocket.close();
@@ -186,7 +181,14 @@ public class FileServerAsyncTask extends AsyncTask<Void, CustomObject, Void> {
     } catch (Exception e) {
       e.printStackTrace();
     }
-
+    try {
+      if (this.fileList.filesViewHolders.size() != 0) {
+        this.fileList.filesViewHolders
+            .get(this.fileList.filesViewHolders.size() - 1).progressBar.setVisibility(View.INVISIBLE);
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
   }
 
   @Override
